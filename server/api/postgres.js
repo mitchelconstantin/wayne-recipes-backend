@@ -3,11 +3,21 @@ const router = express.Router()
 
 const { db } = require('../lib/database')
 
-router.get('/api/postgres', (req, res, next) => {
+router.get('/api/recipe_names', (req, res, next) => {
   db
-    .any('select * from hello')
-    .then(data => {
-      res.json(`${req.path} fetched ${JSON.stringify(data)} from the database`)
+  .any('select "RecipeName", "ID" from "Table_Recipe"')
+  .then(data => {
+      res.json(data);
+    })
+    .catch(next)
+})
+
+router.get('/api/recipes/:recipeID', (req, res, next) => {
+  console.log('trying to get ', req.params.recipeID);
+  db
+  .any('select * from "Table_Recipe" WHERE "ID" = $1',req.params.recipeID )
+  .then(data => {
+      res.json(data);
     })
     .catch(next)
 })
