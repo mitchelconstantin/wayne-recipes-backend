@@ -7,14 +7,10 @@ import RecipeDisplay from './RecipeDisplay.js'
 
 class App extends Component {
   state = {
-    hello: null,
     currentRecipe: null,
-    recipeNames: [],
+    recipeNames: null,
     error: null
   }
-  // handleClick = () => {
-  //   console.log('Button is clicked!!');
-  // };
 
   getRecipe(id) {
     console.log('getting recipe');
@@ -38,7 +34,6 @@ class App extends Component {
   }
 
   resetCurrentRecipe() {
-    console.log('resetting');
     this.setState({ currentRecipe: null })
   }
 
@@ -63,13 +58,12 @@ class App extends Component {
   }
 
   render() {
-    const { currentRecipe, recipeNames, recipes, error } = this.state
-    console.log('this.resetCurrentRecipe: ', this.resetCurrentRecipe);
+    const { currentRecipe, recipeNames, error } = this.state
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          {/* <img src={logo} className="App-logo" alt="logo" /> */}
+          <h1 className="App-title">Welcome to Wayne's Recipe book!</h1>
         </header>
         {currentRecipe ? <RecipeDisplay recipe={currentRecipe} goToRecipes={this.resetCurrentRecipe.bind(this)} /> :
           <table >
@@ -77,13 +71,19 @@ class App extends Component {
               <tr>
                 <th>Recipe Names</th>
               </tr>
-              {recipeNames.map((recipeName, index) => (
+              {recipeNames ? recipeNames.map((recipeName, index) => (
                 <tr onClick={() => this.getRecipe(recipeName[0])} key={index}>
                   <td>{recipeName[0]}</td>
                   <td >{recipeName[1]}</td>
                 </tr>
               )
-              )}
+              ) :
+                <tr>
+                  <td>Loading</td>
+                  <td>Recipes</td>
+                </tr>
+
+              }
             </tbody>
           </table>
         }
