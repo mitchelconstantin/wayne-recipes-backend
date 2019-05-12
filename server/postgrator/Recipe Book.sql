@@ -8,33 +8,34 @@ SET NAMES 'UTF8';
 
 DROP TABLE IF EXISTS "Path";
 
-CREATE TABLE "Path" (
-    "ID" INTEGER PRIMARY KEY,
-    "DBPath" TEXT,
-    "PicPath" TEXT
-);
+-- CREATE TABLE "Path" (
+--     "ID" INTEGER PRIMARY KEY,
+--     "DBPath" TEXT,
+--     "PicPath" TEXT
+-- );
 
-INSERT INTO "Path"("ID","DBPath","PicPath")
-VALUES(1,E'X:\\Wayne\\Documents\\Access\\Recipe Book\\Recipe Book App',E'X:\\Wayne\\Documents\\Access\\Recipe Book\\Recipe Book App\\Pics\\');
+-- INSERT INTO "Path"("ID","DBPath","PicPath")
+-- VALUES(1,E'X:\\Wayne\\Documents\\Access\\Recipe Book\\Recipe Book App',E'X:\\Wayne\\Documents\\Access\\Recipe Book\\Recipe Book App\\Pics\\');
 
 
 
 DROP TABLE IF EXISTS "ShoppingList";
 
-CREATE TABLE "ShoppingList" (
-    "ID" INTEGER PRIMARY KEY,
-    "RecipeName" TEXT,
-    "Ingredients" TEXT
-);
+-- CREATE TABLE "ShoppingList" (
+--     "ID" INTEGER PRIMARY KEY,
+--     "RecipeName" TEXT,
+--     "Ingredients" TEXT
+-- );
 
-INSERT INTO "ShoppingList"("ID","RecipeName","Ingredients")
-VALUES(143,E'Manual Shopping List',NULL);
+-- INSERT INTO "ShoppingList"("ID","RecipeName","Ingredients")
+-- VALUES(143,E'Manual Shopping List',NULL);
 
 
 
 DROP TABLE IF EXISTS "Table_Recipe";
+DROP TABLE IF EXISTS "Recipes";
 
-CREATE TABLE "Table_Recipe" (
+CREATE TABLE "Recipes" (
     "ID" INTEGER PRIMARY KEY,
     "RecipeName" TEXT,
     "Picture" TEXT,
@@ -49,7 +50,7 @@ CREATE TABLE "Table_Recipe" (
     "Selected" BOOLEAN
 );
 
-INSERT INTO "Table_Recipe"("ID","RecipeName","Picture","RecipeType","MainIngredient","Ingredients","Directions","Source","Serves","Region","NetCarbs","Selected")
+INSERT INTO "Recipes"("ID","RecipeName","Picture","RecipeType","MainIngredient","Ingredients","Directions","Source","Serves","Region","NetCarbs","Selected")
 VALUES(430,E'Fruit Smoothie',E'X:\\Documents\\Food\\Recipe Book\\Recipe Book App\\Pics\\AAAA No Pic.jpg',E'Drink',E'Fruit',E'1/4 cup banana (9g carb)\n1/2 cup skim milk (6g carb)\n\nAny two from below:\n1/4 cup raspberries  (4g carb)\n1/4 cup blackberries (6g carb)\n1/4 cup strawberries (4g carb)\n1/4 cup blueberries (6g carb)',E'Slice fruit to 1/4" pieces.  Blend until smooth.',E'Wayne',E'1',E'American',E'20',FALSE),
       (431,E'Stir-Fried Lettuce (or Baby Bok Choy) with Garlic Chiles',E'X:\\Documents\\Food\\Recipe Book\\Recipe Book App\\Pics\\Stir-Fried Lettuce (or Baby Bok Choy) with Garlic Chiles.jpg',E'Vegetable',E'Lettuce',E'Vegetables:\n    1 medium head of romaine lettuce, cut crosswise into 1-inch-wide pieces, about 8 cups, \n    OR 8 to 12 cups baby bok choy, sliced in half lengthwise\n\nSauce:\n    2 tablespoons dry sherry or Shao Hsing rice wine\n    1 tablespoon chicken broth\n    2 teaspoons soy sauce\n\nAromatics:\n    3 medium cloves garlic, smashed\n    1 teaspoon minced jalapeño chiles, with seeds (optional)\n    2 tablespoons peanut or vegetable oil\n    1/2 teaspoon salt\n    1/8 teaspoon ground white pepper',E'Cut Up the Ingredients: \nIt is very important that all the ingredients are cut as directed in the ingredient list. The most important key to making a good stir-fry is cutting each ingredient to a uniform size as specified above. Cut the vegetables and set them aside in a bowl. Cut the aromatics as directed and set them aside as well.\n\nMake the Sauce: \nIn a small bowl, combine the sherry (or rice wine), broth, and soy sauce.\n\nPrepare Your Wok Space: \nSet the bowls of vegetables, aromatics, and sauce near your stove. Also, have a very small bowl of water next to the stove.\n\nHeat the Wok: \nTurn on a stove burner, as high as it will go. Set a 14-inch wok over this high heat burner. To determine when the wok is hot enough, start flicking droplets of water from the small bowl into the pan after 30 seconds. As soon as a bead of water evaporates within 1 to 2 seconds of contact, the wok is heated and ready for stir-frying. Do not overheat the wok.\n\nPull Wok off the Heat and Add Oil: \nPull the wok off the heat and add 1 tablespoon of oil. Pick up the pan and carefully swirl it to coat the bottom and sides. (If the wok smokes wildly the moment you add the oil you\'ve overheated the wok. Remove the wok from the heat and let it cool for a few minutes. When it\'s cool enough to handle carefully remove the oil with paper towels, wash the wok, and start again.)\n\nAdd the Aromatics to the Wok: \nPut the wok back on the heat. Add the garlic and chiles (if using), and stir them for 10 seconds or until fragrant.\n\nAdd the Vegetables: \nPush the garlic up the sides of the wok and add the lettuce (or bok choy, or whatever else you\'re using).\n\nSeason the Vegetables: \nSprinkle the salt and pepper over top.\n\nSet a Timer for 2 Minutes: \nIt\'s helpful for newbie stir-fry cooks to set a timer to give them a rough idea of how long this dish will cook and to learn a sense of rhythm. But your main benchmark should be how the food looks and tastes. From this point on the vegetables will cook for approximately 2 to 2 1/2 minutes.\n\nStir-Fry the Vegetables for 1 Minute: \nStir-fry for 1 minute or until the lettuce or vegetables begin to wilt.\n\nAdd the Sauce: \nPour the sauce mixture around and down the sides of the pan instead of directly into the center (to prevent cooling the pan and lowering the cooking temperature). Stir-fry and toss to coat the lettuce.\n\nCover and Cook: \nCover and cook for 15 seconds.\n\nUncover and Stir-Fry: \nUncover and stir-fry for another 30 to 60 seconds, or until the lettuce is crisp-tender and bright green.',E'Internet',NULL,E'Asian',NULL,FALSE),
       (434,E'Taco Seasoning Mix',E'X:\\Documents\\Food\\Recipe Book\\Recipe Book App\\Pics\\Taco Measoning Mix.jpg',E'Seasoning Mix',NULL,E'1 tablespoon chili powder\n1/4 teaspoon garlic powder\n1/4 teaspoon onion powder\n1/4 teaspoon crushed red pepper flakes\n1/4 teaspoon dried oregano\n1/2 teaspoon paprika\n1 1/2 teaspoons ground cumin\n1 teaspoon sea salt\n1 teaspoon black pepper',E'Mix all ingredients.\n\nBrown 1 lb ground beef, then drain.  Add 2/3 cup water and the seasoning mix.  Simmer for 5 minutes.',E'AllRecipes.com',NULL,E'TexMex',NULL,FALSE),
