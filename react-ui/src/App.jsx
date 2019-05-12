@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import logo from './logo.svg'
 import './App.css'
-import RecipeDisplay from './RecipeDisplay.js'
+import RecipeDisplay from './RecipeDisplay'
 
 // react-ui/src/RecipeDisplay.js
 
@@ -13,7 +12,6 @@ class App extends Component {
   }
 
   getRecipe(id) {
-    console.log('getting recipe');
     fetch(`/api/recipes/${id}`)
       .then(res => {
         if (!res.ok) {
@@ -23,7 +21,6 @@ class App extends Component {
       })
       .then(res => res.json())
       .then(data => {
-        // console.log('here is your data', data);
         let [currentRecipe] = data
         console.log('current', currentRecipe);
         this.setState({ currentRecipe })
@@ -33,7 +30,7 @@ class App extends Component {
       })
   }
 
-  resetCurrentRecipe() {
+  resetCurrentRecipe = () =>{
     this.setState({ currentRecipe: null })
   }
 
@@ -58,20 +55,18 @@ class App extends Component {
   }
 
   render() {
-    const { currentRecipe, recipeNames, error } = this.state
     return (
       <div className="App">
         <header className="App-header">
-          {/* <img src={logo} className="App-logo" alt="logo" /> */}
           <h1 className="App-title">Welcome to Wayne's Recipe book!</h1>
         </header>
-        {currentRecipe ? <RecipeDisplay recipe={currentRecipe} goToRecipes={this.resetCurrentRecipe.bind(this)} /> :
-          <table >
+        {this.state.currentRecipe ? <RecipeDisplay recipe={this.state.currentRecipe} goToRecipes={this.resetCurrentRecipe} /> :
+        <table >
             <tbody>
               <tr>
                 <th>Recipe Names</th>
               </tr>
-              {recipeNames ? recipeNames.map((recipeName, index) => (
+              {this.state.recipeNames ? this.state.recipeNames.map((recipeName, index) => (
                 <tr onClick={() => this.getRecipe(recipeName[0])} key={index}>
                   <td>{recipeName[0]}</td>
                   <td >{recipeName[1]}</td>
