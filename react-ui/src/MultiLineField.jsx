@@ -1,6 +1,6 @@
 import React from 'react';
 
-function MultiLineField(props) {
+export default (props) => {
   return (
         <div>
           {props.title ? props.title : null}
@@ -10,5 +10,3 @@ function MultiLineField(props) {
         </div>
       );
 }
-
-export default MultiLineField;

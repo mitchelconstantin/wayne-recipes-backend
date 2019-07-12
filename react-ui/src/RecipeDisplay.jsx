@@ -1,14 +1,13 @@
 import React from 'react';
 import MultiLineField from './MultiLineField'
+import ImageUploader from './ImageUploader'
 
-function RecipeDisplay(props) {
+export default (props) => {
   return (
     <div>
-          <button onClick={props.goToRecipes} >Return to Recipes</button>
+      <button onClick={props.goToRecipes} >Return to Recipes</button>
       <p>{props.recipe['props.RecipeName']}</p>
-      <div><p >
-        <img src="http://4.bp.blogspot.com/-1PPIpuTPnPY/UCudijf1DPI/AAAAAAAABgY/Ohzq0co9uyk/s1600/generic.jpg" style={{ height: '200px', width: '200px', border: '1px' }} /></p>
-      </div>
+      <ImageUploader image={"http://4.bp.blogspot.com/-1PPIpuTPnPY/UCudijf1DPI/AAAAAAAABgY/Ohzq0co9uyk/s1600/generic.jpg"}/>
 
       <table style={{
         border: '1px solid black', textAlign: 'left', display: 'flex',
@@ -121,4 +120,4 @@ function RecipeDisplay(props) {
 // </tbody>
 // </table> */}
 
-export default RecipeDisplay;
+// export default RecipeDisplay;

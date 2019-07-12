@@ -22,4 +22,14 @@ router.get('/api/recipes/:recipeID', (req, res, next) => {
     .catch(next)
 })
 
+router.patch('/api/recipes/:recipeID', (req, res, next) => {
+  console.log('patching ', req.params.recipeID);
+  db
+  .any('select * from "Recipes" WHERE "ID" = $1',req.params.recipeID )
+  .then(data => {
+      res.json(data);
+    })
+    .catch(next)
+})
+
 module.exports = router
