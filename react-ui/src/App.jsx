@@ -12,6 +12,7 @@ class App extends Component {
   }
 
   getRecipe(id) {
+    console.log('getting recipe # ', id);
     fetch(`/api/recipes/${id}`)
       .then(res => {
         if (!res.ok) {
@@ -22,7 +23,8 @@ class App extends Component {
       .then(res => res.json())
       .then(data => {
         let [currentRecipe] = data
-        console.log('current', currentRecipe);
+        // console.log('current', currentRecipe);
+        console.log('picture', currentRecipe.Picture);
         this.setState({ currentRecipe })
       })
       .catch(err => {
@@ -60,7 +62,7 @@ class App extends Component {
         <header className="App-header">
           <h1 className="App-title">Welcome to Wayne's Recipe book!</h1>
         </header>
-        {this.state.currentRecipe ? <RecipeDisplay recipe={this.state.currentRecipe} goToRecipes={this.resetCurrentRecipe} /> :
+        {this.state.currentRecipe ? <RecipeDisplay getRecipe={()=> {this.getRecipe(this.state.currentRecipe.ID)}} recipe={this.state.currentRecipe} goToRecipes={this.resetCurrentRecipe} /> :
         <table >
             <tbody>
               <tr>

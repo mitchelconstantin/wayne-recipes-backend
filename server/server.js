@@ -7,6 +7,11 @@ const api = require('./api')
 
 const app = express()
 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
 /*
 * Log failed requests to stderr
 */
