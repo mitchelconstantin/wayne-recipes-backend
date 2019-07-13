@@ -3,11 +3,11 @@ import MultiLineField from './MultiLineField'
 import ImageUploader from './ImageUploader'
 
 export default (props) => {
-  // console.log('recipe props', props);
+  console.log('recipe props', props);
   return (
     <div>
       <button onClick={props.goToRecipes} >Return to Recipes</button>
-      <p>{props.recipe['props.RecipeName']}</p>
+      <h2>{props.recipe['RecipeName']}</h2>
       <ImageUploader getRecipe={props.getRecipe} recipeID={props.recipe.ID} image={props.recipe.Picture}/>
       <table style={{
         border: '1px solid black', textAlign: 'left', display: 'flex',
