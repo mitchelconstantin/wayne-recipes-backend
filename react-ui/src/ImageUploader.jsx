@@ -1,33 +1,52 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone'
+
 
 export default (props) => {
   const [image, setImage] = useState(props.image);
-  const [newImage, setNewImage] = useState('');
-  const uploadImage = () => {
-    fetch(`/api/recipes/${props.recipeID}/`, {
+  const onDrop = useCallback(async acceptedFiles => {
+    const imageBlob = await readFileAsync(acceptedFiles);
+    uploadImageToServer(imageBlob);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+
+  const readFileAsync = (file) => {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+
+      reader.onload = () => {
+        resolve(reader.result.split(',')[1]);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file[0])
+    })
+  }
+
+  const uploadImageToServer = async (image) => {
+    const newImage = await fetch(`/api/recipes/${props.recipeID}/`, {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body : JSON.stringify({image: newImage})
+      body: JSON.stringify({ image: image })
     })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`/api/postgres HTTP status ${res.status}`)
-        }
-        props.getRecipe()
-        setNewImage('')
-        return res
-      })
+    const json = await newImage.json();
+    setImage(json.image);
   }
+
   return (
-    <div>
+      <div {...getRootProps()}>
       <p >
-        <img src={props.image} style={{ height: '200px', width: '200px', border: '1px' }} />
+        <img src={image} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
       </p>
-      <input value={newImage} onChange={(v) => setNewImage(v.target.value)}></input>
-      <button onClick={uploadImage} >new image URL</button>
-    </div>
+        <input {...getInputProps()} />
+        {
+          isDragActive ?
+            <p>Drop the files here ...</p> :
+            <p>Drag 'n' drop some files here, or click to select files</p>
+        }
+      </div>
   );
 }

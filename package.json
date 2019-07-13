@@ -25,6 +25,9 @@
   ],
   "dependencies": {
     "body-parser": "^1.19.0",
+    "form-data": "^2.5.0",
+    "node-fetch": "^2.6.0",
+    "react-dropzone": "^10.1.5",
     "react-scripts": "3.0.1"
   }
 }
