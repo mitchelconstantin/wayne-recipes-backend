@@ -1,40 +1,57 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import MultiLineField from './MultiLineField'
 import ImageUploader from './ImageUploader'
 
 export default (props) => {
-  console.log('recipe props', props);
+  const [recipeID, setRecipeID] = useState(props.match.params.number);
+  const [recipe, setRecipe] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  const getRecipe = async (id) =>  {
+    console.log('getting recipe # ', id);
+    const res = await fetch(`/api/recipes/${id}`)
+    const [data] = await res.json();
+    setRecipe(data);
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    getRecipe(recipeID);
+  }, []);
+  // return [data, loading];
+if (loading) {
+  return 'loading';
+}
   return (
     <div>
-      <button onClick={props.goToRecipes} >Return to Recipes</button>
-      <h2>{props.recipe['RecipeName']}</h2>
-      <ImageUploader getRecipe={props.getRecipe} recipeID={props.recipe.ID} image={props.recipe.Picture}/>
+      {/* <button onClick={props.goToRecipes} >Return to Recipes</button> */}
+      <h2>{recipe['RecipeName']}</h2>
+      <ImageUploader getRecipe={'wat'} recipeID={recipe.ID} image={recipe.Picture}/>
       <table style={{
         border: '1px solid black', textAlign: 'left', display: 'flex',
         flexDirection: 'column'
       }}>
         <tbody>
-          {props.recipe.Source ?
+          {recipe.Source ?
             <tr>
               <th>{'from'}</th>
-              <td>{props.recipe['Source']}</td>
+              <td>{recipe['Source']}</td>
             </tr>
             : null}
           <tr>
             <th>{'serves'}</th>
-            <td>{props.recipe['Serves']}</td>
+            <td>{recipe['Serves']}</td>
           </tr>
           <tr>
             <th>{'ingredients'}</th>
-            <td><MultiLineField lines={props.recipe['Ingredients']} /></td>
+            <td><MultiLineField lines={recipe['Ingredients']} /></td>
           </tr>
           <tr>
             <th>{'Directions'}</th>
-            <td><MultiLineField lines={props.recipe['Directions']} /></td>
+            <td><MultiLineField lines={recipe['Directions']} /></td>
           </tr>
         </tbody>
       </table>
-
     </div>
   );
 }
