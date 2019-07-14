@@ -1,82 +1,41 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
-import RecipeDisplay from './RecipeDisplay'
 import { Link } from 'react-router-dom'
-class Home extends Component {
-  state = {
-    currentRecipe: null,
-    recipeNames: null,
-    error: null
+
+export default () => {
+  const [recipes, setRecipe] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getRecipes = async (id) => {
+    const res = await fetch(`/api/recipe_names`)
+    const data = await res.json();
+    setRecipe(data.sort((a, b) => a.ID - b.ID));
+    setLoading(false);
   }
 
-  getRecipe(id) {
-    console.log('getting recipe # ', id);
-    fetch(`/api/recipes/${id}`)
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`/api/postgres HTTP status ${res.status}`)
-        }
-        return res
-      })
-      .then(res => res.json())
-      .then(data => {
-        let [currentRecipe] = data
-        this.setState({ currentRecipe })
-      })
-      .catch(err => {
-        this.setState({ error: err.toString() })
-      })
+  useEffect(() => {
+    getRecipes();
+  }, []);
+  if (loading) {
+    return 'loading';
   }
-
-  resetCurrentRecipe = () => {
-    this.setState({ currentRecipe: null })
-  }
-
-  componentDidMount() {
-    fetch('/api/recipe_names')
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(`/api/postgres HTTP status ${res.status}`)
-        }
-        return res
-      })
-      .then(res => res.json())
-      .then(data => {
-        const recipeNames = Object.keys(data).map(key =>
-          ([data[key]['ID'], data[key]['RecipeName']])
-        )
-        this.setState({ recipeNames })
-      })
-      .catch(err => {
-        this.setState({ error: err.toString() })
-      })
-  }
-
-  render() {
-    return this.state.currentRecipe ? <RecipeDisplay recipe={this.state.currentRecipe} goToRecipes={this.resetCurrentRecipe} /> :
-      <table >
-        <tbody>
-          <tr>
-            <th>Recipe Names</th>
+  return (
+    <table >
+      <tbody>
+        <tr>
+          <th>Recipe ID</th>
+          <th>Recipe Names</th>
+          <th>Recipe Link</th>
+        </tr>
+        {recipes.map((recipe, index) => (
+          <tr key={index}>
+            <td>{recipe.ID}</td>
+            <td >{recipe.RecipeName}</td>
+            <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
           </tr>
-          {this.state.recipeNames ? this.state.recipeNames.map((recipe, index) => (
-            <tr key={index}>
-              <li></li>
-              <td>{recipe[0]}</td>
-              <td >{recipe[1]}</td>
-              <td > <Link to={`/recipe/${recipe[0]}`}>Go to Recipe></Link>  </td>
-            </tr>
-          )
-          ) :
-            <tr>
-              <td>Loading</td>
-              <td>Recipes</td>
-            </tr>
-
-          }
-        </tbody>
-      </table>
-  }
+        )
+        )
+        }
+      </tbody>
+    </table>)
 }
-
-export default Home

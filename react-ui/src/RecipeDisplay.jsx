@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import MultiLineField from './MultiLineField'
 import ImageUploader from './ImageUploader'
+import { Link } from 'react-router-dom'
 
 export default (props) => {
   const [recipeID, setRecipeID] = useState(props.match.params.number);
@@ -24,7 +25,7 @@ if (loading) {
 }
   return (
     <div>
-      {/* <button onClick={props.goToRecipes} >Return to Recipes</button> */}
+      <Link to={`/recipe/`}>Back to Recipe List</Link>
       <h2>{recipe['RecipeName']}</h2>
       <ImageUploader getRecipe={'wat'} recipeID={recipe.ID} image={recipe.Picture}/>
       <table style={{
