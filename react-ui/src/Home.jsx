@@ -1,17 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
+import { filter } from 'fuzzaldrin-plus';
 import { Link } from 'react-router-dom'
 
 export default () => {
   const [recipes, setRecipe] = useState([]);
+  const [filterString, setFilterString] = useState('');
   const [loading, setLoading] = useState(true);
 
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
-    const data = await res.json();
+    const json = await res.json();
+    // might want to implement this later if searching by more than one field
+    // const data = json.map(recipe => ({
+    //   searchField: recipe.RecipeName + recipe.ID,
+    //   ...recipe
+    // }));
+    const data = json;
     setRecipe(data.sort((a, b) => a.ID - b.ID));
     setLoading(false);
   }
+
+  const result = filterString
+    ? filter(recipes, filterString, { key: 'RecipeName' })
+    : recipes;
 
   useEffect(() => {
     getRecipes();
@@ -20,22 +32,30 @@ export default () => {
     return 'loading';
   }
   return (
-    <table >
-      <tbody>
-        <tr>
-          <th>Recipe ID</th>
-          <th>Recipe Names</th>
-          <th>Recipe Link</th>
-        </tr>
-        {recipes.map((recipe, index) => (
-          <tr key={index}>
-            <td>{recipe.ID}</td>
-            <td >{recipe.RecipeName}</td>
-            <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
+    <>
+      <input
+        placeholder='Search...'
+        onChange={e => {
+          setFilterString(e.target.value);
+        }}
+      />
+      <table >
+        <tbody>
+          <tr>
+            <th>Recipe ID</th>
+            <th>Recipe Names</th>
+            <th>Recipe Link</th>
           </tr>
-        )
-        )
-        }
-      </tbody>
-    </table>)
+          {result.map((recipe, index) => (
+            <tr key={index}>
+              <td>{recipe.ID}</td>
+              <td >{recipe.RecipeName}</td>
+              <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
+            </tr>
+          )
+          )
+          }
+        </tbody>
+      </table>
+    </>)
 }
