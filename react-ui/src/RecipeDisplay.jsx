@@ -16,6 +16,7 @@ export default (props) => {
 
   useEffect(() => {
     getRecipe();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 if (loading) {
   return 'loading';
