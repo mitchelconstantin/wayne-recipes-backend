@@ -6,8 +6,8 @@ export default () => {
   const [recipes, setRecipe] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getRecipes = async (id) => {
-    const res = await fetch(`/api/recipe_names`)
+  const getRecipes = async () => {
+    const res = await fetch(`/api/recipes`)
     const data = await res.json();
     setRecipe(data.sort((a, b) => a.ID - b.ID));
     setLoading(false);

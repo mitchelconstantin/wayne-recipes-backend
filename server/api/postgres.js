@@ -23,7 +23,7 @@ const uploadImageToImgur = async (blob) => {
   });
 }
 
-router.get('/api/recipe_names', async (req, res) => {
+router.get('/api/recipes', async (req, res) => {
   const data = await db.any('select "RecipeName", "ID" from "Recipes"')
   res.json(data);
 })
@@ -37,7 +37,7 @@ router.patch('/api/recipes/:recipeID/', async (req, res) => {
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
     await db.any('update "Recipes" SET "Picture" = $1 WHERE "ID" = $2', [imgurLink, req.params.recipeID])
-    res.send({ image: imgurLink });
+    res.send('success');
   }
 })
 
