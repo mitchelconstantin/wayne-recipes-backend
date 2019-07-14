@@ -32,30 +32,33 @@ export default () => {
     return 'loading';
   }
   return (
-    <>
-      <input
-        placeholder='Search...'
-        onChange={e => {
-          setFilterString(e.target.value);
-        }}
-      />
-      <table >
-        <tbody>
-          <tr>
-            <th>Recipe ID</th>
-            <th>Recipe Names</th>
-            <th>Recipe Link</th>
+    <table >
+      <tbody>
+        <tr>
+          <th></th>
+          <th> <input
+            placeholder='Search...'
+            onChange={e => {
+              setFilterString(e.target.value);
+            }}
+          /></th>
+          <th></th>
+        </tr>
+        <tr>
+          <th>Recipe ID</th>
+          <th>Recipe Names</th>
+          <th>Recipe Link</th>
+        </tr>
+        {result.map((recipe, index) => (
+          <tr key={index}>
+            <td>{recipe.ID}</td>
+            <td >{recipe.RecipeName}</td>
+            <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
           </tr>
-          {result.map((recipe, index) => (
-            <tr key={index}>
-              <td>{recipe.ID}</td>
-              <td >{recipe.RecipeName}</td>
-              <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
-            </tr>
-          )
-          )
-          }
-        </tbody>
-      </table>
-    </>)
+        )
+        )
+        }
+      </tbody>
+    </table>
+  )
 }
