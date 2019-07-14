@@ -4,30 +4,28 @@ import ImageUploader from './ImageUploader'
 import { Link } from 'react-router-dom'
 
 export default (props) => {
-  const [recipeID, setRecipeID] = useState(props.match.params.number);
   const [recipe, setRecipe] = useState({});
   const [loading, setLoading] = useState(true);
 
-  const getRecipe = async (id) =>  {
-    console.log('getting recipe # ', id);
-    const res = await fetch(`/api/recipes/${id}`)
+  const getRecipe = async () =>  {
+    const res = await fetch(`/api/recipes/${props.match.params.number}`)
     const [data] = await res.json();
     setRecipe(data);
     setLoading(false);
   }
 
   useEffect(() => {
-    getRecipe(recipeID);
+    getRecipe();
   }, []);
-  // return [data, loading];
 if (loading) {
   return 'loading';
 }
+console.log('what is recipe picture', recipe.Picture);
   return (
     <div>
       <Link to={`/recipe/`}>Back to Recipe List</Link>
       <h2>{recipe['RecipeName']}</h2>
-      <ImageUploader getRecipe={'wat'} recipeID={recipe.ID} image={recipe.Picture}/>
+      <ImageUploader getRecipe={getRecipe} recipeID={recipe.ID} image={recipe.Picture}/>
       <table style={{
         border: '1px solid black', textAlign: 'left', display: 'flex',
         flexDirection: 'column'

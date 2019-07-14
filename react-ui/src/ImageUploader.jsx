@@ -3,7 +3,6 @@ import { useDropzone } from 'react-dropzone'
 
 
 export default (props) => {
-  const [image, setImage] = useState(props.image);
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
     uploadImageToServer(imageBlob);
@@ -24,7 +23,7 @@ export default (props) => {
   }
 
   const uploadImageToServer = async (image) => {
-    const newImage = await fetch(`/api/recipes/${props.recipeID}/`, {
+    await fetch(`/api/recipes/${props.recipeID}/`, {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',
@@ -32,21 +31,20 @@ export default (props) => {
       },
       body: JSON.stringify({ image: image })
     })
-    const json = await newImage.json();
-    setImage(json.image);
+    props.getRecipe();
   }
 
   return (
-      <div {...getRootProps()}>
+    <div {...getRootProps()}>
       <p >
-        <img src={image} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
+        <img src={props.image} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
       </p>
-        <input {...getInputProps()} />
-        {
-          isDragActive ?
-            <p>Drop the files here ...</p> :
-            <p>Drag 'n' drop some files here, or click to select files</p>
-        }
-      </div>
+      <input {...getInputProps()} />
+      {
+        isDragActive ?
+          <p>Drop the files here ...</p> :
+          <p>Drag 'n' drop some files here, or click to select files</p>
+      }
+    </div>
   );
 }
