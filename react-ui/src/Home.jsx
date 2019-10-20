@@ -33,7 +33,7 @@ export default () => {
   }
   return (
     <>
-    <Link to={`/login/`}>Go to login page</Link>
+    <Link to={`/login`}>Go to login page</Link>
 
     <table >
       <tbody>

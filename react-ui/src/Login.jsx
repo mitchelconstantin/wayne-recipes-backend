@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {Button, TextField} from '@material-ui/core';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 
 export default () => {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -34,6 +34,7 @@ export default () => {
     <Button onClick={handleClick} variant="contained" color="primary">
     Login
    </Button>
+   <Link to={`/all`}>Back to Recipe List</Link>
    </>
   )
 }

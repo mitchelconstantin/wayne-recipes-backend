@@ -11,7 +11,7 @@ function Main() {
           <Route path='/all' component={Recipe} />
           <Route path='/r' component={Recipe} />
 
-          {/* <Redirect from="/" to="/all" /> */}
+          <Redirect from="/" to="/all" />
       </Switch>
     </main>
   );
