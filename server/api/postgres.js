@@ -22,7 +22,39 @@ const uploadImageToImgur = async (blob) => {
     resolve(json.data.link)
   });
 }
+//login
+router.post('/api/login', async (req, res) => { // try a single login
+  const {email, password} = req.body.user;
+  const user = await db.any('select * from "users" WHERE "email" = $1 AND "password" = $2',[email, password] )
+  if (!user.length) {
+    return res.status(400).send({
+      message: 'Incorrect login'
+   });
+  }
+  res.json('success')
+})
 
+router.get('/api/users', async (req, res) => { // get list of all users
+  const data = await db.any('select * from "users"')
+  console.log('here is data', data);
+  res.json(data);
+})
+
+router.post('/api/users', async (req, res) => { // try to create a new user
+  // permissionLevel
+  const {firstName, lastName, email, password} = req.body.user;
+  const user = await db.any('select * from "users" WHERE "email" = $1 ',[email] )
+  if (user.length) {
+    return res.status(400).send({
+      message: 'username already exists'
+   });
+  }
+  const newUser = await db.one('INSERT INTO users(firstName, lastName, email, password, permissionLevel) VALUES($1, $2, $3, $4, $5) RETURNING email', [firstName, lastName, email, password, 10])
+console.log('newuser', newUser);
+res.json('success')
+})
+
+//recipes
 router.get('/api/recipes', async (req, res) => {
   const data = await db.any('select "RecipeName", "ID" from "Recipes"')
   res.json(data);

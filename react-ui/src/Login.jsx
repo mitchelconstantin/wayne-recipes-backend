@@ -1,40 +1,139 @@
-import React, {useState} from 'react'
-import {Button, TextField} from '@material-ui/core';
+import React, { useState } from 'react'
+import { Button, TextField } from '@material-ui/core';
 import { Redirect, Link } from 'react-router-dom'
 
-export default () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState({name: '', password: ''})
+const loginToServer = async (user) => {
+  const res = await fetch('/api/login/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user })
+  })
+  return res;
+}
 
-  const handleChange = (type,newValue) => {
-    if (type === 'name') setUser({...user, name: newValue});
-    if (type === 'password') setUser({...user, password: newValue});
+const createUser = async (user) => {
+  console.log('calling the api');
+  const res = await fetch('/api/users/', {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user })
+  })
+  return res;
+}
+
+// const getAllUsers = async () => {
+//   const res = await fetch('/api/users');
+//   const json = await res.json();
+//   console.log('json', json);
+// }
+export default () => {
+  const emptyUser = { firstName: '', lastName: '', email: '', password: '' };
+  const [signingUp, setSigningUp] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState(emptyUser)
+
+  const handleChange = (type, newValue) => {
+    if (type === 'firstName') setUser({ ...user, firstName: newValue });
+    if (type === 'lastName') setUser({ ...user, lastName: newValue });
+    if (type === 'email') setUser({ ...user, email: newValue });
+    if (type === 'password') setUser({ ...user, password: newValue });
   }
-  const handleClick = () => {
-    setLoggedIn(true);
+  const handleSignUpClick = async () => {
+    console.log('trying to sign up');
+    try {
+      const response = await createUser(user);
+      console.log('response', response);
+      if (response.status === 400) console.log('that user already exists, please try logging in');
+      if (response.status === 200) console.log('user created, now login with that username and password');
+      setUser(emptyUser);
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
+  }
+
+  const handleLoginClick = async () => {
+    try {
+      const response = await loginToServer(user);
+      console.log('response', response);
+      if (response.status === 400) {
+        console.log('yikes, that user does not exist');
+        setUser(emptyUser);
+      }
+      if (response.status === 200) {
+        setLoggedIn(true);
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+    }
   }
   return (
     <>
-    {loggedIn && <Redirect push to='/all' />}
+      {loggedIn && <Redirect push to='/all' />}
+      {signingUp && (
+        <>
           <TextField
-        id="standard-name"
-        label="Name"
-        value={user.name}
-        onChange={(e) => handleChange('name', e.target.value)}
+            label="First Name"
+            value={user.firstName}
+            onChange={(e) => handleChange('firstName', e.target.value)}
+            margin="normal"
+          />
+          <TextField
+            label="Last Name"
+            value={user.lastName}
+            onChange={(e) => handleChange('lastName', e.target.value)}
+            margin="normal"
+          />
+        </>
+      )}
+      <TextField
+        label="Email"
+        required
+        value={user.email}
+        onChange={(e) => handleChange('email', e.target.value)}
         margin="normal"
       />
-            <TextField
+      <TextField
         id="standard-password-input"
         label="Password"
         onChange={(e) => handleChange('password', e.target.value)}
         type="password"
+        value={user.password}
+        required
         autoComplete="current-password"
         margin="normal"
       />
-    <Button onClick={handleClick} variant="contained" color="primary">
-    Login
+
+      {signingUp ?
+        <>
+          <Button onClick={handleSignUpClick}
+            disabled={!(user.email && user.password && user.firstName && user.lastName)}
+            variant="contained" color="primary">
+            Sign up
    </Button>
-   <Link to={`/all`}>Back to Recipe List</Link>
-   </>
+          <Button onClick={() => setSigningUp(false)} variant="contained" color="primary">
+            click here to log in
+</Button>
+        </>
+        :
+        <><Button onClick={handleLoginClick}
+        disabled={!(user.email && user.password)}
+
+        variant="contained" color="primary">
+          Login
+   </Button>
+          <Button onClick={() => setSigningUp(true)} variant="contained" color="primary">
+            click here to sign up
+   </Button>
+        </>}
+      <Link to={`/all`}>Back to Recipe List</Link>
+    </>
   )
 }
