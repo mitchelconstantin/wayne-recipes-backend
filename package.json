@@ -28,6 +28,7 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/pickers": "^3.2.2",
     "@material-ui/styles": "^4.3.0",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.19.0",
     "form-data": "^2.5.0",
     "fuzzaldrin-plus": "^0.6.0",

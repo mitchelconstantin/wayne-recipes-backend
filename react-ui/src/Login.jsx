@@ -50,8 +50,11 @@ export default () => {
       const response = await createUser(user);
       console.log('response', response);
       if (response.status === 400) console.log('that user already exists, please try logging in');
-      if (response.status === 200) console.log('user created, now login with that username and password');
-      setUser(emptyUser);
+      if (response.status === 200) {
+        console.log('user created, now login with that username and password')
+        setUser(emptyUser);
+        setSigningUp(false);
+      };
     } catch (e) {
       console.log(e);
     } finally {
@@ -124,9 +127,9 @@ export default () => {
         </>
         :
         <><Button onClick={handleLoginClick}
-        disabled={!(user.email && user.password)}
+          disabled={!(user.email && user.password)}
 
-        variant="contained" color="primary">
+          variant="contained" color="primary">
           Login
    </Button>
           <Button onClick={() => setSigningUp(true)} variant="contained" color="primary">

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 var FormData = require('form-data');
 const fetch = require("node-fetch");
+const bcrypt = require('bcrypt');
 
 const { db } = require('../lib/database')
 
@@ -25,8 +26,10 @@ const uploadImageToImgur = async (blob) => {
 //login
 router.post('/api/login', async (req, res) => { // try a single login
   const {email, password} = req.body.user;
-  const user = await db.any('select * from "users" WHERE "email" = $1 AND "password" = $2',[email, password] )
-  if (!user.length) {
+  const [user] = await db.any('select * from "users" WHERE "email" = $1',[email] )
+  const newHash = bcrypt.hashSync(password, 10);
+
+  if (!user || !bcrypt.compareSync(password, user.hash)) { //if no user or if password and hash do not match
     return res.status(400).send({
       message: 'Incorrect login'
    });
@@ -49,7 +52,11 @@ router.post('/api/users', async (req, res) => { // try to create a new user
       message: 'username already exists'
    });
   }
-  const newUser = await db.one('INSERT INTO users(firstName, lastName, email, password, permissionLevel) VALUES($1, $2, $3, $4, $5) RETURNING email', [firstName, lastName, email, password, 10])
+  const hash = bcrypt.hashSync(password, 10);
+  console.log('here is the hash I make, should be one line');
+  console.log(hash);
+  console.log('done');
+  const newUser = await db.one('INSERT INTO users(firstName, lastName, email, hash, permissionLevel) VALUES($1, $2, $3, $4, $5) RETURNING email', [firstName, lastName, email, hash, 10])
 console.log('newuser', newUser);
 res.json('success')
 })
