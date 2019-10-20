@@ -32,6 +32,9 @@ export default () => {
     return 'loading';
   }
   return (
+    <>
+    <Link to={`/login/`}>Go to login page</Link>
+
     <table >
       <tbody>
         <tr>
@@ -53,12 +56,13 @@ export default () => {
           <tr key={index}>
             <td>{recipe.ID}</td>
             <td >{recipe.RecipeName}</td>
-            <td > <Link to={`/recipe/${recipe.ID}`}>Go to Recipe></Link>  </td>
+            <td > <Link to={`/r/${recipe.ID}`}>Go to Recipe></Link>  </td>
           </tr>
         )
         )
         }
       </tbody>
     </table>
+    </>
   )
 }

@@ -24,7 +24,7 @@ if (loading) {
 console.log('what is recipe picture', recipe.Picture);
   return (
     <div>
-      <Link to={`/recipe/`}>Back to Recipe List</Link>
+      <Link to={`/all/`}>Back to Recipe List</Link>
       <h2>{recipe['RecipeName']}</h2>
       <ImageUploader getRecipe={getRecipe} recipeID={recipe.ID} image={recipe.Picture}/>
       <table style={{

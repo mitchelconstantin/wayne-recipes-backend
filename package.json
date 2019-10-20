@@ -24,9 +24,14 @@
     "server/node_modules"
   ],
   "dependencies": {
+    "@material-ui/core": "^4.3.0",
+    "@material-ui/icons": "^4.2.1",
+    "@material-ui/pickers": "^3.2.2",
+    "@material-ui/styles": "^4.3.0",
     "body-parser": "^1.19.0",
     "form-data": "^2.5.0",
     "fuzzaldrin-plus": "^0.6.0",
+    "material-ui": "^1.0.0-beta.47",
     "node-fetch": "^2.6.0",
     "react-dropzone": "^10.1.5",
     "react-router-dom": "^5.0.1",

@@ -7,8 +7,11 @@ function Main() {
   return (
     <main>
         <Switch>
-          <Route path='/recipe' component={Recipe} />
-          <Redirect from="/" to="/recipe" />
+        <Route path='/login' component={Recipe} />
+          <Route path='/all' component={Recipe} />
+          <Route path='/r' component={Recipe} />
+
+          {/* <Redirect from="/" to="/all" /> */}
       </Switch>
     </main>
   );
