@@ -136,7 +136,6 @@ export default () => {
             click here to sign up
    </Button>
         </>}
-      <Link to={`/all`}>Back to Recipe List</Link>
     </>
   )
 }
