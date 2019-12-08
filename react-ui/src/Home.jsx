@@ -44,7 +44,7 @@ export default () => {
     filter: false,
   };
   console.log('recipes', recipes);
-  if (!recipes.length) <div>not ready yet</div>
+  if (!recipes.length) return <div>not ready yet</div>
   return (
     <>
     {!recipes.length && <div>not ready yet</div>}
