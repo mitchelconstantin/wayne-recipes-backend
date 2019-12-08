@@ -19,7 +19,7 @@ export default () => {
     const json = await res.json();
     console.log('here is your json from the server', json);
     setRecipe(json.
-      sort((a, b) => a.ID - b.ID)
+      sort((a, b) => a.id - b.id)
       .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
     );
     setLoading(false);
