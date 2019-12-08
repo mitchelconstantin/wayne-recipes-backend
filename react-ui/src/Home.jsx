@@ -44,8 +44,10 @@ export default () => {
     filter: false,
   };
   console.log('recipes', recipes);
+  if (!recipes.length) <div>not ready yet</div>
   return (
     <>
+    {!recipes.length && <div>not ready yet</div>}
       {recipes.map((recipe) => {
         console.log('recipe', recipe);
         return <div> here is a recipe {recipe}</div>
