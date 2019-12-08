@@ -7,10 +7,11 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "@material-ui/icons": "^4.5.1",
+    "bcrypt": "^3.0.6",
     "dotenv": "^4.0.0",
     "express": "^4.17.1",
     "morgan": "^1.9.1",
-    "bcrypt": "^3.0.6",
     "pg": "^7.11.0",
     "pg-monitor": "^1.1.0",
     "pg-promise": "^8.7.4",

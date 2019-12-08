@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import MultiLineField from './MultiLineField'
 import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -7,6 +6,8 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Button from '@material-ui/core/Button';
+import emptyImage from './emptyImage.png';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,6 +26,10 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column"
   }
 }));
+
+const isAdmin = () => {
+  return JSON.parse(localStorage.getItem('isAdmin'));
+}
 
 const FixedField = ({ title, content }) => {
   const classes = useStyles();
@@ -58,9 +63,8 @@ const ExpandableField = ({ title, content }) => {
         <Typography className={classes.heading}>{title}</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.details}>
-        {content.split("\n").map((line) => {
-          return <Typography className={classes.secondaryHeading}>{line}</Typography>
-        })}
+        {content.split("\n").map((line, i) => <Typography key={i}className={classes.secondaryHeading}>{line}</Typography>
+        )}
       </ExpansionPanelDetails>
     </ExpansionPanel>
   )
@@ -83,17 +87,27 @@ export default (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (loading) {
-    return 'loading';
+    return 'loading3';
   }
-  console.log('what is recipe picture', recipe.Picture);
+  const onError = (ev) => {
+    const eventTarget = ev.target;
+    eventTarget.src = emptyImage;
+  };
+
   return (
     <div>
-      <h2>{recipe['RecipeName']}</h2>
-      <ImageUploader getRecipe={getRecipe} recipeID={recipe.ID} image={recipe.Picture} />
-      <FixedField title='from' content={recipe['Source'] || 'unknown'} />
-      <FixedField title='serves' content={recipe['Serves'] || 'unknown'} />
-      <ExpandableField title='ingredients' content={recipe['Ingredients'] || 'unknown'} />
-      <ExpandableField title='directions' content={recipe['Directions'] || 'unknown'} />
+      <h2>{recipe.title}</h2>
+      {isAdmin() && <Button
+        href={`/r/${recipe.id}/edit`}
+      >edit this recipe</Button>}
+      {isAdmin() ? <ImageUploader getRecipe={getRecipe} recipeID={recipe.id} image={recipe.picture} /> :
+        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
+      }
+
+      <FixedField title='from' content={recipe.source || 'unknown'} />
+      <FixedField title='serves' content={recipe.serves || 'unknown'} />
+      <ExpandableField title='ingredients' content={recipe.ingredients || 'unknown'} />
+      <ExpandableField title='directions' content={recipe.directions || 'unknown'} />
     </div>
   );
 }

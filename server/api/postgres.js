@@ -26,7 +26,7 @@ const uploadImageToImgur = async (blob) => {
 //login
 router.post('/api/login', async (req, res) => { // try a single login
   const {email, password} = req.body.user;
-  const [user] = await db.any('select * from "users" WHERE "email" = $1',[email] )
+  const [user] = await db.any('select * from "users" WHERE "email" = $1 ',[email] )
   const newHash = bcrypt.hashSync(password, 10);
 
   if (!user || !bcrypt.compareSync(password, user.hash)) { //if no user or if password and hash do not match
@@ -34,7 +34,8 @@ router.post('/api/login', async (req, res) => { // try a single login
       message: 'Incorrect login'
    });
   }
-  res.json('success')
+  console.log('here is your user', user);
+  res.json({isAdmin: user.permissionlevel > 9})
 })
 
 router.get('/api/users', async (req, res) => { // get list of all users
@@ -63,19 +64,34 @@ res.json('success')
 
 //recipes
 router.get('/api/recipes', async (req, res) => {
-  const data = await db.any('select "RecipeName", "ID" from "Recipes"')
+  const data = await db.any('select "title", "id" from "Recipes"')
   res.json(data);
 })
 
 router.get('/api/recipes/:recipeID', async (req, res) => {
-  const data = await db.any('select * from "Recipes" WHERE "ID" = $1', req.params.recipeID)
+  const data = await db.any('select * from "Recipes" WHERE id = $1', req.params.recipeID)
+  console.log('here is your data, data', data);
   res.json(data);
 })
 
-router.patch('/api/recipes/:recipeID/', async (req, res) => {
+router.patch('/api/recipes', async (req, res) => {
+  const recipe = req.body.recipe
+  if (recipe.id) {
+    const values = [recipe.id, recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions]
+    await db.any('update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6 WHERE "id" = $1', values)
+    res.send({id: recipe.id});
+  }
+  else {
+  const values = [recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions]
+  const newRecipe = await db.one('INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions") VALUES($1, $2, $3, $4, $5) RETURNING id', values)
+  res.send(newRecipe);
+}
+})
+
+router.patch('/api/recipes/:recipeID/image', async (req, res) => {
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
-    await db.any('update "Recipes" SET "Picture" = $1 WHERE "ID" = $2', [imgurLink, req.params.recipeID])
+    await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
     res.send('success');
   }
 })

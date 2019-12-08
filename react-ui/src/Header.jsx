@@ -17,19 +17,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+const logout = () => {
+  localStorage.setItem('isLoggedIn', false);
+  localStorage.setItem('isAdmin', false);
+  // window.location= '/all'
+  window.location.reload();
+}
+
+const isLoggedIn = () => {
+  return JSON.parse(localStorage.getItem('isLoggedIn'));
+}
+
+
 export default (props) => {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography  className={classes.title} edge='start' variant="h6" >
+          <Typography className={classes.title} edge='start' variant="h6" >
             Wayne's Recipes
     </Typography>
-          <div  >
-            <Button  href='/login' color="inherit">Login</Button>
-            <Button href='/all' color="inherit">All Recipes</Button>
-          </div>
+          {isLoggedIn() ?
+            <Button onClick={logout} color="inherit">Logout {isLoggedIn}</Button>
+            :
+            <Button href='/login' color="inherit">Login</Button>
+          }
+          <Button href='/all' color="inherit">All Recipes</Button>
         </Toolbar>
       </AppBar>
     </div>

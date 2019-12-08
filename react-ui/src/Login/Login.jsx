@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
 import { Redirect, Link } from 'react-router-dom'
 
+export const isLoggedIn = () => {
+  JSON.parse(localStorage.getItem('isLoggedIn'));
+}
 const loginToServer = async (user) => {
   const res = await fetch('/api/login/', {
     method: 'POST',
@@ -11,6 +14,8 @@ const loginToServer = async (user) => {
     },
     body: JSON.stringify({ user })
   })
+
+  localStorage.setItem('isLoggedIn', 'true');
   return res;
 }
 
@@ -35,7 +40,7 @@ const createUser = async (user) => {
 export default () => {
   const emptyUser = { firstName: '', lastName: '', email: '', password: '' };
   const [signingUp, setSigningUp] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  // const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(emptyUser)
 
   const handleChange = (type, newValue) => {
@@ -70,7 +75,14 @@ export default () => {
         setUser(emptyUser);
       }
       if (response.status === 200) {
-        setLoggedIn(true);
+        // console.log('response', response.j);
+        const user = await response.json();
+        console.log('user', user);
+        if (user.isAdmin) localStorage.setItem('isAdmin', true);
+        localStorage.setItem('isLoggedIn', true);
+        // setLoggedIn(true);
+        // window.location.reload();
+        window.location = '/all';
       }
     } catch (e) {
       console.log(e);
@@ -79,7 +91,7 @@ export default () => {
   }
   return (
     <>
-      {loggedIn && <Redirect push to='/all' />}
+      {/* {isLoggedIn() && <Redirect push to='/all' />} */}
       {signingUp && (
         <>
           <TextField

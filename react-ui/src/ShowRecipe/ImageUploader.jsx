@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
-
+import emptyImage from './emptyImage.png';
 
 export default (props) => {
   const onDrop = useCallback(async acceptedFiles => {
@@ -23,7 +23,7 @@ export default (props) => {
   }
 
   const uploadImageToServer = async (image) => {
-    await fetch(`/api/recipes/${props.recipeID}/`, {
+    await fetch(`/api/recipes/${props.recipeID}/image`, {
       method: 'PATCH',
       headers: {
         'Accept': 'application/json',
@@ -33,11 +33,15 @@ export default (props) => {
     })
     props.getRecipe();
   }
+  const onError = (ev) => {
+    const eventTarget = ev.target;
+    eventTarget.src = emptyImage;
+  };
 
   return (
     <div {...getRootProps()}>
       <p >
-        <img src={props.image} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
+        <img onError={onError} src={props.image || emptyImage} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
       </p>
       <input {...getInputProps()} />
       {

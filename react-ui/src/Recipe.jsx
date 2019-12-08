@@ -1,15 +1,17 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
-import RecipeDisplay from './RecipeDisplay';
+import RecipeDisplay from './ShowRecipe/RecipeDisplay';
 import Home from './Home'
-import Login from './Login'
+import Login from './Login/Login'
+import UpdateRecipe from './UpdateRecipe/UpdateRecipe';
 
 export default () => {
   return (
     <Switch>
       <Route exact path='/login' component={Login} />
       <Route exact path='/all' component={Home} />
-      <Route path='/r/:number' component={RecipeDisplay} />
+      <Route exact path='/r/:number' component={RecipeDisplay} />
+      <Route path='/r/:number/edit' component={UpdateRecipe} />
     </Switch>
   );
 }
