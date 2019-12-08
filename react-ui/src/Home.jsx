@@ -17,6 +17,7 @@ export default () => {
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
+    console.log('here is your json from the server', json);
     setRecipe(json.
       sort((a, b) => a.ID - b.ID)
       .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
@@ -40,6 +41,7 @@ export default () => {
     viewColumns: false,
     filter: false,
   };
+  console.log('recipes', recipes);
   return (
     <>
       {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
