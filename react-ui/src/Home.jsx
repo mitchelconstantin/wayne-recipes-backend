@@ -18,22 +18,24 @@ export default () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
     console.log('here is your json from the server', json);
-    setRecipe(json.
-      sort((a, b) => a.id - b.id)
-      .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
-    );
+    const recipeList = json
+    .sort((a, b) => a.id - b.id)
+    .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
+
+    setRecipe(recipeList);
     setLoading(false);
   }
 
   useEffect(() => {
     getRecipes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (loading) return <CircularProgress />;
 
   const columns = ['Recipe Name', 'Recipe Link']
   const options = {
     searchOpen: true,
-    selectableRows: false,
+    selectableRows: 'none',
     searchPlaceholder: 'search recipe titles',
     print: false,
     download: false,

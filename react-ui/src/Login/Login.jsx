@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
-import { Redirect, Link } from 'react-router-dom'
 
 export const isLoggedIn = () => {
   JSON.parse(localStorage.getItem('isLoggedIn'));

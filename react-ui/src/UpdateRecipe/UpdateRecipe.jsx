@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button, TextField } from '@material-ui/core';
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 
@@ -39,6 +39,7 @@ export default (props) => {
 
   useEffect(() => {
     getRecipeData(setRecipe, recipeId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
 

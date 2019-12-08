@@ -73,7 +73,6 @@ const ExpandableField = ({ title, content }) => {
 export default (props) => {
   const [recipe, setRecipe] = useState({});
   const [loading, setLoading] = useState(true);
-  const classes = useStyles();
 
   const getRecipe = async () => {
     const res = await fetch(`/api/recipes/${props.match.params.number}`)
