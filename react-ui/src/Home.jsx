@@ -19,8 +19,8 @@ export default () => {
     const json = await res.json();
     console.log('here is your json from the server', json);
     const recipeList = json
-    .sort((a, b) => a.id - b.id)
-    .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
+      .sort((a, b) => a.id - b.id)
+      .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
 
     setRecipe(recipeList);
     setLoading(false);
@@ -46,6 +46,10 @@ export default () => {
   console.log('recipes', recipes);
   return (
     <>
+      {recipes.map((recipe) => {
+        console.log('recipe', recipe);
+        return <div> here is a recipe {recipe}</div>
+      })}
       {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
       <MUIDataTable
         title={"Recipes"}
