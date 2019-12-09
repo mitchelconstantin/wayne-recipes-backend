@@ -17,7 +17,6 @@ export default () => {
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
-    console.log('here is your json from the server', json);
     const recipeList = json
       .sort((a, b) => a.id - b.id)
       .map((recipe) => [recipe.title, getRecipeLink(recipe.id)])
@@ -30,7 +29,6 @@ export default () => {
     getRecipes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  if (loading) return <CircularProgress />;
 
   const columns = ['Recipe Name', 'Recipe Link']
   const options = {
@@ -43,15 +41,9 @@ export default () => {
     viewColumns: false,
     filter: false,
   };
-  console.log('recipes', recipes);
-  if (!recipes.length) return <div>not ready yet</div>
+  if (loading) return <CircularProgress />;
   return (
     <>
-    {!recipes.length && <div>not ready yet</div>}
-      {recipes.map((recipe) => {
-        console.log('recipe', recipe);
-        return <div> here is a recipe {recipe}</div>
-      })}
       {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
       <MUIDataTable
         title={"Recipes"}

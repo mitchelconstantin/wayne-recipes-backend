@@ -91,8 +91,18 @@ router.patch('/api/recipes', async (req, res) => {
 router.patch('/api/recipes/:recipeID/image', async (req, res) => {
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
-    await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
-    res.send('success');
+    // await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
+    res.send({link: imgurLink});
+  }
+})
+
+router.post('/api/image', async (req, res) => {
+  console.log('req', req);
+  if (req.body.image) {
+    const imgurLink = await uploadImageToImgur(req.body.image)
+    console.log('here is your imgur link', imgurLink);
+    // await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
+    res.send({link: imgurLink});
   }
 })
 

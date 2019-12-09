@@ -3,6 +3,7 @@ import { Button, TextField } from '@material-ui/core';
 import { Redirect } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import ImageUploader from './ImageUploader'
 
 const emptyRecipe = { id: undefined, title: '', picture: '', source: '', serves: '', ingredients: '', directions: '' };
 
@@ -21,8 +22,9 @@ const getRecipeData = async (setRecipe, recipeId) => {
       directions: recipe.directions,
     })
   }
-
-  if (!recipeId) setRecipe(emptyRecipe);
+  if (!recipeId) {
+    console.log('no recipe data');
+    setRecipe(emptyRecipe)};
 };
 
 
@@ -44,13 +46,18 @@ export default (props) => {
 
 
   const handleChange = (type, newValue) => {
+    console.log('handling change of type', type);
+    console.log('with newValue', newValue);
+    console.log('here is recipe', recipe);
     if (type === 'title') setRecipe({ ...recipe, title: newValue });
     if (type === 'picture') setRecipe({ ...recipe, picture: newValue });
     if (type === 'source') setRecipe({ ...recipe, source: newValue });
     if (type === 'serves') setRecipe({ ...recipe, serves: newValue });
     if (type === 'ingredients') setRecipe({ ...recipe, ingredients: newValue });
     if (type === 'directions') setRecipe({ ...recipe, directions: newValue });
+    console.log('now here is recupe', recipe);
   }
+  // const setPicture = (image) => handleChange('picture', image)
 
   const saveRecipe = async () => {
     const res = await fetch('/api/recipes/', {
@@ -81,7 +88,7 @@ export default (props) => {
         {recipeId ?'edit this recipe' :'Add a new recipe (you can upload a new photo once you save the details)'}
 
       </Typography>
-
+      <ImageUploader setPicture={(newImage) => handleChange('picture', newImage)} recipeId={recipe.id} picture={recipe.picture} />
       <Grid container direction='column' spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
