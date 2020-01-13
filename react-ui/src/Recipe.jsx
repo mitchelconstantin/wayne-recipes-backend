@@ -1,11 +1,12 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom'
 import RecipeDisplay from './ShowRecipe/RecipeDisplay';
-import Home from './Home'
+import Home from './AllRecipes/Home'
 import Login from './Login/Login'
 import UpdateRecipe from './UpdateRecipe/UpdateRecipe';
 
 export default () => {
+  const searchTerm = '222222';
   return (
     <Switch>
       <Route exact path='/login' component={Login} />

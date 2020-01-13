@@ -2,7 +2,7 @@
   "name": "react-express-postgres-heroku",
   "version": "1.0.0",
   "engines": {
-    "node": "8.x.x",
+    "node": "12.13.x",
     "npm": "5.x.x"
   },
   "private": true,
@@ -37,6 +37,7 @@
     "node-fetch": "^2.6.0",
     "react-dropzone": "^10.1.5",
     "react-router-dom": "^5.0.1",
-    "react-scripts": "3.0.1"
+    "react-scripts": "3.0.1",
+    "typescript": "^3.7.2"
   }
 }

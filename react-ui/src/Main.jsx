@@ -1,5 +1,4 @@
 import React from 'react'
-import './App.css'
 import Recipe from './Recipe'
 import UpdateRecipe from './UpdateRecipe/UpdateRecipe'
 import { Switch, Route, Redirect } from 'react-router-dom'

@@ -64,7 +64,7 @@ res.json('success')
 
 //recipes
 router.get('/api/recipes', async (req, res) => {
-  const data = await db.any('select "title", "id" from "Recipes"')
+  const data = await db.any('select "title", "id", "type", "mainIngredient", "source" from "Recipes"')
   res.json(data);
 })
 
