@@ -43,7 +43,7 @@ export default (props) => {
   // };
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`
-  const description = 'traditional Cajun food and so much more!'
+  const description = 'Traditional Cajun food and so much more!'
 
   return (
     <div className={classes.root}>
