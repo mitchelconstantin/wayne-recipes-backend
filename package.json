@@ -8,6 +8,7 @@
   "private": true,
   "description": "Recipe app with Express API and Postgres DB hosted in Heroku",
   "scripts": {
+    "heroku-prebuild": "rm -rf /dist",
     "postinstall": "npm --prefix react-ui install && npm --prefix server install",
     "start:dev": "concurrently 'npm run --prefix react-ui start' 'npm run --prefix server start'",
     "heroku-postbuild": "npm run --prefix react-ui build",
