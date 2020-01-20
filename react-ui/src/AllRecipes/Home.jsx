@@ -61,15 +61,22 @@ export default () => {
   )
 
   return (
-    <Container display='flex' flexDirection='column' alignItems='center' >
-      <Box width='100%' position='static'>
-        <Tabs value={value} onChange={handleChangeTab} variant="scrollable"
+    <Container display='flex' flexDirection='column' alignItems='center' position='static'>
+      <Box width='100%'
+        display='flex'
+        justifyContent='center'
+      >
+        <Tabs
+          value={value}
+          onChange={handleChangeTab}
+          variant="scrollable"
           scrollButtons="auto"
           classes={{ indicator: classes.indicator }}
         >
           {categories.map(c => <Tab key={c.label} label={c.label} />)}
         </Tabs>
       </Box>
+      {/* </Box> */}
       <Input placeholder='search'
         value={searchTerm}
         onChange={handleChangeInput}

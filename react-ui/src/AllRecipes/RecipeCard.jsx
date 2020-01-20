@@ -22,8 +22,10 @@ export const RecipeCard = ({ recipe }) => {
     <Box justifySelf='center' alignSelf='center'>
       <Paper className={classes.card} onClick={selectRecipe} >
         <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '300px', width: '300px' }} />
+        <Box p='10px'>
         <Typography>{recipe.title}</Typography>
         <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
+        </Box>
       </Paper>
     </Box>
   )

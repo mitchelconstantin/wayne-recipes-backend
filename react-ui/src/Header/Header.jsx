@@ -6,7 +6,6 @@ import logo from './logo.svg'
 const useStyles = makeStyles(theme => ({
   root: {
     // flexGrow: 1,
-    height: '20%'
   },
   menuButton: {
     marginRight: theme.spacing(4),
@@ -16,6 +15,8 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     backgroundColor: '#e4673d',
+    paddingLeft: '20px',
+    paddingRight: '20px'
   },
   button: {
     color: 'white'
