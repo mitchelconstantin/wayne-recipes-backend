@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, AppBar, Toolbar, Typography, Button, Input } from '@material-ui/core/';
 import logo from './logo.svg'
-import useScrollTrigger from '@material-ui/core/useScrollTrigger';
-import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
   root: {
