@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, AppBar, Toolbar, Typography, Button, Input } from '@material-ui/core/';
 import logo from './logo.svg'
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
+import Slide from '@material-ui/core/Slide';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    // flexGrow: 1,
   },
   menuButton: {
     marginRight: theme.spacing(4),
@@ -16,8 +18,12 @@ const useStyles = makeStyles(theme => ({
   toolbar: {
     backgroundColor: '#e4673d',
   },
+  subToolbar: {
+    height: '10px',
+    backgroundColor: '#e4673d',
+  },
   button: {
-    height: '50px',
+    // height: '50px',
     color: 'white'
   }
 }));
@@ -35,31 +41,40 @@ const isLoggedIn = () => {
   return JSON.parse(localStorage.getItem('isLoggedIn'));
 }
 
+
 export default (props) => {
   const [Container, TopRow, ButtonSet, BottomRow, Center] = [Box, Box, Box, Box, Box];
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const handleChange = event => {
-  //   setSearchTerm(event.target.value);
-  // };
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`
   const description = 'Traditional Cajun food and so much more!'
+  const UserButtons = () => (
+    <ButtonSet ml='auto'>
+      {isLoggedIn() ?
+        <Button onClick={logout} className={classes.button}>Logout {isLoggedIn}</Button>
+        :
+        <Button href='/login' className={classes.button}>Login</Button>
+      }
+      <Button href='/all' className={classes.button}>All Recipes</Button>
+    </ButtonSet>
+  )
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed" >
+        <Toolbar className={classes.subToolbar}>
+          <Center display='flex' flexDirection='row' alignItems='center' width='100%' >
+            <img src={logo} alt={'Logo'} style={{ height: '40px', width: '40px', marginRight: '30px' }} />
+            <Typography variant="h6" > {title}  </Typography>
+            < UserButtons />
+          </Center>
+        </Toolbar>
+      </AppBar>
+      <AppBar position="sticky">
         <Toolbar className={classes.toolbar}>
           <Container display='flex' flexDirection='column' pl={'30px'} pr={'30px'} width='100%'>
             <TopRow display='flex' justifyContent='top' mb='30px' mt='20px' width='100%' >
               <img src={logo} alt={'Logo'} style={{ height: '80px', width: '80px', }} />
-              <ButtonSet ml='auto'>
-                {isLoggedIn() ?
-                  <Button onClick={logout} className={classes.button}>Logout {isLoggedIn}</Button>
-                  :
-                  <Button href='/login' className={classes.button}>Login</Button>
-                }
-                <Button href='/all' className={classes.button}>All Recipes</Button>
-              </ButtonSet>
+              < UserButtons />
             </TopRow>
             <Center display='flex' flexDirection='column' mb='20px'>
               <Typography className={classes.title} variant="h2" >
@@ -69,17 +84,10 @@ export default (props) => {
                 {description}
               </Typography>
             </Center>
-            {/* <BottomRow display='flex' justifyContent='top' mb='20px' >
-              <Input placeholder='search'
-                value={searchTerm}
-                onChange={handleChange}
-                variant="filled"
-              />
-              <Button className={classes.button}>Get Cooking</Button>
-            </BottomRow> */}
           </Container>
         </Toolbar>
       </AppBar>
+      <Toolbar />
     </div>
   )
 }
