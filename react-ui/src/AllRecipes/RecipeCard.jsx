@@ -19,10 +19,12 @@ export const RecipeCard = ({ recipe }) => {
     eventTarget.src = emptyImage;
   };
   return (
-    <Paper className={classes.card}  onClick={selectRecipe}>
-      <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '300px', width: '300px'}} />
-      <Typography>{recipe.title}</Typography>
-      <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
-    </Paper>
+    <Box justifySelf='center' alignSelf='center'>
+      <Paper className={classes.card} onClick={selectRecipe} >
+        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '300px', width: '300px' }} />
+        <Typography>{recipe.title}</Typography>
+        <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
+      </Paper>
+    </Box>
   )
 };

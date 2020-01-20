@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import MUIDataTable from "mui-datatables";
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard'
 import { Box, Button, Input, Tab, Tabs } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  label: {
+    color: '#FFF000'
+  },
+  indicator: {
+    backgroundColor: '#e4673d'
+  }
+}));
 
 const isAdmin = () => {
   return JSON.parse(localStorage.getItem('isAdmin'));
@@ -14,11 +23,14 @@ export default () => {
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const classes = useStyles();
+
   const handleChangeInput = event => {
     setSearchTerm(event.target.value);
   };
   const handleChangeTab = (event, newValue) => setValue(newValue);
   const RecipeZone = Box;
+  const Container = Box;
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
@@ -42,22 +54,31 @@ export default () => {
     return filter(filteredResults, searchTerm, { key: 'title' });
   }
 
-  if (loading) return <CircularProgress />;
+  if (loading) return (
+    <Container display='flex' flexDirection='column' justifyContent='center' alignItems='center' >
+      <CircularProgress />
+    </Container>
+  )
+
   return (
-    <>
-      <Tabs value={value} onChange={handleChangeTab} aria-label="simple tabs example">
-        {categories.map(c => <Tab key={c.label} label={c.label} />)}
-      </Tabs>
+    <Container display='flex' flexDirection='column' alignItems='center' >
+      <Box width='100%' position='static'>
+        <Tabs value={value} onChange={handleChangeTab} variant="scrollable"
+          scrollButtons="auto"
+          classes={{ indicator: classes.indicator }}
+        >
+          {categories.map(c => <Tab key={c.label} label={c.label} />)}
+        </Tabs>
+      </Box>
       <Input placeholder='search'
         value={searchTerm}
         onChange={handleChangeInput}
         variant="filled"
       />
-
-      {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
-      <RecipeZone display='flex' flexDirection='row' flexWrap='wrap'>
+      <RecipeZone display='flex' justifyContent='center' flexDirection='row' flexWrap='wrap'>
+        {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
         {filterRecipes(recipes).map((recipe) => (<RecipeCard key={recipe.id} recipe={recipe} />))}
       </RecipeZone>
-    </>
+    </Container >
   )
 }

@@ -8,6 +8,7 @@ import Slide from '@material-ui/core/Slide';
 const useStyles = makeStyles(theme => ({
   root: {
     // flexGrow: 1,
+    height: '20%'
   },
   menuButton: {
     marginRight: theme.spacing(4),
@@ -18,12 +19,7 @@ const useStyles = makeStyles(theme => ({
   toolbar: {
     backgroundColor: '#e4673d',
   },
-  subToolbar: {
-    height: '10px',
-    backgroundColor: '#e4673d',
-  },
   button: {
-    // height: '50px',
     color: 'white'
   }
 }));
@@ -56,22 +52,22 @@ export default (props) => {
       }
       <Button href='/all' className={classes.button}>All Recipes</Button>
     </ButtonSet>
+
   )
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" >
-        <Toolbar className={classes.subToolbar}>
+      <AppBar position="fixed" display='flex' >
+        <Toolbar className={classes.toolbar} disableGutters>
           <Center display='flex' flexDirection='row' alignItems='center' width='100%' >
             <img src={logo} alt={'Logo'} style={{ height: '40px', width: '40px', marginRight: '30px' }} />
-            <Typography variant="h6" > {title}  </Typography>
             < UserButtons />
           </Center>
         </Toolbar>
       </AppBar>
-      <AppBar position="sticky">
-        <Toolbar className={classes.toolbar}>
-          <Container display='flex' flexDirection='column' pl={'30px'} pr={'30px'} width='100%'>
+      <AppBar position="sticky" display='flex'>
+        <Toolbar className={classes.toolbar} disableGutters>
+          <Container display='flex' flexDirection='column'  width='100%'>
             <TopRow display='flex' justifyContent='top' mb='30px' mt='20px' width='100%' >
               <img src={logo} alt={'Logo'} style={{ height: '80px', width: '80px', }} />
               < UserButtons />
@@ -87,7 +83,6 @@ export default (props) => {
           </Container>
         </Toolbar>
       </AppBar>
-      <Toolbar />
     </div>
   )
 }
