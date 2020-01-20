@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, AppBar, Toolbar, Typography, Button, Input } from '@material-ui/core/';
+import { Box, AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import logo from './logo.svg'
 
 const useStyles = makeStyles(theme => ({
@@ -38,7 +38,7 @@ const isLoggedIn = () => {
 
 
 export default (props) => {
-  const [Container, TopRow, ButtonSet, BottomRow, Center] = [Box, Box, Box, Box, Box];
+  const [Container, TopRow, ButtonSet, Center] = [Box, Box, Box, Box, Box];
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`
   const description = 'Traditional Cajun food and so much more!'

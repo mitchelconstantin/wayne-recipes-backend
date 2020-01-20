@@ -6,7 +6,6 @@ import Login from './Login/Login'
 import UpdateRecipe from './UpdateRecipe/UpdateRecipe';
 
 export default () => {
-  const searchTerm = '222222';
   return (
     <Switch>
       <Route exact path='/login' component={Login} />

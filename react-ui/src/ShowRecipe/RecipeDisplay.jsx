@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Button from '@material-ui/core/Button';
 import emptyImage from './emptyImage.png';
+import { Box, Typography, Divider } from '@material-ui/core/';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,43 +27,35 @@ const isAdmin = () => {
   return JSON.parse(localStorage.getItem('isAdmin'));
 }
 
-const FixedField = ({ title, content }) => {
-  const classes = useStyles();
-
-  return (
-    <ExpansionPanel
-      expanded
-    >
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>{title}</Typography>
-        <Typography className={classes.secondaryHeading}>{content}</Typography>
-      </ExpansionPanelSummary>
-    </ExpansionPanel>
-  )
+const isLandscape = () => {
+  if ([0, 180].includes(window.orientation)) return false;
+  return true;
 }
 
-const ExpandableField = ({ title, content }) => {
+const LongList = ({ content, title, numbered = false }) => {
   const classes = useStyles();
 
-  return (
-    <ExpansionPanel>
-      <ExpansionPanelSummary
-        expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-      >
-        <Typography className={classes.heading}>{title}</Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.details}>
-        {content.split("\n").map((line, i) => <Typography key={i}className={classes.secondaryHeading}>{line}</Typography>
-        )}
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+  const getLine = (index, line) => {
+    if (!numbered || !line) return line;
+    const val = Math.floor(index / 2 + 1)
+    return `${val}. ${line}`
+  }
+  const processedContent = content.split("\n").map((line, i) => {
+    return (
+      <Box mt='10px' key={i}>
+        <Typography className={classes.secondaryHeading}>
+          {getLine(i, line)}
+        </Typography>
+      </Box>)
+  }
   )
+  return (
+    <Box mt='20px' mb='20px'>
+      <Typography variant="h2" >
+        {title}
+      </Typography>
+      {processedContent}
+    </Box>)
 }
 
 export default (props) => {
@@ -92,21 +80,47 @@ export default (props) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
+  const [Container, RecipeDetails] = [Box, Box];
 
+  const tags = [recipe.type, recipe.mainIngredient, recipe.region];
+  const responsive = {
+    style: isLandscape() ? { height: '30%', width: '30%', border: '1px' } : { height: '80%', width: '80%', border: '1px' },
+    flexDirection: isLandscape() ? 'row' : 'column',
+    alignItems: isLandscape() ? 'top' : 'center'
+  }
   return (
-    <div>
-      <h2>{recipe.title}</h2>
-      {isAdmin() && <Button
-        href={`/r/${recipe.id}/edit`}
-      >edit this recipe</Button>}
-      {isAdmin() ? <ImageUploader getRecipe={getRecipe} recipeID={recipe.id} image={recipe.picture} /> :
-        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
-      }
 
-      <FixedField title='from' content={recipe.source || 'unknown'} />
-      <FixedField title='serves' content={recipe.serves || 'unknown'} />
-      <ExpandableField title='ingredients' content={recipe.ingredients || 'unknown'} />
-      <ExpandableField title='directions' content={recipe.directions || 'unknown'} />
-    </div>
-  );
+    <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
+      {isAdmin() ? <ImageUploader getRecipe={getRecipe} recipeID={recipe.id} image={recipe.picture} /> :
+        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'}
+          style={responsive.style}
+        />
+      }
+      <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
+        <h2>{recipe.title}</h2>
+        <Box display='flex' mb='10px'>
+          <div>
+            {`from: ${recipe.source || 'unknown'}`}
+          </div>
+          <Box ml='auto'>
+            {tags.map((tag) => !!tag && `#${tag} `)}
+          </Box>
+        </Box>
+        <Divider />
+        <Box mt='10px' display='flex' flexDirection='column'>
+          <div>
+            {`Yield: ${recipe.serves || 'unknown'}`}
+          </div>
+          <div>
+            {`Time: ${recipe.time || 'unknown'}`}
+          </div>
+        </Box>
+
+        <Box mt='10px' display='flex' flexDirection='column'>
+          <LongList title='Ingredients' content={recipe.ingredients || 'unknown'} />
+          <LongList title='Directions' content={recipe.directions || 'unknown'} numbered />
+        </Box>
+      </RecipeDetails>
+    </Container>
+  )
 }
