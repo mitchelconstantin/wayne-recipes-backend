@@ -27,10 +27,24 @@ const isAdmin = () => {
   return JSON.parse(localStorage.getItem('isAdmin'));
 }
 
-const isLandscape = () => {
-  if ([0, 180].includes(window.orientation)) return false;
-  return true;
+const isMobile = () => {
+  return window.orientation !== undefined
 }
+
+const getLayout = () => (
+  isMobile() ?
+    {
+      style: { height: '80%', width: '80%', border: '1px' },
+      flexDirection: 'column',
+      alignItems: 'center'
+    }
+    :
+    {
+      style: { height: '30%', width: '30%', border: '1px' },
+      flexDirection: 'row',
+      alignItems: 'top'
+    }
+);
 
 const LongList = ({ content, title, numbered = false }) => {
   const classes = useStyles();
@@ -61,7 +75,7 @@ const LongList = ({ content, title, numbered = false }) => {
 export default (props) => {
   const [recipe, setRecipe] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const [responsive] = useState(getLayout());
   const getRecipe = async () => {
     const res = await fetch(`/api/recipes/${props.match.params.number}`)
     const [data] = await res.json();
@@ -73,6 +87,7 @@ export default (props) => {
     getRecipe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   if (loading) {
     return 'loading3';
   }
@@ -81,13 +96,7 @@ export default (props) => {
     eventTarget.src = emptyImage;
   };
   const [Container, RecipeDetails] = [Box, Box];
-
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
-  const responsive = {
-    style: isLandscape() ? { height: '30%', width: '30%', border: '1px' } : { height: '80%', width: '80%', border: '1px' },
-    flexDirection: isLandscape() ? 'row' : 'column',
-    alignItems: isLandscape() ? 'top' : 'center'
-  }
   return (
 
     <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
