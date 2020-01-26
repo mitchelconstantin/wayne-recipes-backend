@@ -7,6 +7,7 @@ import { IShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import Print from '@material-ui/icons/Print';
+import SnackbarService from '../Shared/SnackbarService'
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -31,15 +32,16 @@ export const ShoppingList = () => {
     console.log('saving');
     window.print();
   };
-  const removeFromShoppingList = (id: number, i: number) => {
+  const removeFromShoppingList = (title: string, i: number) => {
     ShoppingListBehaviors.removeByIndex(i);
-    // ShoppingListBehaviors.remove(id);
     updateShoppingList();
+    SnackbarService.success(`Removed ${title} from Shopping List`);
   }
 
   const clearShoppingList = () => {
-    ShoppingListBehaviors.clear()
+    ShoppingListBehaviors.clear();
     updateShoppingList();
+    SnackbarService.success('Shopping List Cleared');
   }
 
   interface ShoppingListProps {
@@ -61,7 +63,7 @@ export const ShoppingList = () => {
         <div key={item.id} >
           {item.title}
           <Tooltip title="Remove from Shopping List">
-            <IconButton onClick={() => removeFromShoppingList(item.id, i)} aria-label="upload picture" >
+            <IconButton onClick={() => removeFromShoppingList(item.title, i)} aria-label="upload picture" >
               <RemoveShoppingCart />
             </IconButton>
           </Tooltip>
@@ -90,13 +92,15 @@ export const ShoppingList = () => {
           </IconButton>
         </Tooltip>
       </Buttons>
-      {/* <Buttons display='flex' >
+      <Divider />
+      {shoppingList.length ? <>
+        <ShoppingListItems shoppingList={shoppingList} />
+        <Divider />
+        <ShoppingListIngredients shoppingList={shoppingList} />
+      </> :
+        <Typography variant='h2' > Shopping List is Empty</Typography>
+      }
 
-      </Buttons> */}
-      <Divider />
-      <ShoppingListItems shoppingList={shoppingList} />
-      <Divider />
-      <ShoppingListIngredients shoppingList={shoppingList} />
     </Container >
   )
 }

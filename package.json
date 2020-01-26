@@ -42,7 +42,7 @@
     "node-fetch": "^2.6.0",
     "react-dropzone": "^10.2.1",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.0.1",
+    "react-scripts": "^3.3.0",
     "typescript": "^3.7.5"
   }
 }
