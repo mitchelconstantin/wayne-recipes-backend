@@ -6,15 +6,21 @@ export class ShoppingListBehaviors {
     localStorage.setItem('shoppingList', JSON.stringify([]))
   };
 
+  static removeByIndex = (index) => {
+    const prev = this.load();
+    prev.splice(index, 1);
+    localStorage.setItem('shoppingList', JSON.stringify(prev));
+    // return this.load();
+  }
+
   static remove = (recipeId) => {
     const prev = this.load();
     console.log('prev', prev);
     const indexToRemove = prev.findIndex((item) => item.id === recipeId)
     prev.splice(indexToRemove, 1);
     localStorage.setItem('shoppingList', JSON.stringify(prev));
-    return this.load();
+    // return this.load();
   }
-
 
   static add = (recipe) => {
     console.log('here is a recipe', recipe);
@@ -23,7 +29,7 @@ export class ShoppingListBehaviors {
     const prev = this.load();
     console.log('here is prev', prev);
     localStorage.setItem('shoppingList', JSON.stringify([...prev, listItem]));
-    return this.load();
+    // return this.load();
   };
 
   static load = () => {

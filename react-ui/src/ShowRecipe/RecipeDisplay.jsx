@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
 import emptyImage from './emptyImage.png';
-import { Box, Button, Typography, Divider } from '@material-ui/core/';
-import {ShoppingListBehaviors} from '../ShoppingList/ShoppinglistBehaviors';
-
+import { Box, Button, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
+import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
+import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
+// import SnackbarService from '../Shared/SnackbarService';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -46,7 +47,7 @@ const getLayout = () => (
     }
 );
 
-const LongList = ({ content, title, numbered = false }) => {
+export const LongList = ({ content, title, numbered = false }) => {
   const classes = useStyles();
 
   const getLine = (index, line) => {
@@ -100,6 +101,7 @@ export default (props) => {
   const addToShoppingList = () => {
     console.log('adding', recipe);
     ShoppingListBehaviors.add(recipe);
+    // SnackbarService.success('added to list!');
   }
   return (
 
@@ -110,7 +112,14 @@ export default (props) => {
         />
       }
       <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
+        <Box display='flex' flexDirection='row'>
         <h2>{recipe.title}</h2>
+        <Tooltip title="Add to Shopping List">
+          <IconButton onClick={addToShoppingList} aria-label="upload picture" >
+            <AddShoppingCart />
+          </IconButton>
+        </Tooltip>
+        </Box>
         <Box display='flex' mb='10px'>
           <div>
             {`from: ${recipe.source || 'unknown'}`}
@@ -127,7 +136,6 @@ export default (props) => {
           <div>
             {`Time: ${recipe.time || 'unknown'}`}
           </div>
-          <Button onClick={addToShoppingList}>Add To Shopping List</Button>
         </Box>
 
         <Box mt='10px' display='flex' flexDirection='column'>
