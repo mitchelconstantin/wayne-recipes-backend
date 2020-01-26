@@ -27,8 +27,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const isAdmin = (): boolean => {
-  return false;
-  // return JSON.parse(localStorage.getItem('isAdmin'));
+  const isAdmin = localStorage.getItem('isAdmin');
+  if (!isAdmin) return false;
+  return JSON.parse(isAdmin);
 }
 
 const isMobile = () => {
