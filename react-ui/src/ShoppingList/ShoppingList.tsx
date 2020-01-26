@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Box, Button, Divider,Typography } from '@material-ui/core'
+import { Box, Button, Divider, IconButton, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 import { LongList } from '../ShowRecipe/RecipeDisplay';
 import { IShoppingList } from '../Shared/Types';
+import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
+
 const useStyles = makeStyles(theme => ({
   label: {
     color: '#FFF000'
@@ -46,7 +48,11 @@ export const ShoppingList = () => {
         {shoppingList.map((item: any, i: number) => (
         <div key={item.id} >
           {item.title}
-          <Button onClick={() => removeFromShoppingList(item.id, i)}>Remove from Shopping List</Button>
+          <Tooltip title="Remove from Shopping List">
+            <IconButton onClick={() => removeFromShoppingList(item.id, i)} aria-label="upload picture" >
+              <RemoveShoppingCart />
+            </IconButton>
+          </Tooltip>
         </div>
       ))}
     </>);
