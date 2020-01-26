@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
 import emptyImage from './emptyImage.png';
-import { Box, Typography, Divider } from '@material-ui/core/';
-
+import { Box, Button, Typography, Divider } from '@material-ui/core/';
+import {ShoppingListBehaviors} from '../ShoppingList/ShoppinglistBehaviors';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -97,6 +97,10 @@ export default (props) => {
   };
   const [Container, RecipeDetails] = [Box, Box];
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
+  const addToShoppingList = () => {
+    console.log('adding', recipe);
+    ShoppingListBehaviors.add(recipe);
+  }
   return (
 
     <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
@@ -123,6 +127,7 @@ export default (props) => {
           <div>
             {`Time: ${recipe.time || 'unknown'}`}
           </div>
+          <Button onClick={addToShoppingList}>Add To Shopping List</Button>
         </Box>
 
         <Box mt='10px' display='flex' flexDirection='column'>

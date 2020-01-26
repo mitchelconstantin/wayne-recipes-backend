@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import logo from './logo.svg'
+import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,6 +43,12 @@ export default (props) => {
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`
   const description = 'Traditional Cajun food and so much more!'
+  const ShoppingListLabel = () => {
+    const text = 'Shopping List';
+    const list = ShoppingListBehaviors.load();
+    if (!list.length) return text;
+    return `${text}(${list.length})`
+  }
   const UserButtons = () => (
     <ButtonSet ml='auto'>
       {isLoggedIn() ?
@@ -49,6 +56,7 @@ export default (props) => {
         :
         <Button href='/login' className={classes.button}>Login</Button>
       }
+      <Button href='/list' className={classes.button}>{ShoppingListLabel()}</Button>
       <Button href='/all' className={classes.button}>All Recipes</Button>
     </ButtonSet>
 
@@ -66,7 +74,7 @@ export default (props) => {
       </AppBar>
       <AppBar position="sticky" display='flex'>
         <Toolbar className={classes.toolbar} disableGutters>
-          <Container display='flex' flexDirection='column'  width='100%'>
+          <Container display='flex' flexDirection='column' width='100%'>
             <TopRow display='flex' justifyContent='top' mb='30px' mt='20px' width='100%' >
               <img src={logo} alt={'Logo'} style={{ height: '80px', width: '80px', }} />
               < UserButtons />
