@@ -2,20 +2,12 @@ import React, { useState, useEffect } from 'react';
 import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
 import emptyImage from './emptyImage.png';
-import { Box, Button, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
+import { Box, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
 import SnackbarService from '../Shared/SnackbarService';
 
-interface Recipe {
-  id: number;
-  type: string;
-  source: string;
-  serves: string;
-  title: string;
-  picture: string;
-  ingredients: string;
-}
+
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
