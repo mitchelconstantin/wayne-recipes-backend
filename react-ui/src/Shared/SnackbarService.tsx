@@ -9,7 +9,7 @@ import WarningIcon from '@material-ui/icons/Warning';
 import ReactDOM from 'react-dom';
 import { SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
 // @ts-ignore
-import { createWrapper } from 'Web/react2angular/renderReactComponent/renderReactComponent';
+// import { createWrapper } from 'Web/react2angular/renderReactComponent/renderReactComponent';
 
 type Variant = 'success' | 'warning' | 'error' | 'info';
 interface Args {
@@ -124,7 +124,7 @@ export default class SnackbarService {
     document.body.appendChild(snackbarContainer);
     const SnackbarBody = () => <SimpleSnackbar message={message} variant={variant} />;
     // @ts-ignore
-    const WrappedSnackbarBody = createWrapper(SnackbarBody);
-    ReactDOM.render(<WrappedSnackbarBody />, snackbarContainer);
+    // const WrappedSnackbarBody = createWrapper(SnackbarBody);
+    ReactDOM.render(<SnackbarBody />, snackbarContainer);
   }
 }

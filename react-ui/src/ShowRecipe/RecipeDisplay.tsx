@@ -5,7 +5,17 @@ import emptyImage from './emptyImage.png';
 import { Box, Button, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
-// import SnackbarService from '../Shared/SnackbarService';
+import SnackbarService from '../Shared/SnackbarService';
+
+interface Recipe {
+  id: number;
+  type: string;
+  source: string;
+  serves: string;
+  title: string;
+  picture: string;
+  ingredients: string;
+}
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
@@ -24,8 +34,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const isAdmin = () => {
-  return JSON.parse(localStorage.getItem('isAdmin'));
+const isAdmin = (): boolean => {
+  return false;
+  // return JSON.parse(localStorage.getItem('isAdmin'));
 }
 
 const isMobile = () => {
@@ -47,15 +58,21 @@ const getLayout = () => (
     }
 );
 
-export const LongList = ({ content, title, numbered = false }) => {
+interface LongListProps {
+  content: any;
+  title: string;
+  numbered?: boolean;
+}
+
+export const LongList = ({ content, title, numbered = false }: LongListProps) => {
   const classes = useStyles();
 
-  const getLine = (index, line) => {
+  const getLine = (index: number, line: any) => {
     if (!numbered || !line) return line;
     const val = Math.floor(index / 2 + 1)
     return `${val}. ${line}`
   }
-  const processedContent = content.split("\n").map((line, i) => {
+  const processedContent = content.split("\n").map((line: any, i: number) => {
     return (
       <Box mt='10px' key={i}>
         <Typography className={classes.secondaryHeading}>
@@ -73,8 +90,9 @@ export const LongList = ({ content, title, numbered = false }) => {
     </Box>)
 }
 
-export default (props) => {
-  const [recipe, setRecipe] = useState({});
+export default (props: { match: { params: { number: any; }; }; }) => {
+  //@ts-ignore
+  const [recipe, setRecipe] = useState<Recipe>({});
   const [loading, setLoading] = useState(true);
   const [responsive] = useState(getLayout());
   const getRecipe = async () => {
@@ -92,16 +110,17 @@ export default (props) => {
   if (loading) {
     return 'loading3';
   }
-  const onError = (ev) => {
+  const onError = (ev: { target: any; }) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
   const [Container, RecipeDetails] = [Box, Box];
+  //@ts-ignore
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
   const addToShoppingList = () => {
     console.log('adding', recipe);
     ShoppingListBehaviors.add(recipe);
-    // SnackbarService.success('added to list!');
+    SnackbarService.success('added to list!');
   }
   return (
 
@@ -113,12 +132,12 @@ export default (props) => {
       }
       <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
         <Box display='flex' flexDirection='row'>
-        <h2>{recipe.title}</h2>
-        <Tooltip title="Add to Shopping List">
-          <IconButton onClick={addToShoppingList} aria-label="upload picture" >
-            <AddShoppingCart />
-          </IconButton>
-        </Tooltip>
+          <h2>{recipe.title}</h2>
+          <Tooltip title="Add to Shopping List">
+            <IconButton onClick={addToShoppingList} aria-label="upload picture" >
+              <AddShoppingCart />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box display='flex' mb='10px'>
           <div>
