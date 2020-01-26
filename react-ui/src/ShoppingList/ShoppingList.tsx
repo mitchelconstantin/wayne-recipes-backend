@@ -5,6 +5,8 @@ import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 import { LongList } from '../ShowRecipe/RecipeDisplay';
 import { IShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
+import DeleteForever from '@material-ui/icons/DeleteForever';
+import Print from '@material-ui/icons/Print';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -27,6 +29,7 @@ export const ShoppingList = () => {
   const [Container, Buttons] = [Box, Box];
   const saveShoppingList = () => {
     console.log('saving');
+    window.print();
   };
   const removeFromShoppingList = (id: number, i: number) => {
     ShoppingListBehaviors.removeByIndex(i);
@@ -44,8 +47,17 @@ export const ShoppingList = () => {
   }
   const ShoppingListItems = ({ shoppingList }: ShoppingListProps) => (
     <>
-      Items on the shopping list
-        {shoppingList.map((item: any, i: number) => (
+      <Box display='flex'>
+        <Typography variant='h4'>
+          Items on the shopping list
+        </Typography>
+        <Tooltip title="Clear Entire Shopping List">
+          <IconButton onClick={clearShoppingList} aria-label="upload picture" >
+            <DeleteForever />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      {shoppingList.map((item: any, i: number) => (
         <div key={item.id} >
           {item.title}
           <Tooltip title="Remove from Shopping List">
@@ -70,11 +82,17 @@ export const ShoppingList = () => {
   console.log('here is your shopping list', shoppingList);
   return (
     <Container display='flex' flexDirection='column' alignItems='center' position='static'>
-      <Typography variant='h2' > Shopping List</Typography>
       <Buttons display='flex' >
-        <Button onClick={saveShoppingList} className={classes.button}>Download as PDF</Button>
-        <Button onClick={clearShoppingList} className={classes.button}>Clear Shopping List</Button>
+        <Typography variant='h2' > Shopping List</Typography>
+        <Tooltip title="Print Shopping List">
+          <IconButton onClick={saveShoppingList} aria-label="upload picture" >
+            <Print />
+          </IconButton>
+        </Tooltip>
       </Buttons>
+      {/* <Buttons display='flex' >
+
+      </Buttons> */}
       <Divider />
       <ShoppingListItems shoppingList={shoppingList} />
       <Divider />
