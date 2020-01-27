@@ -4,7 +4,6 @@ import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard'
 import { Box, Button, Input, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-
 const useStyles = makeStyles(theme => ({
   label: {
     color: '#FFF000'
@@ -13,10 +12,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#e4673d'
   }
 }));
-
-const isAdmin = () => {
-  return JSON.parse(localStorage.getItem('isAdmin'));
-}
 
 export default () => {
   const [recipes, setRecipe] = useState([]);
@@ -76,14 +71,12 @@ export default () => {
           {categories.map(c => <Tab key={c.label} label={c.label} />)}
         </Tabs>
       </Box>
-      {/* </Box> */}
       <Input placeholder='search'
         value={searchTerm}
         onChange={handleChangeInput}
         variant="filled"
       />
       <RecipeZone display='flex' justifyContent='center' flexDirection='row' flexWrap='wrap'>
-        {isAdmin() && <Button href='/new' variant="contained" color="primary" >Add new recipe</Button>}
         {filterRecipes(recipes).map((recipe) => (<RecipeCard key={recipe.id} recipe={recipe} />))}
       </RecipeZone>
     </Container >

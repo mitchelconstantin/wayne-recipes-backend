@@ -3,8 +3,8 @@ import { Button, TextField } from '@material-ui/core';
 import { Redirect } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import ImageUploader from './ImageUploader'
-
+import ImageUploader from './ImageUploader';
+import {isAdmin} from '../Shared/AppBehaviors';
 const emptyRecipe = { id: undefined, title: '', picture: '', source: '', serves: '', ingredients: '', directions: '' };
 
 const getRecipeData = async (setRecipe, recipeId) => {
@@ -71,7 +71,6 @@ export default (props) => {
     const json = await res.json();
     window.location = `/r/${json.id}`;
   }
-  const isAdmin = true;
   const disabled = (
     !(recipe.title
       // && recipe.source
@@ -82,7 +81,7 @@ export default (props) => {
   console.log('here is your recipe', recipe);
   return (
     <>
-      {!isAdmin && <Redirect push to='/all' />}
+      {!isAdmin() && <Redirect push to='/all' />}
 
       <Typography variant="h6" gutterBottom>
         {recipeId ?'edit this recipe' :'Add a new recipe (you can upload a new photo once you save the details)'}
@@ -124,7 +123,7 @@ export default (props) => {
       <Button
         disabled={disabled}
         onClick={saveRecipe} variant="contained" color="primary">
-        save new recipe
+        {recipeId ? 'update recupe' : 'save new recipe' }
    </Button>
     </>
   )

@@ -5,8 +5,9 @@ import emptyImage from './emptyImage.png';
 import { Box, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
+import Edit from '@material-ui/icons/Edit';
 import SnackbarService from '../Shared/SnackbarService';
-
+import { isAdmin } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,11 +27,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const isAdmin = (): boolean => {
-  const isAdmin = localStorage.getItem('isAdmin');
-  if (!isAdmin) return false;
-  return JSON.parse(isAdmin);
-}
 
 const isMobile = () => {
   return window.orientation !== undefined
@@ -131,6 +127,11 @@ export default (props: { match: { params: { number: any; }; }; }) => {
               <AddShoppingCart />
             </IconButton>
           </Tooltip>
+          {isAdmin() && <Tooltip title="Edit Recipe">
+            <IconButton href={`/r/${recipe.id}/edit`} aria-label="upload picture" >
+              <Edit />
+            </IconButton>
+          </Tooltip>}
         </Box>
         <Box display='flex' mb='10px'>
           <div>

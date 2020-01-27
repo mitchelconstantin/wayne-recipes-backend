@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, AppBar, Toolbar, Typography, Button } from '@material-ui/core/';
 import logo from './logo.svg'
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors'
-
+import {isLoggedIn, logOut, isAdmin} from '../Shared/AppBehaviors';
 const useStyles = makeStyles(theme => ({
   root: {
     // flexGrow: 1,
@@ -24,20 +24,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-
-
-const logout = () => {
-  localStorage.setItem('isLoggedIn', false);
-  localStorage.setItem('isAdmin', false);
-  // window.location= '/all'
-  window.location.reload();
-}
-
-const isLoggedIn = () => {
-  return JSON.parse(localStorage.getItem('isLoggedIn'));
-}
-
-
 export default (props) => {
   const [Container, TopRow, ButtonSet, Center] = [Box, Box, Box, Box, Box];
   const classes = useStyles();
@@ -52,10 +38,11 @@ export default (props) => {
   const UserButtons = () => (
     <ButtonSet ml='auto'>
       {isLoggedIn() ?
-        <Button onClick={logout} className={classes.button}>Logout {isLoggedIn}</Button>
+        <Button onClick={logOut} className={classes.button}>Logout {isLoggedIn}</Button>
         :
         <Button href='/login' className={classes.button}>Login</Button>
       }
+      {isAdmin() && <Button href='/new' className={classes.button} >Add new recipe</Button>}
       <Button href='/list' className={classes.button}>{ShoppingListLabel()}</Button>
       <Button href='/all' className={classes.button}>All Recipes</Button>
     </ButtonSet>

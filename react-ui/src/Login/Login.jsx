@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
+import { setLoggedIn, setAdmin } from '../Shared/AppBehaviors';
 
-export const isLoggedIn = () => {
-  JSON.parse(localStorage.getItem('isLoggedIn'));
-}
 const loginToServer = async (user) => {
   const res = await fetch('/api/login/', {
     method: 'POST',
@@ -13,8 +11,7 @@ const loginToServer = async (user) => {
     },
     body: JSON.stringify({ user })
   })
-
-  localStorage.setItem('isLoggedIn', 'true');
+  setLoggedIn();
   return res;
 }
 
@@ -74,13 +71,9 @@ export default () => {
         setUser(emptyUser);
       }
       if (response.status === 200) {
-        // console.log('response', response.j);
         const user = await response.json();
-        console.log('user', user);
-        if (user.isAdmin) localStorage.setItem('isAdmin', true);
-        localStorage.setItem('isLoggedIn', true);
-        // setLoggedIn(true);
-        // window.location.reload();
+        setAdmin(true);
+        setLoggedIn(true);
         window.location = '/all';
       }
     } catch (e) {
