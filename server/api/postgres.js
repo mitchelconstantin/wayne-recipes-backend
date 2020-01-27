@@ -75,10 +75,11 @@ router.get('/api/recipes/:recipeID', async (req, res) => {
 })
 
 router.patch('/api/recipes', async (req, res) => {
+  //todo make this patch endpoint for 1 recipe
   const recipe = req.body.recipe
   if (recipe.id) {
-    const values = [recipe.id, recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions]
-    await db.any('update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6 WHERE "id" = $1', values)
+    const values = [recipe.id, recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions, recipe.picture]
+    await db.any('update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7 WHERE "id" = $1', values)
     res.send({id: recipe.id});
   }
   else {
@@ -89,9 +90,9 @@ router.patch('/api/recipes', async (req, res) => {
 })
 
 router.patch('/api/recipes/:recipeID/image', async (req, res) => {
+  //todo rename this to something else, it only uploads to imgur and returns
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
-    // await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
     res.send({link: imgurLink});
   }
 })

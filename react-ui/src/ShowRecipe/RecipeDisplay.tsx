@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import ImageUploader from './ImageUploader'
 import { makeStyles } from '@material-ui/core/styles';
 import emptyImage from './emptyImage.png';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { Box, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
@@ -96,9 +96,12 @@ export default (props: { match: { params: { number: any; }; }; }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) {
-    return 'loading3';
-  }
+  if (loading) return (
+    <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' >
+      <CircularProgress />
+    </Box>
+  )
+
   const onError = (ev: { target: any; }) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
@@ -114,11 +117,9 @@ export default (props: { match: { params: { number: any; }; }; }) => {
   return (
 
     <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
-      {isAdmin() ? <ImageUploader getRecipe={getRecipe} recipeID={recipe.id} image={recipe.picture} /> :
         <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'}
           style={responsive.style}
         />
-      }
       <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
         <Box display='flex' flexDirection='row'>
           <h2>{recipe.title}</h2>

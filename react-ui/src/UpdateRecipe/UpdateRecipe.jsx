@@ -46,19 +46,8 @@ export default (props) => {
 
 
   const handleChange = (type, newValue) => {
-    console.log('handling change of type', type);
-    console.log('with newValue', newValue);
-    console.log('here is recipe', recipe);
-    if (type === 'title') setRecipe({ ...recipe, title: newValue });
-    if (type === 'picture') setRecipe({ ...recipe, picture: newValue });
-    if (type === 'source') setRecipe({ ...recipe, source: newValue });
-    if (type === 'serves') setRecipe({ ...recipe, serves: newValue });
-    if (type === 'ingredients') setRecipe({ ...recipe, ingredients: newValue });
-    if (type === 'directions') setRecipe({ ...recipe, directions: newValue });
-    console.log('now here is recupe', recipe);
+    setRecipe(prev=> ({ ...prev, [type]: newValue }))
   }
-  // const setPicture = (image) => handleChange('picture', image)
-
   const saveRecipe = async () => {
     const res = await fetch('/api/recipes/', {
       method: 'PATCH',
@@ -66,7 +55,7 @@ export default (props) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ recipe: recipe })
+      body: JSON.stringify({ recipe })
     })
     const json = await res.json();
     window.location = `/r/${json.id}`;
