@@ -10,7 +10,7 @@ export interface IRecipe {
 }
 
 
-export const emptyRecipe : IRecipe = {
+export const emptyRecipe: IRecipe = {
   id: undefined,
   title: '',
   picture: '',
@@ -21,3 +21,17 @@ export const emptyRecipe : IRecipe = {
 };
 
 export type IShoppingList = IRecipe[];
+
+export interface IUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export const emptyUser: IUser = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: ''
+}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
 import { setLoggedIn, setAdmin } from '../Shared/AppBehaviors';
+import {emptyUser, IUser} from '../Shared/Types';
 
-const loginToServer = async (user) => {
+const loginToServer = async (user: IUser) => {
   const res = await fetch('/api/login/', {
     method: 'POST',
     headers: {
@@ -15,7 +16,7 @@ const loginToServer = async (user) => {
   return res;
 }
 
-const createUser = async (user) => {
+const createUser = async (user: IUser) => {
   console.log('calling the api');
   const res = await fetch('/api/users/', {
     method: 'POST',
@@ -34,12 +35,11 @@ const createUser = async (user) => {
 //   console.log('json', json);
 // }
 export const Login = () => {
-  const emptyUser = { firstName: '', lastName: '', email: '', password: '' };
   const [signingUp, setSigningUp] = useState(false);
   // const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(emptyUser)
 
-  const handleChange = (type, newValue) => {
+  const handleChange = (type: string, newValue: any) => {
     if (type === 'firstName') setUser({ ...user, firstName: newValue });
     if (type === 'lastName') setUser({ ...user, lastName: newValue });
     if (type === 'email') setUser({ ...user, email: newValue });
@@ -73,9 +73,9 @@ export const Login = () => {
       if (response.status === 200) {
         const u = await response.json();
         setUser(u);
-        setAdmin(true);
-        setLoggedIn(true);
-        window.location = '/all';
+        setAdmin();
+        setLoggedIn();
+        window.location.href = '/all';
       }
     } catch (e) {
       console.log(e);
