@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default (props) => {
+export const Header = () => {
   const [Container, TopRow, ButtonSet, Center] = [Box, Box, Box, Box, Box];
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`

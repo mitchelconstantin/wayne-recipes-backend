@@ -79,7 +79,7 @@ export const LongList = ({ content, title, numbered = false }: LongListProps) =>
     </Box>)
 }
 
-export default (props: { match: { params: { number: any; }; }; }) => {
+export const RecipeDisplay =  (props: { match: { params: { number: any; }; }; }) => {
   //@ts-ignore
   const [recipe, setRecipe] = useState<Recipe>({});
   const [loading, setLoading] = useState(true);

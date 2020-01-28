@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default () => {
+export const Home = () => {
   const [recipes, setRecipe] = useState([]);
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(0);

@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
 import emptyImage from '../ShowRecipe/emptyImage.png';
 
-export default ({recipeId, picture, setPicture}) => {
-  // const [localPicture, setLocalPicture] = useState(picture);
+export const ImageUploader =  ({picture, setPicture}) => {
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
     uploadImageToServer(imageBlob);

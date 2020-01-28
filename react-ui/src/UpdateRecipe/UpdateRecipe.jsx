@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { Button, TextField } from '@material-ui/core';
+import { Button, Grid, TextField, Typography } from '@material-ui/core';
 import { Redirect } from 'react-router-dom'
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import ImageUploader from './ImageUploader';
+import {ImageUploader} from './ImageUploader';
 import {isAdmin} from '../Shared/AppBehaviors';
+
 const emptyRecipe = { id: undefined, title: '', picture: '', source: '', serves: '', ingredients: '', directions: '' };
 
 const getRecipeData = async (setRecipe, recipeId) => {
@@ -28,7 +27,7 @@ const getRecipeData = async (setRecipe, recipeId) => {
 };
 
 
-export default (props) => {
+export const UpdateRecipe = (props) => {
   const [recipeId] = useState(
     () => {
       if (props && props.match && props.match.params && props.match.params.number) {

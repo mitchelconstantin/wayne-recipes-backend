@@ -1,10 +1,10 @@
 import React from 'react'
-import UpdateRecipe from './UpdateRecipe/UpdateRecipe'
+import { UpdateRecipe } from './UpdateRecipe/UpdateRecipe'
 import { ShoppingList } from './ShoppingList/ShoppingList'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import Home from './AllRecipes/Home'
-import Login from './Login/Login'
-import RecipeDisplay from './ShowRecipe/RecipeDisplay';
+import { Home } from './AllRecipes/Home'
+import { Login } from './Login/Login'
+import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
 
 function Main() {
   return (

@@ -33,7 +33,7 @@ const createUser = async (user) => {
 //   const json = await res.json();
 //   console.log('json', json);
 // }
-export default () => {
+export const Login = () => {
   const emptyUser = { firstName: '', lastName: '', email: '', password: '' };
   const [signingUp, setSigningUp] = useState(false);
   // const [loggedIn, setLoggedIn] = useState(false);
