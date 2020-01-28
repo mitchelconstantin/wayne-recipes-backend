@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import CircularProgress from '@material-ui/core/CircularProgress';
+//@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard'
-import { Box, Button, Input, Tab, Tabs } from '@material-ui/core'
+import { Box, Input, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import { IRecipe } from '../Shared/Types';
+
 const useStyles = makeStyles(theme => ({
   label: {
     color: '#FFF000'
@@ -20,16 +23,17 @@ export default () => {
   const [searchTerm, setSearchTerm] = useState('');
   const classes = useStyles();
 
-  const handleChangeInput = event => {
+  const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
   };
-  const handleChangeTab = (event, newValue) => setValue(newValue);
+  const handleChangeTab = (event: any, newValue: number) => setValue(newValue);
   const RecipeZone = Box;
   const Container = Box;
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
-    const recipeList = json.sort((a, b) => a.title - b.title);
+    //TODO pick a default sort for the recipes
+    const recipeList = json
 
     setRecipe(recipeList);
     setLoading(false);
@@ -37,11 +41,10 @@ export default () => {
 
   useEffect(() => {
     getRecipes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const categories = [{ label: 'All', type: '' }, { label: 'Entrée', type: 'Entrée' }, { label: 'Soups', type: 'Soup' }, { label: 'Salads', type: 'Salad' }, { label: 'Drinks', type: 'Drink' }, { label: 'Breads', type: 'Bread' }, { label: 'Appetizer', type: 'Appetizer' }, { label: 'Vegetable', type: 'Vegetable' }, { label: 'Desserts', type: 'Dessert' }];
 
-  const filterRecipes = (recipes) => {
+  const filterRecipes = (recipes : IRecipe[]) => {
     const filteredResults = value !== 0
       ? filter(recipes, categories[value].type, { key: 'type' })
       : recipes;
@@ -74,10 +77,9 @@ export default () => {
       <Input placeholder='search'
         value={searchTerm}
         onChange={handleChangeInput}
-        variant="filled"
       />
       <RecipeZone display='flex' justifyContent='center' flexDirection='row' flexWrap='wrap'>
-        {filterRecipes(recipes).map((recipe) => (<RecipeCard key={recipe.id} recipe={recipe} />))}
+        {filterRecipes(recipes).map((recipe: IRecipe) => (<RecipeCard key={recipe.id} recipe={recipe} />))}
       </RecipeZone>
     </Container >
   )
