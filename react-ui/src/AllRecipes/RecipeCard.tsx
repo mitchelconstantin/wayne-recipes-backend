@@ -2,6 +2,7 @@ import React from 'react'
 import emptyImage from './emptyImage.png';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography, } from '@material-ui/core/';
+import { IRecipe } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -11,10 +12,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const RecipeCard = ({ recipe }) => {
+interface Props {
+  recipe: IRecipe;
+}
+
+export const RecipeCard = ({ recipe }: Props) => {
   const classes = useStyles();
-  const selectRecipe = () => window.location = `/r/${recipe.id}`;
-  const onError = (ev) => {
+  const selectRecipe = () => window.location.href = `/r/${recipe.id}`;
+  const onError = (ev: any) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
@@ -23,8 +28,8 @@ export const RecipeCard = ({ recipe }) => {
       <Paper className={classes.card} onClick={selectRecipe} >
         <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '300px', width: '300px' }} />
         <Box p='10px'>
-        <Typography>{recipe.title}</Typography>
-        <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
+          <Typography>{recipe.title}</Typography>
+          <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
         </Box>
       </Paper>
     </Box>
