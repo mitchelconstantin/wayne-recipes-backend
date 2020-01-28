@@ -51,7 +51,7 @@ export const Header = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" display='flex' >
+      <AppBar position="fixed" >
         <Toolbar className={classes.toolbar} disableGutters>
           <Center display='flex' flexDirection='row' alignItems='center' width='100%' >
             <img src={logo} alt={'Logo'} style={{ height: '40px', width: '40px', marginRight: '30px' }} />
@@ -59,7 +59,7 @@ export const Header = () => {
           </Center>
         </Toolbar>
       </AppBar>
-      <AppBar position="sticky" display='flex'>
+      <AppBar position="sticky">
         <Toolbar className={classes.toolbar} disableGutters>
           <Container display='flex' flexDirection='column' width='100%'>
             <TopRow display='flex' justifyContent='top' mb='30px' mt='20px' width='100%' >
