@@ -32,7 +32,7 @@ export const Home = () => {
   const getRecipes = async () => {
     const res = await fetch(`/api/recipes`)
     const json = await res.json();
-    //TODO pick a default sort for the recipes
+    // TODO pick a default sort for the recipes
     const recipeList = json
 
     setRecipe(recipeList);

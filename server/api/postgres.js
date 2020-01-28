@@ -75,7 +75,7 @@ router.get('/api/recipes/:recipeID', async (req, res) => {
 })
 
 router.patch('/api/recipes', async (req, res) => {
-  //todo make this patch endpoint for 1 recipe
+  // TODO make this patch endpoint for 1 recipe
   const recipe = req.body.recipe
   if (recipe.id) {
     const values = [recipe.id, recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions, recipe.picture]
@@ -90,7 +90,7 @@ router.patch('/api/recipes', async (req, res) => {
 })
 
 router.patch('/api/recipes/:recipeID/image', async (req, res) => {
-  //todo rename this to something else, it only uploads to imgur and returns
+  // TODO rename this to something else, it only uploads to imgur and returns
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
     res.send({link: imgurLink});
