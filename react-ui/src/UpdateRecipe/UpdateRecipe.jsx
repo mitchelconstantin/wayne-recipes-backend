@@ -73,7 +73,7 @@ export default (props) => {
       {!isAdmin() && <Redirect push to='/all' />}
 
       <Typography variant="h6" gutterBottom>
-        {recipeId ?'edit this recipe' :'Add a new recipe (you can upload a new photo once you save the details)'}
+        {recipeId ?'edit this recipe' :'Add a new recipe '}
 
       </Typography>
       <ImageUploader setPicture={(newImage) => handleChange('picture', newImage)} recipeId={recipe.id} picture={recipe.picture} />
