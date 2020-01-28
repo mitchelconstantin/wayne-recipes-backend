@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Grid, TextField, Typography } from '@material-ui/core';
+//@ts-ignore
 import { Redirect } from 'react-router-dom'
-import {ImageUploader} from './ImageUploader';
-import {isAdmin} from '../Shared/AppBehaviors';
+import { ImageUploader } from './ImageUploader';
+import { isAdmin } from '../Shared/AppBehaviors';
+import { IRecipe, emptyRecipe } from '../Shared/Types';
 
-const emptyRecipe = { id: undefined, title: '', picture: '', source: '', serves: '', ingredients: '', directions: '' };
-
-const getRecipeData = async (setRecipe, recipeId) => {
+const getRecipeData = async (setRecipe: Function, recipeId: number) => {
   if (recipeId) {
     const res = await fetch(`/api/recipes/${recipeId}`)
     const [recipe] = await res.json();
@@ -23,10 +23,12 @@ const getRecipeData = async (setRecipe, recipeId) => {
   }
   if (!recipeId) {
     console.log('no recipe data');
-    setRecipe(emptyRecipe)};
+    setRecipe(emptyRecipe)
+  };
 };
 
-
+// TODO fix props typing
+//@ts-ignore
 export const UpdateRecipe = (props) => {
   const [recipeId] = useState(
     () => {
@@ -36,7 +38,7 @@ export const UpdateRecipe = (props) => {
       else return null;
     }
   )
-  const [recipe, setRecipe] = useState(emptyRecipe);
+  const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
 
   useEffect(() => {
     getRecipeData(setRecipe, recipeId)
@@ -44,8 +46,8 @@ export const UpdateRecipe = (props) => {
   }, [])
 
 
-  const handleChange = (type, newValue) => {
-    setRecipe(prev=> ({ ...prev, [type]: newValue }))
+  const handleChange = (type: string, newValue: any) => {
+    setRecipe(prev => ({ ...prev, [type]: newValue }))
   }
   const saveRecipe = async () => {
     const res = await fetch('/api/recipes/', {
@@ -57,7 +59,7 @@ export const UpdateRecipe = (props) => {
       body: JSON.stringify({ recipe })
     })
     const json = await res.json();
-    window.location = `/r/${json.id}`;
+    window.location.href = `/r/${json.id}`;
   }
   const disabled = (
     !(recipe.title
@@ -70,12 +72,10 @@ export const UpdateRecipe = (props) => {
   return (
     <>
       {!isAdmin() && <Redirect push to='/all' />}
-
       <Typography variant="h6" gutterBottom>
-        {recipeId ?'edit this recipe' :'Add a new recipe '}
-
+        {recipeId ? 'edit this recipe' : 'Add a new recipe '}
       </Typography>
-      <ImageUploader setPicture={(newImage) => handleChange('picture', newImage)} recipeId={recipe.id} picture={recipe.picture} />
+      <ImageUploader setPicture={(newImage: string) => handleChange('picture', newImage)} picture={recipe.picture} />
       <Grid container direction='column' spacing={3}>
         <Grid item xs={12} md={6}>
           <TextField
@@ -111,8 +111,8 @@ export const UpdateRecipe = (props) => {
       <Button
         disabled={disabled}
         onClick={saveRecipe} variant="contained" color="primary">
-        {recipeId ? 'update recupe' : 'save new recipe' }
-   </Button>
+        {recipeId ? 'update recupe' : 'save new recipe'}
+      </Button>
     </>
   )
 }

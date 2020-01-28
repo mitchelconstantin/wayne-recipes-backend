@@ -2,19 +2,25 @@ import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone'
 import emptyImage from '../ShowRecipe/emptyImage.png';
 
-export const ImageUploader =  ({picture, setPicture}) => {
+interface Props {
+  picture?: string;
+  setPicture: Function;
+}
+export const ImageUploader =  ({picture, setPicture} : Props) => {
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
+    //@ts-ignore
     uploadImageToServer(imageBlob);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
-  const readFileAsync = (file) => {
+  const readFileAsync = (file: any) => {
     return new Promise((resolve, reject) => {
       let reader = new FileReader();
 
       reader.onload = () => {
+        //@ts-ignore
         resolve(reader.result.split(',')[1]);
       };
       reader.onerror = reject;
@@ -22,7 +28,7 @@ export const ImageUploader =  ({picture, setPicture}) => {
     })
   }
 
-  const uploadImageToServer = async (image) => {
+  const uploadImageToServer = async (image : string) => {
     console.log('trying to upload');
     const res = await fetch(`/api/image`, {
       method: 'POST',
@@ -36,7 +42,7 @@ export const ImageUploader =  ({picture, setPicture}) => {
     // setLocalPicture(json.link);
     setPicture(json.link)
   }
-  const onError = (ev) => {
+  const onError = (ev : any) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };

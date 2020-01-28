@@ -23,6 +23,7 @@ export class ShoppingListBehaviors {
     const listItem = { id: recipe.id, ingredients: recipe.ingredients, title: recipe.title };
     const prev = ShoppingListBehaviors.load();
     console.log('here is prev', prev);
+    //@ts-ignore
     ShoppingListBehaviors._setShoppingList([...prev, listItem]);
   };
 

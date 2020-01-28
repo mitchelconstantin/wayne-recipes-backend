@@ -79,7 +79,7 @@ export const LongList = ({ content, title, numbered = false }: LongListProps) =>
     </Box>)
 }
 
-export const RecipeDisplay =  (props: { match: { params: { number: any; }; }; }) => {
+export const RecipeDisplay = (props: { match: { params: { number: any; }; }; }) => {
   //@ts-ignore
   const [recipe, setRecipe] = useState<Recipe>({});
   const [loading, setLoading] = useState(true);
@@ -117,9 +117,9 @@ export const RecipeDisplay =  (props: { match: { params: { number: any; }; }; })
   return (
 
     <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
-        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'}
-          style={responsive.style}
-        />
+      <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'}
+        style={responsive.style}
+      />
       <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
         <Box display='flex' flexDirection='row'>
           <h2>{recipe.title}</h2>

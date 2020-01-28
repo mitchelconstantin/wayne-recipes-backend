@@ -1,10 +1,10 @@
 import React from 'react'
 import './App.css'
 import { Header } from './Header/Header'
-import { BrowserRouter } from 'react-router-dom'
 import { UpdateRecipe } from './UpdateRecipe/UpdateRecipe'
 import { ShoppingList } from './ShoppingList/ShoppingList'
-import { Switch, Route, Redirect } from 'react-router-dom'
+//@ts-ignore
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { Home } from './AllRecipes/Home'
 import { Login } from './Login/Login'
 import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
