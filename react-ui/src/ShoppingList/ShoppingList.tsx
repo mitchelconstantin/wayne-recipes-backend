@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button, Divider, IconButton, Tooltip, Typography } from '@material-ui/core'
+import { Box, Divider, IconButton, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 import { LongList } from '../ShowRecipe/RecipeDisplay';
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 export const ShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<IShoppingList>(ShoppingListBehaviors.load());
   const updateShoppingList = () => setShoppingList(ShoppingListBehaviors.load());
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [Container, Buttons] = [Box, Box];
   const saveShoppingList = () => {

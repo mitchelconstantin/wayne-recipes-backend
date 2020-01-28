@@ -71,7 +71,8 @@ export const Login = () => {
         setUser(emptyUser);
       }
       if (response.status === 200) {
-        const user = await response.json();
+        const u = await response.json();
+        setUser(u);
         setAdmin(true);
         setLoggedIn(true);
         window.location = '/all';
