@@ -8,6 +8,7 @@ import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
 import Edit from '@material-ui/icons/Edit';
 import SnackbarService from '../Shared/SnackbarService';
 import { isAdmin } from '../Shared/AppBehaviors';
+import { RecipeAPI } from '../Shared/RecipeAPI';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,9 +86,8 @@ export const RecipeDisplay = (props: { match: { params: { number: any; }; }; }) 
   const [loading, setLoading] = useState(true);
   const [responsive] = useState(getLayout());
   const getRecipe = async () => {
-    const res = await fetch(`/api/recipes/${props.match.params.number}`)
-    const [data] = await res.json();
-    setRecipe(data);
+    const recipe = await RecipeAPI.getRecipe(props.match.params.number);
+    setRecipe(recipe);
     setLoading(false);
   }
 

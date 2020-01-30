@@ -29,11 +29,6 @@ const createUser = async (user: IUser) => {
   return res;
 }
 
-// const getAllUsers = async () => {
-//   const res = await fetch('/api/users');
-//   const json = await res.json();
-//   console.log('json', json);
-// }
 export const Login = () => {
   const [signingUp, setSigningUp] = useState(false);
   // const [loggedIn, setLoggedIn] = useState(false);

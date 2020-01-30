@@ -5,11 +5,11 @@ import { Redirect } from 'react-router-dom'
 import { ImageUploader } from './ImageUploader';
 import { isAdmin } from '../Shared/AppBehaviors';
 import { IRecipe, emptyRecipe } from '../Shared/Types';
+import { RecipeAPI } from '../Shared/RecipeAPI';
 
 const getRecipeData = async (setRecipe: Function, recipeId: number) => {
   if (recipeId) {
-    const res = await fetch(`/api/recipes/${recipeId}`)
-    const [recipe] = await res.json();
+    const recipe = await RecipeAPI.getRecipe(recipeId);
     console.log('here is your data', recipe);
     setRecipe({
       id: recipe.id,
@@ -49,16 +49,9 @@ export const UpdateRecipe = (props) => {
   const handleChange = (type: string, newValue: any) => {
     setRecipe(prev => ({ ...prev, [type]: newValue }))
   }
+
   const saveRecipe = async () => {
-    const res = await fetch('/api/recipes/', {
-      method: 'PATCH',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ recipe })
-    })
-    const json = await res.json();
+   const json = await RecipeAPI.saveRecipe(recipe);
     window.location.href = `/r/${json.id}`;
   }
   const disabled = (

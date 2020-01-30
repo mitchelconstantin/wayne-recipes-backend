@@ -6,6 +6,7 @@ import { RecipeCard } from './RecipeCard'
 import { Box, Input, Tab, Tabs } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe } from '../Shared/Types';
+import { RecipeAPI } from '../Shared/RecipeAPI';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -30,11 +31,8 @@ export const Home = () => {
   const RecipeZone = Box;
   const Container = Box;
   const getRecipes = async () => {
-    const res = await fetch(`/api/recipes`)
-    const json = await res.json();
+    const recipeList = await RecipeAPI.getAllRecipes();
     // TODO pick a default sort for the recipes
-    const recipeList = json
-
     setRecipe(recipeList);
     setLoading(false);
   }

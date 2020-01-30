@@ -25,17 +25,17 @@ const uploadImageToImgur = async (blob) => {
 }
 //login
 router.post('/api/login', async (req, res) => { // try a single login
-  const {email, password} = req.body.user;
-  const [user] = await db.any('select * from "users" WHERE "email" = $1 ',[email] )
+  const { email, password } = req.body.user;
+  const [user] = await db.any('select * from "users" WHERE "email" = $1 ', [email])
   const newHash = bcrypt.hashSync(password, 10);
 
   if (!user || !bcrypt.compareSync(password, user.hash)) { //if no user or if password and hash do not match
     return res.status(400).send({
       message: 'Incorrect login'
-   });
+    });
   }
   console.log('here is your user', user);
-  res.json({isAdmin: user.permissionlevel > 9})
+  res.json({ isAdmin: user.permissionlevel > 9 })
 })
 
 router.get('/api/users', async (req, res) => { // get list of all users
@@ -46,20 +46,20 @@ router.get('/api/users', async (req, res) => { // get list of all users
 
 router.post('/api/users', async (req, res) => { // try to create a new user
   // permissionLevel
-  const {firstName, lastName, email, password} = req.body.user;
-  const user = await db.any('select * from "users" WHERE "email" = $1 ',[email] )
+  const { firstName, lastName, email, password } = req.body.user;
+  const user = await db.any('select * from "users" WHERE "email" = $1 ', [email])
   if (user.length) {
     return res.status(400).send({
       message: 'username already exists'
-   });
+    });
   }
   const hash = bcrypt.hashSync(password, 10);
   console.log('here is the hash I make, should be one line');
   console.log(hash);
   console.log('done');
   const newUser = await db.one('INSERT INTO users(firstName, lastName, email, hash, permissionLevel) VALUES($1, $2, $3, $4, $5) RETURNING email', [firstName, lastName, email, hash, 10])
-console.log('newuser', newUser);
-res.json('success')
+  console.log('newuser', newUser);
+  res.json('success')
 })
 
 //recipes
@@ -74,36 +74,27 @@ router.get('/api/recipes/:recipeID', async (req, res) => {
   res.json(data);
 })
 
-router.patch('/api/recipes', async (req, res) => {
-  // TODO make this patch endpoint for 1 recipe
+
+router.patch('/api/recipes/:recipeID', async (req, res) => {
   const recipe = req.body.recipe
   if (recipe.id) {
     const values = [recipe.id, recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions, recipe.picture]
     await db.any('update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7 WHERE "id" = $1', values)
-    res.send({id: recipe.id});
+    res.send({ id: recipe.id });
   }
   else {
-  const values = [recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions]
-  const newRecipe = await db.one('INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions") VALUES($1, $2, $3, $4, $5) RETURNING id', values)
-  res.send(newRecipe);
-}
-})
-
-router.patch('/api/recipes/:recipeID/image', async (req, res) => {
-  // TODO rename this to something else, it only uploads to imgur and returns
-  if (req.body.image) {
-    const imgurLink = await uploadImageToImgur(req.body.image)
-    res.send({link: imgurLink});
+    const values = [recipe.title, recipe.source, recipe.serves, recipe.ingredients, recipe.directions]
+    const newRecipe = await db.one('INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions") VALUES($1, $2, $3, $4, $5) RETURNING id', values)
+    res.send(newRecipe);
   }
-})
+});
 
 router.post('/api/image', async (req, res) => {
   console.log('req', req);
   if (req.body.image) {
     const imgurLink = await uploadImageToImgur(req.body.image)
     console.log('here is your imgur link', imgurLink);
-    // await db.any('update "Recipes" SET "picture" = $1 WHERE "id" = $2', [imgurLink, req.params.recipeID])
-    res.send({link: imgurLink});
+    res.send({ link: imgurLink });
   }
 })
 
