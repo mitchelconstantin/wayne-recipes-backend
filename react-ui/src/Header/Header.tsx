@@ -28,7 +28,7 @@ export const Header = () => {
   const [Container, TopRow, ButtonSet, Center] = [Box, Box, Box, Box, Box];
   const classes = useStyles();
   const title = `WAYNE'S FAMILY RECIPES`
-  const description = 'Traditional Cajun food and so much more! 01/30 pt2'
+  const description = 'Traditional Cajun food and so much more! 01/30 pt3'
   const ShoppingListLabel = () => {
     const text = 'Shopping List';
     const list = ShoppingListBehaviors.load();
