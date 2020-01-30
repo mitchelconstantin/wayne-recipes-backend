@@ -19,7 +19,8 @@ export const setAdmin = () => {
 }
 
 export const isAdmin = () => {
-  const admin = localStorage.getItem('isAdmin');
-  if (!admin) return false;
-  return JSON.parse(admin);
+  return true;
+  // const admin = localStorage.getItem('isAdmin');
+  // if (!admin) return false;
+  // return JSON.parse(admin);
 }
