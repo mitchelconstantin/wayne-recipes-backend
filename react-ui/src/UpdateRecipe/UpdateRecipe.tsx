@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogTitle, Grid, TextField, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, Grid, TextField, Typography, Snackbar } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom'
 import { ImageUploader } from './ImageUploader';
@@ -68,6 +68,7 @@ export const UpdateRecipe = () => {
   const saveRecipe = async () => {
     const json = await RecipeAPI.saveRecipe(recipe);
     window.location.href = `/r/${json.id}`;
+    SnackbarService.success('recipe saved')
   }
   const disabled = (
     !(recipe.title
