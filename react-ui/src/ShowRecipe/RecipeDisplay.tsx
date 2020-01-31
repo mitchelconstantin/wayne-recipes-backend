@@ -9,6 +9,8 @@ import Edit from '@material-ui/icons/Edit';
 import SnackbarService from '../Shared/SnackbarService';
 import { isAdmin } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/RecipeAPI';
+//@ts-ignore
+import { useParams } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -80,13 +82,14 @@ export const LongList = ({ content, title, numbered = false }: LongListProps) =>
     </Box>)
 }
 
-export const RecipeDisplay = (props: { match: { params: { number: any; }; }; }) => {
+export const RecipeDisplay = () => {
   //@ts-ignore
   const [recipe, setRecipe] = useState<Recipe>({});
   const [loading, setLoading] = useState(true);
+  const {recipeId} = useParams();
   const [responsive] = useState(getLayout());
   const getRecipe = async () => {
-    const recipe = await RecipeAPI.getRecipe(props.match.params.number);
+    const recipe = await RecipeAPI.getRecipe(recipeId);
     setRecipe(recipe);
     setLoading(false);
   }
@@ -110,7 +113,6 @@ export const RecipeDisplay = (props: { match: { params: { number: any; }; }; }) 
   //@ts-ignore
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
   const addToShoppingList = () => {
-    console.log('adding', recipe);
     ShoppingListBehaviors.add(recipe);
     SnackbarService.success('added to list!');
   }

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
 import { setLoggedIn, setAdmin } from '../Shared/AppBehaviors';
 import {emptyUser, IUser} from '../Shared/Types';
+import SnackbarService from '../Shared/SnackbarService';
 
 const loginToServer = async (user: IUser) => {
   const res = await fetch('/api/login/', {
@@ -17,7 +18,6 @@ const loginToServer = async (user: IUser) => {
 }
 
 const createUser = async (user: IUser) => {
-  console.log('calling the api');
   const res = await fetch('/api/users/', {
     method: 'POST',
     headers: {
@@ -41,13 +41,12 @@ export const Login = () => {
     if (type === 'password') setUser({ ...user, password: newValue });
   }
   const handleSignUpClick = async () => {
-    console.log('trying to sign up');
     try {
       const response = await createUser(user);
       console.log('response', response);
-      if (response.status === 400) console.log('that user already exists, please try logging in');
+      if (response.status === 400) SnackbarService.error('that user already exists, please try logging in');
       if (response.status === 200) {
-        console.log('user created, now login with that username and password')
+        SnackbarService.success('user created, now login with that username and password')
         setUser(emptyUser);
         setSigningUp(false);
       };
@@ -60,9 +59,8 @@ export const Login = () => {
   const handleLoginClick = async () => {
     try {
       const response = await loginToServer(user);
-      console.log('response', response);
       if (response.status === 400) {
-        console.log('yikes, that user does not exist');
+        SnackbarService.error('yikes, that user does not exist');
         setUser(emptyUser);
       }
       if (response.status === 200) {

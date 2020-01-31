@@ -69,7 +69,16 @@ router.get('/api/recipes', async (req, res) => {
 })
 
 router.get('/api/recipes/:recipeID', async (req, res) => {
+  console.log('trying to get this');
   const data = await db.any('select * from "Recipes" WHERE id = $1', req.params.recipeID)
+  console.log('here is your data, data', data);
+  res.json(data);
+})
+
+router.delete('/api/recipes/:recipeID', async (req, res) => {
+  console.log('trying to delete', req.params.recipeID);
+  // const data = 2;
+  const data = await db.any('delete from "Recipes" WHERE id = $1', req.params.recipeID)
   console.log('here is your data, data', data);
   res.json(data);
 })

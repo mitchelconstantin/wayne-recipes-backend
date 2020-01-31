@@ -13,6 +13,12 @@ export class RecipeAPI {
     return data;
   }
 
+  static deleteRecipe = async (id: number) => {
+    const res = await fetch(`/api/recipes/${id}`, {method: 'DELETE'})
+    const [data] = await res.json();
+    return data;
+  }
+
   static saveRecipe = async (recipe: IRecipe) => {
     const res = await fetch(`/api/recipes/${recipe.id}`, {
       method: 'PATCH',
@@ -27,7 +33,6 @@ export class RecipeAPI {
   };
 
   static uploadImage = async (image : string) => {
-    console.log('trying to upload');
     const res = await fetch(`/api/image`, {
       method: 'POST',
       headers: {
@@ -37,7 +42,6 @@ export class RecipeAPI {
       body: JSON.stringify({ image: image })
     })
     const json = await res.json();
-    console.log('json', json);
     return json.link;
   };
 

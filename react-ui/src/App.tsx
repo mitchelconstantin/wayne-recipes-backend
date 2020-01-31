@@ -19,8 +19,8 @@ export const App = () => {
           <Route exact path='/all' component={Home} />
           <Route path='/list' component={ShoppingList} />
           <Route path='/new' component={UpdateRecipe} />
-          <Route exact path='/r/:number' component={RecipeDisplay} />
-          <Route path='/r/:number/edit' component={UpdateRecipe} />
+          <Route exact path='/r/:recipeId' component={RecipeDisplay} />
+          <Route path='/r/:recipeId/edit' component={UpdateRecipe} />
           <Redirect from="/" to="/all" />
         </Switch>
       </div>

@@ -2,7 +2,6 @@ import { IRecipe, IShoppingList } from '../Shared/Types';
 
 export class ShoppingListBehaviors {
   static clear = () => {
-    console.log('clearing the shopping list');
     ShoppingListBehaviors._setShoppingList([]);
   };
 
@@ -22,7 +21,6 @@ export class ShoppingListBehaviors {
   static add = (recipe: IRecipe) => {
     const listItem = { id: recipe.id, ingredients: recipe.ingredients, title: recipe.title };
     const prev = ShoppingListBehaviors.load();
-    console.log('here is prev', prev);
     //@ts-ignore
     ShoppingListBehaviors._setShoppingList([...prev, listItem]);
   };

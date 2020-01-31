@@ -1,57 +1,72 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, Grid, TextField, Typography } from '@material-ui/core';
 //@ts-ignore
-import { Redirect } from 'react-router-dom'
+import { Redirect, useParams } from 'react-router-dom'
 import { ImageUploader } from './ImageUploader';
 import { isAdmin } from '../Shared/AppBehaviors';
 import { IRecipe, emptyRecipe } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
+import SnackbarService from '../Shared/SnackbarService';
 
 const getRecipeData = async (setRecipe: Function, recipeId: number) => {
-  if (recipeId) {
-    const recipe = await RecipeAPI.getRecipe(recipeId);
-    console.log('here is your data', recipe);
-    setRecipe({
-      id: recipe.id,
-      title: recipe.title,
-      picture: recipe.picture,
-      source: recipe.source,
-      serves: recipe.serves,
-      ingredients: recipe.ingredients,
-      directions: recipe.directions,
-    })
+  const recipe = await RecipeAPI.getRecipe(recipeId);
+  if (!recipe) {
+    SnackbarService.error('could not find that recipe')
+    window.location.href = '/';
   }
-  if (!recipeId) {
-    console.log('no recipe data');
-    setRecipe(emptyRecipe)
-  };
+  setRecipe({
+    id: recipe.id,
+    title: recipe.title,
+    picture: recipe.picture,
+    source: recipe.source,
+    serves: recipe.serves,
+    ingredients: recipe.ingredients,
+    directions: recipe.directions,
+  })
 };
-
-// TODO fix props typing
+interface DialogProps {
+  onClose: any;
+  id: number;
+  open: boolean;
+}
 //@ts-ignore
-export const UpdateRecipe = (props) => {
-  const [recipeId] = useState(
-    () => {
-      if (props && props.match && props.match.params && props.match.params.number) {
-        return props.match.params.number
-      }
-      else return null;
-    }
-  )
+const SimpleDialog = ({onClose, id, open}: DialogProps) => {
+  const handleDelete = async () => {
+    await RecipeAPI.deleteRecipe(id);
+    SnackbarService.success('recipe deleted')
+    window.location.href = '/';
+    onClose();
+  };
+
+  return (
+    <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
+      <DialogTitle id="simple-dialog-title">Are you sure you want to delete this recipe?</DialogTitle>
+      <Button onClick={handleDelete}>YES DELETE IT</Button>
+      <Button onClick={onClose}>oops, no</Button>
+    </Dialog>
+  );
+}
+
+export const UpdateRecipe = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const {recipeId} = useParams();
   const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
 
   useEffect(() => {
-    getRecipeData(setRecipe, recipeId)
+    if (recipeId) {
+      getRecipeData(setRecipe, recipeId);
+    } else {
+      setRecipe(emptyRecipe);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
 
   const handleChange = (type: string, newValue: any) => {
     setRecipe(prev => ({ ...prev, [type]: newValue }))
   }
 
   const saveRecipe = async () => {
-   const json = await RecipeAPI.saveRecipe(recipe);
+    const json = await RecipeAPI.saveRecipe(recipe);
     window.location.href = `/r/${json.id}`;
   }
   const disabled = (
@@ -61,7 +76,6 @@ export const UpdateRecipe = (props) => {
       && recipe.ingredients
       && recipe.directions)
   )
-  console.log('here is your recipe', recipe);
   return (
     <>
       {!isAdmin() && <Redirect push to='/all' />}
@@ -104,8 +118,13 @@ export const UpdateRecipe = (props) => {
       <Button
         disabled={disabled}
         onClick={saveRecipe} variant="contained" color="primary">
-        {recipeId ? 'update recupe' : 'save new recipe'}
+        {recipeId ? 'update recipe' : 'save new recipe'}
       </Button>
+      <Button
+        onClick={() => setOpenModal(true)} variant="contained" color="primary">
+        delete recipe
+      </Button>
+      <SimpleDialog open={openModal} id={recipe.id || 1} onClose={() => setOpenModal(false)} />
     </>
   )
 }

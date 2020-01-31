@@ -29,7 +29,6 @@ export const ShoppingList = () => {
 
   const [Container, Buttons] = [Box, Box];
   const saveShoppingList = () => {
-    console.log('saving');
     window.print();
   };
   const removeFromShoppingList = (title: string, i: number) => {
@@ -81,7 +80,6 @@ export const ShoppingList = () => {
       ))}
     </>);
 
-  console.log('here is your shopping list', shoppingList);
   return (
     <Container display='flex' flexDirection='column' alignItems='center' position='static'>
       <Buttons display='flex' >
