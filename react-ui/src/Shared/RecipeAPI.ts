@@ -1,13 +1,13 @@
 import { IRecipe } from "./Types";
 
 export class RecipeAPI {
-  static getAllRecipes = async () => {
+  static getAllRecipes = async (): Promise<IRecipe[]>=> {
     const res = await fetch(`/api/recipes`);
     const json = await res.json();
     return json;
   };
 
-  static getRecipe = async (id: number) => {
+  static getRecipe = async (id: number): Promise<IRecipe> => {
     const res = await fetch(`/api/recipes/${id}`)
     const [data] = await res.json();
     return data;
@@ -32,7 +32,7 @@ export class RecipeAPI {
     return json;
   };
 
-  static uploadImage = async (image : string) => {
+  static uploadImage = async (image : string): Promise<string> => {
     const res = await fetch(`/api/image`, {
       method: 'POST',
       headers: {

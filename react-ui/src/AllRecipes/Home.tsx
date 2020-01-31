@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const Home = () => {
-  const [recipes, setRecipe] = useState([]);
+  const [recipes, setRecipe] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [value, setValue] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -32,8 +32,8 @@ export const Home = () => {
   const Container = Box;
   const getRecipes = async () => {
     const recipeList = await RecipeAPI.getAllRecipes();
-    // TODO pick a default sort for the recipes
-    setRecipe(recipeList);
+    const sortedRecipe = recipeList.sort((a,b)=>a.title.localeCompare(b.title))
+    setRecipe(sortedRecipe);
     setLoading(false);
   }
 
