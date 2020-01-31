@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Divider, IconButton, Tooltip, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 import { LongList } from '../ShowRecipe/RecipeDisplay';
 import { IShoppingList } from '../Shared/Types';
@@ -9,17 +9,17 @@ import DeleteForever from '@material-ui/icons/DeleteForever';
 import Print from '@material-ui/icons/Print';
 import SnackbarService from '../Shared/SnackbarService'
 
-const useStyles = makeStyles(theme => ({
-  label: {
-    color: '#FFF000'
-  },
-  indicator: {
-    backgroundColor: '#e4673d'
-  },
-  button: {
+// const useStyles = makeStyles(theme => ({
+//   label: {
+//     color: '#FFF000'
+//   },
+//   indicator: {
+//     backgroundColor: '#e4673d'
+//   },
+//   button: {
 
-  }
-}));
+//   }
+// }));
 
 
 export const ShoppingList = () => {

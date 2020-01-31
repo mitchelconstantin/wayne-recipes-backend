@@ -12,15 +12,23 @@ import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
 export const App = () => {
   return (
     <BrowserRouter>
-      <div className="App">
         <Header />
+      <div className="App">
         <Switch>
-          <Route path='/login' component={Login} />
+
+          <Route path='/login' render={(props: any) => <Login {...props} />} />
+          <Route exact path='/all' render={(props: any) => <Home {...props} />} />
+          <Route path='/list' render={(props: any) => <ShoppingList {...props} />} />
+          <Route path='/new' render={(props: any) => <UpdateRecipe {...props} />} />
+          <Route exact path='/r/:recipeId' render={(props: any) => <RecipeDisplay {...props} />} />
+          <Route path='/r/:recipeId/edit' render={(props: any) => <UpdateRecipe {...props} />} />
+
+          {/* <Route path='/login' component={Login} />
           <Route exact path='/all' component={Home} />
           <Route path='/list' component={ShoppingList} />
           <Route path='/new' component={UpdateRecipe} />
           <Route exact path='/r/:recipeId' component={RecipeDisplay} />
-          <Route path='/r/:recipeId/edit' component={UpdateRecipe} />
+          <Route path='/r/:recipeId/edit' component={UpdateRecipe} /> */}
           <Redirect from="/" to="/all" />
         </Switch>
       </div>
