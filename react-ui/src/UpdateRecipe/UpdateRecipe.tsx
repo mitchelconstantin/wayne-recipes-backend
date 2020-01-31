@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogTitle, Grid, TextField, Typography, Snackbar } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, Grid, TextField, Typography } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom'
 import { ImageUploader } from './ImageUploader';

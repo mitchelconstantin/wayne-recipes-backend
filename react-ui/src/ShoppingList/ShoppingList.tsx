@@ -1,31 +1,67 @@
 import React, { useState } from 'react'
 import { Box, Divider, IconButton, Tooltip, Typography } from '@material-ui/core'
-// import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
-import { LongList } from '../ShowRecipe/RecipeDisplay';
 import { IShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import Print from '@material-ui/icons/Print';
 import SnackbarService from '../Shared/SnackbarService'
 
-// const useStyles = makeStyles(theme => ({
-//   label: {
-//     color: '#FFF000'
-//   },
-//   indicator: {
-//     backgroundColor: '#e4673d'
-//   },
-//   button: {
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: '33.33%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary,
+  },
+  details: {
+    flexDirection: "column"
+  }
+}));
 
-//   }
-// }));
+interface LongListProps {
+  content: any;
+  title: string;
+  numbered?: boolean;
+}
 
+export const LongList = ({ content, title, numbered = false }: LongListProps) => {
+  const classes = useStyles();
+
+  const getLine = (index: number, line: any) => {
+    if (!numbered || !line) return line;
+    const val = Math.floor(index / 2 + 1)
+    return `${val}. ${line}`
+  }
+  const processedContent = content.split("\n").map((line: any, i: number) => {
+    return (
+      <Box mt='10px' key={i}>
+        <Typography className={classes.secondaryHeading}>
+          {getLine(i, line)}
+        </Typography>
+      </Box>)
+  }
+  )
+  return (
+    <Box mt='20px' mb='20px' display='flex' flexDirection='column' alignItems='left'>
+      <Typography variant="h6" >
+        {title}
+      </Typography>
+      {processedContent}
+    </Box>)
+}
 
 export const ShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<IShoppingList>(ShoppingListBehaviors.load());
   const updateShoppingList = () => setShoppingList(ShoppingListBehaviors.load());
-  // const classes = useStyles();
+  const classes = useStyles();
 
   const [Container, Buttons] = [Box, Box];
   const saveShoppingList = () => {
@@ -48,9 +84,9 @@ export const ShoppingList = () => {
   }
   const ShoppingListItems = ({ shoppingList }: ShoppingListProps) => (
     <>
-      <Box display='flex'>
-        <Typography variant='h4'>
-          Items on the shopping list
+      <Box display='flex' alignItems='center'>
+        <Typography variant='h6'>
+          Recipes on the shopping list
         </Typography>
         <Tooltip title="Clear Entire Shopping List">
           <IconButton onClick={clearShoppingList} aria-label="upload picture" >
@@ -59,24 +95,23 @@ export const ShoppingList = () => {
         </Tooltip>
       </Box>
       {shoppingList.map((item: any, i: number) => (
-        <div key={item.id} >
-          {item.title}
+        <Box key={i} display='flex' alignItems='center'>
+          <Typography className={classes.secondaryHeading}>
+            {item.title}
+          </Typography>
           <Tooltip title="Remove from Shopping List">
             <IconButton onClick={() => removeFromShoppingList(item.title, i)} aria-label="upload picture" >
               <RemoveShoppingCart />
             </IconButton>
           </Tooltip>
-        </div>
+        </Box>
       ))}
     </>);
 
   const ShoppingListIngredients = ({ shoppingList }: ShoppingListProps) => (
     <>
       {shoppingList.map((item: any, i: number) => (
-        <div
-          key={item.id} >
-          <LongList title={item.title} content={item.ingredients || 'unknown'} />
-        </div>
+        <LongList key={i} title={item.title} content={item.ingredients || 'unknown'} />
       ))}
     </>);
 
@@ -91,11 +126,13 @@ export const ShoppingList = () => {
         </Tooltip>
       </Buttons>
       <Divider />
-      {shoppingList.length ? <>
-        <ShoppingListItems shoppingList={shoppingList} />
-        <Divider />
-        <ShoppingListIngredients shoppingList={shoppingList} />
-      </> :
+      {shoppingList.length ?
+        <Box display='flex' flexDirection='column' alignItems='left'>
+          <ShoppingListItems shoppingList={shoppingList} />
+          <Divider />
+          <ShoppingListIngredients shoppingList={shoppingList} />
+        </Box>
+        :
         <Typography variant='h2' > Shopping List is Empty</Typography>
       }
 
