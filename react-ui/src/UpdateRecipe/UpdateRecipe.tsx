@@ -3,7 +3,7 @@ import { Button, Dialog, DialogTitle, Grid, TextField, Typography } from '@mater
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom'
 import { ImageUploader } from './ImageUploader';
-import { isAdmin } from '../Shared/AppBehaviors';
+import { isAdmin, isOwner } from '../Shared/AppBehaviors';
 import { IRecipe, emptyRecipe } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
@@ -121,10 +121,10 @@ export const UpdateRecipe = () => {
         onClick={saveRecipe} variant="contained" color="primary">
         {recipeId ? 'update recipe' : 'save new recipe'}
       </Button>
-      <Button
+      {isOwner() && <Button
         onClick={() => setOpenModal(true)} variant="contained" color="primary">
         delete recipe
-      </Button>
+      </Button>}
       <SimpleDialog open={openModal} id={recipe.id || 1} onClose={() => setOpenModal(false)} />
     </>
   )
