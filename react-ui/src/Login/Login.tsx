@@ -1,37 +1,13 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@material-ui/core';
-import { setLoggedIn, setAdmin } from '../Shared/AppBehaviors';
+import { logIn } from '../Shared/AppBehaviors';
 import {emptyUser, IUser} from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
+import { UserAPI } from '../Shared/UserAPI';
 
-const loginToServer = async (user: IUser) => {
-  const res = await fetch('/api/login/', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user })
-  })
-  setLoggedIn();
-  return res;
-}
-
-const createUser = async (user: IUser) => {
-  const res = await fetch('/api/users/', {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ user })
-  })
-  return res;
-}
 
 export const Login = () => {
   const [signingUp, setSigningUp] = useState(false);
-  // const [loggedIn, setLoggedIn] = useState(false);
   const [user, setUser] = useState(emptyUser)
 
   const handleChange = (type: string, newValue: any) => {
@@ -42,7 +18,7 @@ export const Login = () => {
   }
   const handleSignUpClick = async () => {
     try {
-      const response = await createUser(user);
+      const response = await UserAPI.createUser(user);
       console.log('response', response);
       if (response.status === 400) SnackbarService.error('that user already exists, please try logging in');
       if (response.status === 200) {
@@ -58,7 +34,7 @@ export const Login = () => {
 
   const handleLoginClick = async () => {
     try {
-      const response = await loginToServer(user);
+      const response = await UserAPI.loginToServer(user);
       if (response.status === 400) {
         SnackbarService.error('yikes, that user does not exist');
         setUser(emptyUser);
@@ -66,8 +42,7 @@ export const Login = () => {
       if (response.status === 200) {
         const u = await response.json();
         setUser(u);
-        setAdmin();
-        setLoggedIn();
+        logIn(u);
         window.location.href = '/all';
       }
     } catch (e) {

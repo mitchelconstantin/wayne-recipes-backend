@@ -1,26 +1,24 @@
+import { IUser } from "./Types";
+
+const getLocalStorage = (item: string) => {
+  const result = localStorage.getItem(item);
+  if (!result) return false;
+  return JSON.parse(result);
+};
+
+export const logIn = (user: IUser) => {
+  localStorage.setItem('isLoggedIn', 'true');
+  localStorage.setItem('isAdmin', user.isAdmin.toString());
+  localStorage.setItem('isOwner', user.isOwner.toString());
+};
+
 export const logOut = () => {
   localStorage.setItem('isLoggedIn', 'false');
   localStorage.setItem('isAdmin', 'false');
+  localStorage.setItem('isOwner', 'false');
   window.location.reload();
-}
+};
+export const isLoggedIn = () => getLocalStorage('isLoggedIn');
+export const isAdmin = () => getLocalStorage('isAdmin');
+export const isOwner = () => getLocalStorage('isOwner');
 
-export const isLoggedIn = () => {
-  const loggedIn = localStorage.getItem('isLoggedIn');
-  if (!loggedIn) return false;
-  return JSON.parse(loggedIn);
-}
-
-export const setLoggedIn = () => {
-  localStorage.setItem('isLoggedIn', 'true');
-}
-
-export const setAdmin = () => {
-  localStorage.setItem('isAdmin', 'true');
-}
-
-export const isAdmin = () => {
-  return true;
-  // const admin = localStorage.getItem('isAdmin');
-  // if (!admin) return false;
-  // return JSON.parse(admin);
-}

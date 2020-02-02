@@ -39,7 +39,7 @@ router.post('/api/login', async (req, res) => {
     });
   }
   console.log('here is your user', user);
-  res.json({ isAdmin: user.permissionlevel > 9 });
+  res.json(user);
 });
 
 router.get('/api/users', async (req, res) => {
@@ -62,8 +62,8 @@ router.post('/api/users', async (req, res) => {
   }
   const hash = bcrypt.hashSync(password, 10);
   const newUser = await db.one(
-    'INSERT INTO users(firstName, lastName, email, hash, permissionLevel) VALUES($1, $2, $3, $4, $5) RETURNING email',
-    [firstName, lastName, email, hash, 10]
+    'INSERT INTO users("firstName", "lastName", "email", "hash") VALUES($1, $2, $3, $4) RETURNING email',
+    [firstName, lastName, email, hash]
   );
   console.log('newuser', newUser);
   res.json('success');
@@ -75,8 +75,8 @@ router.patch('/api/users', async (req, res) => {
   console.log('here are all your users', users);
   users.forEach(async (user) => {
     await db.any(
-      'update "users" SET "permissionlevel" = $2 WHERE "email" = $1',
-      [user.email, user.permissionlevel]
+      'update "users" SET "isAdmin" = $2 WHERE "email" = $1',
+      [user.email, user.isAdmin]
     );
   });
   res.json('success');
@@ -96,7 +96,6 @@ router.get('/api/recipes/:recipeID', async (req, res) => {
     'select * from "Recipes" WHERE id = $1',
     req.params.recipeID
   );
-  console.log('here is your data, data', data);
   res.json(data);
 });
 
@@ -107,7 +106,6 @@ router.delete('/api/recipes/:recipeID', async (req, res) => {
     'delete from "Recipes" WHERE id = $1',
     req.params.recipeID
   );
-  console.log('here is your data, data', data);
   res.json(data);
 });
 

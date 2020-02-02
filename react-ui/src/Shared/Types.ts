@@ -26,13 +26,16 @@ export interface IUser {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
-  permissionlevel?: number;
+  password?: string;
+  isAdmin: boolean;
+  isOwner: boolean;
 }
 
 export const emptyUser: IUser = {
   firstName: '',
   lastName: '',
   email: '',
-  password: ''
+  password: '',
+  isAdmin: false,
+  isOwner: false
 }
