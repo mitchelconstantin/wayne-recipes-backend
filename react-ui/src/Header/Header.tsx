@@ -45,6 +45,7 @@ export const Header = () => {
           <Button href='/login' className={classes.button}>Login</Button>
         }
         {isAdmin() && <Button href='/new' className={classes.button} >Add new recipe</Button>}
+        {isAdmin() && <Button href='/dashboard' className={classes.button} >Admin Dashboard</Button>}
         <Button href='/list' className={classes.button}>{ShoppingListLabel()}</Button>
         <Button href='/all' className={classes.button}>All Recipes</Button>
       </ButtonSet>

@@ -8,6 +8,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { Home } from './AllRecipes/Home'
 import { Login } from './Login/Login'
 import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
+import { AdminDashboard } from './AdminDashboard/AdminDashboard'
 
 export const App = () => {
   return (
@@ -22,6 +23,7 @@ export const App = () => {
           <Route path='/new' render={(props: any) => <UpdateRecipe {...props} />} />
           <Route exact path='/r/:recipeId' render={(props: any) => <RecipeDisplay {...props} />} />
           <Route path='/r/:recipeId/edit' render={(props: any) => <UpdateRecipe {...props} />} />
+          <Route path='/dashboard' render={(props: any) => <AdminDashboard {...props} />} />
 
           {/* <Route path='/login' component={Login} />
           <Route exact path='/all' component={Home} />
