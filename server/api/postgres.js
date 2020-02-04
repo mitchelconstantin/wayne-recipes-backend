@@ -3,26 +3,21 @@ const router = express.Router();
 var FormData = require('form-data');
 const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
-
+var cloudinary = require('cloudinary').v2;
+var FileReader = require('filereader');
 const { db } = require('../lib/database');
 
-const uploadImageToImgur = async blob => {
-  return new Promise(async (resolve, reject) => {
-    let formData = new FormData();
-    formData.append('image', blob);
-    const imgurFile = await fetch('https://api.imgur.com/3/image', {
-      method: 'POST',
-      headers: {
-        Authorization: process.env.IMGUR_CLIENT_ID,
-        'Cache-Control': null, //required for cors
-        'X-Requested-With': null //required for cors
-      },
-      body: formData
+const uploadToCloudinary = async image => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(image, (err, url) => {
+      if (err) return reject(err);
+      console.log('url has a bunch of other data, check it out');
+      //TODO see about getting thumbnail and fullsize URL from here
+      return resolve(url);
     });
-    const json = await imgurFile.json();
-    resolve(json.data.link);
   });
 };
+
 //login
 router.post('/api/login', async (req, res) => {
   // try a single login
@@ -73,11 +68,11 @@ router.post('/api/users', async (req, res) => {
 router.patch('/api/users', async (req, res) => {
   const { users } = req.body;
   console.log('here are all your users', users);
-  users.forEach(async (user) => {
-    await db.any(
-      'update "users" SET "isAdmin" = $2 WHERE "email" = $1',
-      [user.email, user.isAdmin]
-    );
+  users.forEach(async user => {
+    await db.any('update "users" SET "isAdmin" = $2 WHERE "email" = $1', [
+      user.email,
+      user.isAdmin
+    ]);
   });
   res.json('success');
 });
@@ -143,12 +138,11 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
 });
 
 router.post('/api/image', async (req, res) => {
-  console.log('req', req);
-  if (req.body.image) {
-    const imgurLink = await uploadImageToImgur(req.body.image);
-    console.log('here is your imgur link', imgurLink);
-    res.send({ link: imgurLink });
-  }
+  console.log('req');
+  const img = await uploadToCloudinary(req.body.image);
+  const link = img.url;
+
+  res.send({ link });
 });
 
 module.exports = router;

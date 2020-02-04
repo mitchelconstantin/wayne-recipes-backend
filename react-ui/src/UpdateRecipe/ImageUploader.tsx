@@ -23,7 +23,8 @@ export const ImageUploader =  ({picture, setPicture} : Props) => {
 
       reader.onload = () => {
         //@ts-ignore
-        resolve(reader.result.split(',')[1]);
+        resolve(reader.result)
+        // resolve(reader.result.split(',')[1]);
       };
       reader.onerror = reject;
       reader.readAsDataURL(file[0])
