@@ -2,53 +2,55 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import emptyImage from './emptyImage.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Box, Typography, IconButton, Divider, Tooltip } from '@material-ui/core/';
-import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
-import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
-import Edit from '@material-ui/icons/Edit';
-import SnackbarService from '../Shared/SnackbarService';
+import {
+  Box,
+  Typography,
+  Divider,
+} from '@material-ui/core/';
 import { isAdmin } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 //@ts-ignore
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
+import {
+  PrintButton,
+  AddToShoppingListButton,
+  EditRecipeButton
+} from '../Shared/Components/CustomButtons';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    width: '100%',
+    width: '100%'
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     flexBasis: '33.33%',
-    flexShrink: 0,
+    flexShrink: 0
   },
   secondaryHeading: {
     fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
+    color: theme.palette.text.secondary
   },
   details: {
-    flexDirection: "column"
+    flexDirection: 'column'
   }
 }));
 
-
 const isMobile = () => {
-  return window.orientation !== undefined
-}
+  return window.orientation !== undefined;
+};
 
-const getLayout = () => (
-  isMobile() ?
-    {
-      style: { height: '80%', width: '80%', border: '1px' },
-      flexDirection: 'column',
-      alignItems: 'center'
-    }
-    :
-    {
-      style: { height: '30%', width: '30%', border: '1px' },
-      flexDirection: 'row',
-      alignItems: 'top'
-    }
-);
+const getLayout = () =>
+  isMobile()
+    ? {
+        style: { height: '80%', width: '80%', border: '1px' },
+        flexDirection: 'column',
+        alignItems: 'center'
+      }
+    : {
+        style: { height: '30%', width: '30%', border: '1px' },
+        flexDirection: 'row',
+        alignItems: 'top'
+      };
 
 interface LongListProps {
   content: any;
@@ -56,66 +58,72 @@ interface LongListProps {
   numbered?: boolean;
 }
 
-export const LongList = ({ content, title, numbered = false }: LongListProps) => {
+export const LongList = ({
+  content,
+  title,
+  numbered = false
+}: LongListProps) => {
   const classes = useStyles();
 
   const getLine = (index: number, line: any) => {
     if (!numbered || !line) return line;
-    const val = Math.floor(index / 2 + 1)
-    return `${val}. ${line}`
-  }
-  const processedContent = content.split("\n").map((line: any, i: number) => {
+    const val = Math.floor(index / 2 + 1);
+    return `${val}. ${line}`;
+  };
+  const processedContent = content.split('\n').map((line: any, i: number) => {
     return (
-      <Box mt='10px' key={i}>
+      <Box mt="10px" key={i}>
         <Typography className={classes.secondaryHeading}>
           {getLine(i, line)}
         </Typography>
-      </Box>)
-  }
-  )
+      </Box>
+    );
+  });
   return (
-    <Box mt='20px' mb='20px'>
-      <Typography variant="h2" >
-        {title}
-      </Typography>
+    <Box mt="20px" mb="20px">
+      <Typography variant="h2">{title}</Typography>
       {processedContent}
-    </Box>)
-}
+    </Box>
+  );
+};
 
 export const RecipeDisplay = () => {
   //@ts-ignore
   const [recipe, setRecipe] = useState<Recipe>({});
   const [loading, setLoading] = useState(true);
-  const {recipeId} = useParams();
+  const { recipeId } = useParams();
   const [responsive] = useState(getLayout());
   const getRecipe = async () => {
     const recipe = await RecipeAPI.getRecipe(recipeId);
     setRecipe(recipe);
     setLoading(false);
-  }
+  };
 
   useEffect(() => {
     getRecipe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading) return (
-    <Box display='flex' flexDirection='column' justifyContent='center' alignItems='center' >
-      <CircularProgress />
-    </Box>
-  )
+  if (loading)
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <CircularProgress />
+      </Box>
+    );
 
-  const onError = (ev: { target: any; }) => {
+  const onError = (ev: { target: any }) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
   const [Container, RecipeDetails] = [Box, Box];
   //@ts-ignore
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
-  const addToShoppingList = () => {
-    ShoppingListBehaviors.add(recipe);
-    SnackbarService.success('added to list!');
-  }
+ 
   return (
     <Container
       mt="50px"
@@ -134,21 +142,9 @@ export const RecipeDisplay = () => {
       <RecipeDetails ml="30px" mr="20px" display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
-          <Tooltip title="Add to Shopping List">
-            <IconButton onClick={addToShoppingList} aria-label="upload picture">
-              <AddShoppingCart />
-            </IconButton>
-          </Tooltip>
-          {isAdmin() && (
-            <Tooltip title="Edit Recipe">
-              <IconButton
-                href={`/r/${recipe.id}/edit`}
-                aria-label="upload picture"
-              >
-                <Edit />
-              </IconButton>
-            </Tooltip>
-          )}
+          <AddToShoppingListButton recipe={recipe} />
+          <PrintButton label="Recipe" />
+          {isAdmin() && <EditRecipeButton id={recipe.id} />}
         </Box>
         <Box display="flex" mb="10px">
           <div>{`from: ${recipe.source || 'unknown'}`}</div>
@@ -177,4 +173,4 @@ export const RecipeDisplay = () => {
       </RecipeDetails>
     </Container>
   );
-}
+};

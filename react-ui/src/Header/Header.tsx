@@ -12,9 +12,6 @@ import logo from './logo.svg';
 import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import { isLoggedIn, logOut, isAdmin, isOwner } from '../Shared/AppBehaviors';
 const useStyles = makeStyles(theme => ({
-  root: {
-    // flexGrow: 1,
-  },
   title: {
     marginRight: 'auto'
   },
@@ -96,7 +93,7 @@ export const Header = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <Box displayPrint="none">
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar} disableGutters>
           <Center
@@ -142,6 +139,6 @@ export const Header = () => {
           </Container>
         </Toolbar>
       </AppBar>
-    </div>
+    </Box>
   );
 };
