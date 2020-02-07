@@ -7,7 +7,11 @@ export interface IRecipe {
   picture?: string;
   ingredients: string;
   directions?: string;
+  mainIngredient?: string;
+  region: string;
+  netCarbs?: string;
 }
+
 
 
 export const emptyRecipe: IRecipe = {
@@ -17,7 +21,10 @@ export const emptyRecipe: IRecipe = {
   source: '',
   serves: '',
   ingredients: '',
-  directions: ''
+  directions: '',
+  mainIngredient: '',
+  region: '',
+  netCarbs: '',
 };
 
 export type IShoppingList = IRecipe[];

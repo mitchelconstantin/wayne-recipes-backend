@@ -28,8 +28,6 @@ const uploadToCloudinary = async image => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(image, (err, url) => {
       if (err) return reject(err);
-      console.log('url has a bunch of other data, check it out');
-      //TODO see about getting thumbnail and fullsize URL from here
       return resolve(url);
     });
   });
@@ -50,14 +48,12 @@ router.post('/api/login', async (req, res) => {
       message: 'Incorrect login'
     });
   }
-  console.log('here is your user', user);
   res.json(user);
 });
 
 router.get('/api/users', async (req, res) => {
   // get list of all users
   const data = await db.any('select * from "users"');
-  console.log('here is data', data);
   res.json(data);
 });
 
@@ -77,14 +73,12 @@ router.post('/api/users', async (req, res) => {
     'INSERT INTO users("firstName", "lastName", "email", "hash") VALUES($1, $2, $3, $4) RETURNING email',
     [firstName, lastName, email, hash]
   );
-  console.log('newuser', newUser);
   res.json('success');
 });
 
 // update user permissions
 router.patch('/api/users', async (req, res) => {
   const { users } = req.body;
-  console.log('here are all your users', users);
   users.forEach(async user => {
     await db.any('update "users" SET "isAdmin" = $2 WHERE "email" = $1', [
       user.email,
@@ -97,13 +91,12 @@ router.patch('/api/users', async (req, res) => {
 //recipes
 router.get('/api/recipes', async (req, res) => {
   const data = await db.any(
-    'select "title", "id", "type", "mainIngredient", "source", "picture" from "Recipes"'
+    'select * from "Recipes"'
   );
   res.json(data);
 });
 
 router.get('/api/recipes/:recipeID', async (req, res) => {
-  console.log('trying to get this');
   const data = await db.any(
     'select * from "Recipes" WHERE id = $1',
     req.params.recipeID
@@ -112,8 +105,6 @@ router.get('/api/recipes/:recipeID', async (req, res) => {
 });
 
 router.delete('/api/recipes/:recipeID', async (req, res) => {
-  console.log('trying to delete', req.params.recipeID);
-  // const data = 2;
   const data = await db.any(
     'delete from "Recipes" WHERE id = $1',
     req.params.recipeID
@@ -131,10 +122,13 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       recipe.serves,
       recipe.ingredients,
       recipe.directions,
-      recipe.picture
+      recipe.picture,
+      recipe.mainIngredient,
+      recipe.region,
+      recipe.netCarbs
     ];
     await db.any(
-      'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7 WHERE "id" = $1',
+      'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7, "mainIngredient" = $8, "region" = $9, "netCarbs" = $10 WHERE "id" = $1',
       values
     );
     res.send({ id: recipe.id });
@@ -144,10 +138,15 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       recipe.source,
       recipe.serves,
       recipe.ingredients,
-      recipe.directions
+      recipe.directions,
+      recipe.mainIngredient,
+      recipe.region,
+      recipe.netCarbs,
+      recipe.picture,
+
     ];
     const newRecipe = await db.one(
-      'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions") VALUES($1, $2, $3, $4, $5) RETURNING id',
+      'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions", "mainIngredient", "region", "netCarbs", "picture") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
       values
     );
     res.send(newRecipe);

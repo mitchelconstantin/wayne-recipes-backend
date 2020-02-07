@@ -117,48 +117,64 @@ export const RecipeDisplay = () => {
     SnackbarService.success('added to list!');
   }
   return (
-
-    <Container mt='50px' width='100%' display='flex' flexDirection={responsive.flexDirection} justifyContent='center' alignItems={responsive.alignItems}>
-      <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'}
+    <Container
+      mt="50px"
+      width="100%"
+      display="flex"
+      flexDirection={responsive.flexDirection}
+      justifyContent="center"
+      alignItems={responsive.alignItems}
+    >
+      <img
+        onError={onError}
+        src={recipe.picture || emptyImage}
+        alt={'a tasty dish'}
         style={responsive.style}
       />
-      <RecipeDetails ml='30px' mr='20px' display='flex' flexDirection='column' >
-        <Box display='flex' flexDirection='row'>
+      <RecipeDetails ml="30px" mr="20px" display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
           <Tooltip title="Add to Shopping List">
-            <IconButton onClick={addToShoppingList} aria-label="upload picture" >
+            <IconButton onClick={addToShoppingList} aria-label="upload picture">
               <AddShoppingCart />
             </IconButton>
           </Tooltip>
-          {isAdmin() && <Tooltip title="Edit Recipe">
-            <IconButton href={`/r/${recipe.id}/edit`} aria-label="upload picture" >
-              <Edit />
-            </IconButton>
-          </Tooltip>}
+          {isAdmin() && (
+            <Tooltip title="Edit Recipe">
+              <IconButton
+                href={`/r/${recipe.id}/edit`}
+                aria-label="upload picture"
+              >
+                <Edit />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
-        <Box display='flex' mb='10px'>
-          <div>
-            {`from: ${recipe.source || 'unknown'}`}
-          </div>
-          <Box ml='auto'>
-            {tags.map((tag) => !!tag && `#${tag} `)}
-          </Box>
+        <Box display="flex" mb="10px">
+          <div>{`from: ${recipe.source || 'unknown'}`}</div>
+          <Box ml="auto">{tags.map(tag => !!tag && `#${tag} `)}</Box>
         </Box>
         <Divider />
-        <Box mt='10px' display='flex' flexDirection='column'>
-          <div>
-            {`Yield: ${recipe.serves || 'unknown'}`}
-          </div>
-          <div>
-            {`Time: ${recipe.time || 'unknown'}`}
-          </div>
+        <Box mt="10px" display="flex" flexDirection="column">
+          <div>{`Yield: ${recipe.serves || 'unknown'}`}</div>
+          <div>{`Time: ${recipe.time || 'unknown'}`}</div>
+          <div>{`NetCarbs: ${recipe.netCarbs || 'unknown'}`}</div>
+          <div>{`Main Ingredient: ${recipe.mainIngredient || 'unknown'}`}</div>
+          <div>{`Region: ${recipe.region || 'unknown'}`}</div>
         </Box>
 
-        <Box mt='10px' display='flex' flexDirection='column'>
-          <LongList title='Ingredients' content={recipe.ingredients || 'unknown'} />
-          <LongList title='Directions' content={recipe.directions || 'unknown'} numbered />
+        <Box mt="10px" display="flex" flexDirection="column">
+          <LongList
+            title="Ingredients"
+            content={recipe.ingredients || 'unknown'}
+          />
+          <LongList
+            title="Directions"
+            content={recipe.directions || 'unknown'}
+            numbered
+          />
         </Box>
       </RecipeDetails>
     </Container>
-  )
+  );
 }

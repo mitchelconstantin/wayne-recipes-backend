@@ -22,15 +22,7 @@ const getRecipeData = async (setRecipe: Function, recipeId: number) => {
     SnackbarService.error('could not find that recipe');
     window.location.href = '/';
   }
-  setRecipe({
-    id: recipe.id,
-    title: recipe.title,
-    picture: recipe.picture,
-    source: recipe.source,
-    serves: recipe.serves,
-    ingredients: recipe.ingredients,
-    directions: recipe.directions
-  });
+  setRecipe({ ...recipe });
 };
 interface DialogProps {
   onClose: any;
@@ -39,6 +31,8 @@ interface DialogProps {
 }
 //@ts-ignore
 const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
+  const classes = useContainerStyles();
+
   const handleDelete = async () => {
     await RecipeAPI.deleteRecipe(id);
     SnackbarService.success('recipe deleted');
@@ -51,8 +45,12 @@ const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
       <DialogTitle id="simple-dialog-title">
         Are you sure you want to delete this recipe?
       </DialogTitle>
-      <Button onClick={handleDelete}>YES DELETE IT</Button>
-      <Button onClick={onClose}>oops, no</Button>
+      <Button className={classes.formButton} onClick={handleDelete}>
+        YES DELETE IT
+      </Button>
+      <Button className={classes.formButton} onClick={onClose}>
+        oops, no
+      </Button>
     </Dialog>
   );
 };
@@ -123,6 +121,30 @@ export const UpdateRecipe = () => {
         style={{ width: '50%' }}
       />
       <TextField
+        value={recipe.mainIngredient || ''}
+        onChange={e => handleChange('mainIngredient', e.target.value)}
+        required
+        id="mainIngredient"
+        label="Main Ingredient"
+        style={{ width: '50%' }}
+      />
+      <TextField
+        value={recipe.region || ''}
+        onChange={e => handleChange('region', e.target.value)}
+        required
+        id="region"
+        label="Region"
+        style={{ width: '50%' }}
+      />
+      <TextField
+        value={recipe.netCarbs || ''}
+        onChange={e => handleChange('netCarbs', e.target.value)}
+        required
+        id="netCarbs"
+        label="Net Carbs"
+        style={{ width: '50%' }}
+      />
+      <TextField
         value={recipe.ingredients || ''}
         onChange={e => handleChange('ingredients', e.target.value)}
         required
@@ -149,7 +171,7 @@ export const UpdateRecipe = () => {
       >
         {recipeId ? 'update recipe' : 'save new recipe'}
       </Button>
-      {(isOwner() && recipeId) && (
+      {isOwner() && recipeId && (
         <Button
           onClick={() => setOpenModal(true)}
           className={classes.formButton}
