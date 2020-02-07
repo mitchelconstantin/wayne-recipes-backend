@@ -23,6 +23,7 @@ export const RecipeCard = ({ recipe }: Props) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
+  console.log('recipe image ', recipe);
   return (
     <Box justifySelf='center' alignSelf='center'>
       <Paper className={classes.card} onClick={selectRecipe} >

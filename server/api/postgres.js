@@ -97,7 +97,7 @@ router.patch('/api/users', async (req, res) => {
 //recipes
 router.get('/api/recipes', async (req, res) => {
   const data = await db.any(
-    'select "title", "id", "type", "mainIngredient", "source" from "Recipes"'
+    'select "title", "id", "type", "mainIngredient", "source", "picture" from "Recipes"'
   );
   res.json(data);
 });
