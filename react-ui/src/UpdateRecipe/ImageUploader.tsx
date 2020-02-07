@@ -1,21 +1,22 @@
 import React, { useCallback } from 'react';
-import { useDropzone } from 'react-dropzone'
+import { useDropzone } from 'react-dropzone';
 import emptyImage from '../ShowRecipe/emptyImage.png';
 import { RecipeAPI } from '../Shared/RecipeAPI';
+import { Box } from '@material-ui/core';
 
 interface Props {
   picture?: string;
   setPicture: Function;
 }
-export const ImageUploader =  ({picture, setPicture} : Props) => {
+export const ImageUploader = ({ picture, setPicture }: Props) => {
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
     //@ts-ignore
     const img = await RecipeAPI.uploadImage(imageBlob);
-    setPicture(img)
+    setPicture(img);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+  }, []);
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const readFileAsync = (file: any) => {
     return new Promise((resolve, reject) => {
@@ -23,30 +24,39 @@ export const ImageUploader =  ({picture, setPicture} : Props) => {
 
       reader.onload = () => {
         //@ts-ignore
-        resolve(reader.result)
-        // resolve(reader.result.split(',')[1]);
+        resolve(reader.result);
       };
       reader.onerror = reject;
-      reader.readAsDataURL(file[0])
-    })
-  }
+      reader.readAsDataURL(file[0]);
+    });
+  };
 
-  const onError = (ev : any) => {
+  const onError = (ev: any) => {
     const eventTarget = ev.target;
     eventTarget.src = emptyImage;
   };
 
   return (
     <div {...getRootProps()}>
-      <p >
-        <img onError={onError} src={picture || emptyImage} alt={'a tasty dish'} style={{ height: '200px', width: '200px', border: '1px' }} />
-      </p>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <img
+          onError={onError}
+          src={picture || emptyImage}
+          alt={'a tasty dish'}
+          style={{ height: '200px', width: '200px', border: '1px' }}
+        />
+      </Box>
       <input {...getInputProps()} />
-      {
-        isDragActive ?
-          <p>Drop the files here ...</p> :
-          <p>Drag 'n' drop some files here, or click to select files</p>
-      }
+      {isDragActive ? (
+        <p>Drop the files here ...</p>
+      ) : (
+        <p>Drag 'n' drop some files here, or click to select files</p>
+      )}
     </div>
   );
-}
+};
