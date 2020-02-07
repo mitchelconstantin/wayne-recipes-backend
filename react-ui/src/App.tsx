@@ -9,6 +9,7 @@ import { Home } from './AllRecipes/Home'
 import { Login } from './Login/Login'
 import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
 import { AdminDashboard } from './AdminDashboard/AdminDashboard'
+import { SignUp } from './Login/SignUp'
 
 export const App = () => {
   return (
@@ -18,6 +19,7 @@ export const App = () => {
         <Switch>
 
           <Route path='/login' render={(props: any) => <Login {...props} />} />
+          <Route path='/signup' render={(props: any) => <SignUp {...props} />} />
           <Route exact path='/all' render={(props: any) => <Home {...props} />} />
           <Route path='/list' render={(props: any) => <ShoppingList {...props} />} />
           <Route path='/new' render={(props: any) => <UpdateRecipe {...props} />} />
