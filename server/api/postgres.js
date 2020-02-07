@@ -4,8 +4,25 @@ var FormData = require('form-data');
 const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
 var cloudinary = require('cloudinary').v2;
-var FileReader = require('filereader');
 const { db } = require('../lib/database');
+
+// const uploadToImgur = async blob => {
+//   return new Promise(async (resolve, reject) => {
+//     let formData = new FormData();
+//     formData.append('image', blob.split(',')[1]);
+//     const imgurFile = await fetch('https://api.imgur.com/3/image', {
+//       method: 'POST',
+//       headers: {
+//         Authorization: process.env.IMGUR_CLIENT_ID,
+//         'Cache-Control': null, //required for cors
+//         'X-Requested-With': null //required for cors
+//       },
+//       body: formData
+//     });
+//     const json = await imgurFile.json();
+//     resolve(json.data.link);
+//   });
+// };
 
 const uploadToCloudinary = async image => {
   return new Promise((resolve, reject) => {
@@ -138,9 +155,8 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
 });
 
 router.post('/api/image', async (req, res) => {
-  console.log('req');
-  const img = await uploadToCloudinary(req.body.image);
-  const link = img.url;
+  const {url: link} = await uploadToCloudinary(req.body.image);
+  // const secondary = await uploadToImgur(req.body.image);
 
   res.send({ link });
 });
