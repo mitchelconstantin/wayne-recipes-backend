@@ -1,4 +1,5 @@
 import { IUser } from './Types';
+import SnackbarService from './SnackbarService';
 
 export class UserAPI {
   static loginToServer = async (user: IUser) => {
@@ -22,7 +23,14 @@ export class UserAPI {
       },
       body: JSON.stringify({ user })
     });
-    return res;
+    if (res.status === 400)
+      SnackbarService.error('that user already exists, please try logging in');
+    if (res.status === 200) {
+      SnackbarService.success(
+        'user created, now login with that username and password'
+      );
+    }
+    return;
   };
 
   static getAllUsers = async (): Promise<IUser[]> => {

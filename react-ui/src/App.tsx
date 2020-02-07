@@ -6,10 +6,10 @@ import { ShoppingList } from './ShoppingList/ShoppingList'
 //@ts-ignore
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { Home } from './AllRecipes/Home'
-import { Login } from './Login/Login'
+import { Login } from './AccountComponents/Login'
 import { RecipeDisplay } from './ShowRecipe/RecipeDisplay';
 import { AdminDashboard } from './AdminDashboard/AdminDashboard'
-import { SignUp } from './Login/SignUp'
+import { SignUp } from './AccountComponents/SignUp'
 
 export const App = () => {
   return (

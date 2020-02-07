@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField } from '@material-ui/core';
 import { logIn } from '../Shared/AppBehaviors';
-import { emptyUser, IUser } from '../Shared/Types';
+import { emptyUser } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
 import { UserAPI } from '../Shared/UserAPI';
+import { useContainerStyles } from '../Shared/formStyles';
 
 export const Login = () => {
   const [user, setUser] = useState(emptyUser);
-
+  const [loggedIn, setLoggedIn] = useState(false);
+  const classes = useContainerStyles();
   const handleChange = (type: string, newValue: any) => {
     setUser(prev => ({ ...prev, [type]: newValue }));
   };
@@ -21,17 +23,25 @@ export const Login = () => {
       }
       if (response.status === 200) {
         const u = await response.json();
-        setUser(u);
         logIn(u);
-        window.location.href = '/all';
+        setLoggedIn(true);
+        SnackbarService.success('you are now logged in');
       }
     } catch (e) {
       console.log(e);
     } finally {
     }
   };
+  if (loggedIn)
+    return (
+      <Box className={classes.formContainer}>
+        <Button href="/all" className={classes.formButton}>
+          Go to All Reicpes
+        </Button>
+      </Box>
+    );
   return (
-    <>
+    <Box className={classes.formContainer}>
       <TextField
         label="Email"
         required
@@ -49,20 +59,16 @@ export const Login = () => {
         autoComplete="current-password"
         margin="normal"
       />
-
-      <>
-        <Button
-          onClick={handleLoginClick}
-          disabled={!(user.email && user.password)}
-          variant="contained"
-          color="primary"
-        >
-          Login
-        </Button>
-        <Button href="/signup" variant="contained" color="primary">
-          click here to sign up
-        </Button>
-      </>
-    </>
+      <Button
+        onClick={handleLoginClick}
+        className={classes.formButton}
+        disabled={!(user.email && user.password)}
+      >
+        Login
+      </Button>
+      <Button href="/signup" className={classes.formButton}>
+        Sign Up
+      </Button>
+    </Box>
   );
 };

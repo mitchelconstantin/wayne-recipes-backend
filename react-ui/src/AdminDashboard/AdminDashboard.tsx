@@ -5,9 +5,9 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  FormHelperText,
   Box,
-  Button
+  Button,
+  Typography
 } from '@material-ui/core';
 import { isOwner } from '../Shared/AppBehaviors';
 import { IUser } from '../Shared/Types';
@@ -16,6 +16,7 @@ import { UserAPI } from '../Shared/UserAPI';
 //@ts-ignore
 import { Redirect } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { useContainerStyles } from '../Shared/formStyles';
 
 const getAndSetUsers = async (setUsers: any) => {
   const users = await UserAPI.getAllUsers();
@@ -28,6 +29,7 @@ const updateUsers = async (users: IUser[]) => {
 };
 export const AdminDashboard = () => {
   const [users, setUsers] = useState<IUser[]>([]);
+  const classes = useContainerStyles();
   useEffect(() => {
     getAndSetUsers(setUsers);
   }, []);
@@ -41,28 +43,37 @@ export const AdminDashboard = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box className={classes.formContainer}>
       <FormControl component="fieldset">
-        <FormLabel component="legend">Has Admin priviledges?</FormLabel>
+        <FormLabel>Has Admin priviledges?</FormLabel>
         <FormGroup>
           {users.map((user, i) => (
             <div key={i}>
               <FormControlLabel
-                //@ts-ignore 
+                //@ts-ignore
                 control={
                   <Checkbox
                     checked={user.isAdmin}
                     onChange={() => handleChange(user, i)}
-                    value="gilad"
+                    style={{
+                      color: '#e4673d'
+                    }}
                   />
                 }
-                label={user.email}
+                label={
+                  <Typography variant="h6" style={{ color: 'black' }}>
+                    {user.email}
+                  </Typography>
+                }
               />
             </div>
           ))}
         </FormGroup>
       </FormControl>
-      <Button onClick={() => updateUsers(users)}> Save Settings</Button>
+      <Button className={classes.formButton} onClick={() => updateUsers(users)}>
+        {' '}
+        Save Settings
+      </Button>
     </Box>
   );
 };
