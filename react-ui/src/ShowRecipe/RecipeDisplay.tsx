@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import emptyImage from './emptyImage.png';
+import noImage from '../Shared/noImage.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
@@ -118,7 +118,7 @@ export const RecipeDisplay = () => {
 
   const onError = (ev: { target: any }) => {
     const eventTarget = ev.target;
-    eventTarget.src = emptyImage;
+    eventTarget.src = noImage;
   };
   const [Container, RecipeDetails] = [Box, Box];
   //@ts-ignore
@@ -135,7 +135,7 @@ export const RecipeDisplay = () => {
     >
       <img
         onError={onError}
-        src={recipe.picture || emptyImage}
+        src={recipe.picture || noImage}
         alt={'a tasty dish'}
         style={responsive.style}
       />

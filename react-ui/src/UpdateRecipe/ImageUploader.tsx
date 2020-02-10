@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import emptyImage from '../ShowRecipe/emptyImage.png';
+import noImage from '../Shared/noImage.png';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import { Box } from '@material-ui/core';
 
@@ -33,7 +33,7 @@ export const ImageUploader = ({ picture, setPicture }: Props) => {
 
   const onError = (ev: any) => {
     const eventTarget = ev.target;
-    eventTarget.src = emptyImage;
+    eventTarget.src = noImage;
   };
 
   return (
@@ -46,7 +46,7 @@ export const ImageUploader = ({ picture, setPicture }: Props) => {
       >
         <img
           onError={onError}
-          src={picture || emptyImage}
+          src={picture || noImage}
           alt={'a tasty dish'}
           style={{ height: '200px', width: '200px', border: '1px' }}
         />

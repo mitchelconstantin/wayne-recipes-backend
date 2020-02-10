@@ -1,11 +1,11 @@
 import React from 'react'
-import emptyImage from './emptyImage.png';
+import noImage from '../Shared/noImage.png'
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography, } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import LazyLoad from 'react-lazyload';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({ 
   card: {
     cursor: 'pointer',
     margin: '20px',
@@ -22,19 +22,24 @@ export const RecipeCard = ({ recipe }: Props) => {
   const selectRecipe = () => window.location.href = `/r/${recipe.id}`;
   const onError = (ev: any) => {
     const eventTarget = ev.target;
-    eventTarget.src = emptyImage;
+    eventTarget.src = noImage;
   };
   return (
-    <Box justifySelf='center' alignSelf='center'>
-      <Paper className={classes.card} onClick={selectRecipe} >
+    <Box justifySelf="center" alignSelf="center">
+      <Paper className={classes.card} onClick={selectRecipe}>
         <LazyLoad height={200}>
-        <img onError={onError} src={recipe.picture || emptyImage} alt={'a tasty dish'} style={{ height: '300px', width: '300px' }} />
+          <img
+            onError={onError}
+            src={recipe.picture || noImage}
+            alt={'a tasty dish'}
+            style={{ height: '300px', width: '300px' }}
+          />
         </LazyLoad>
-        <Box p='10px'>
+        <Box p="10px">
           <Typography>{recipe.title}</Typography>
           <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
         </Box>
       </Paper>
     </Box>
-  )
+  );
 };
