@@ -19,8 +19,8 @@ export const RecipeTypeArr = [
   { label: 'Desserts', type: 'Dessert' },
   { label: 'Drinks', type: 'Drink' },
   { label: 'Entrée', type: 'Entrée' },
-  { label: 'Soups', type: 'Soup' },
   { label: 'Salads', type: 'Salad' },
+  { label: 'Soups', type: 'Soup' },
   { label: 'Vegetable', type: 'Vegetable' },
   { label: 'Wine', type: 'Wine' }
 ];

@@ -94,7 +94,7 @@ export const UpdateRecipe = () => {
         setPicture={(newImage: string) => handleChange('picture', newImage)}
         picture={recipe.picture}
       />
-      <Box display="flex" width="50%" alignItems='end' justifyContent='end'>
+      <Box display="flex" width="50%" alignItems="end" justifyContent="end">
         <TextField
           value={recipe.title || ''}
           onChange={e => handleChange('title', e.target.value)}
@@ -103,7 +103,7 @@ export const UpdateRecipe = () => {
           label="Title"
           style={{ height: '44px', width: '60%', marginBottom: '4px' }}
         />
-        <FormControl style={{ width: '40%' }}>
+        <FormControl style={{ paddingLeft: '20px', width: '40%' }}>
           <FormHelperText>Recipe Type</FormHelperText>
           <Select
             value={recipe.type || ''}
