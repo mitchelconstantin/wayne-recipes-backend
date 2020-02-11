@@ -5,13 +5,20 @@ import {
   DialogTitle,
   TextField,
   Typography,
-  Box
+  Box,
+  Select,
+  MenuItem
 } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom';
 import { ImageUploader } from './ImageUploader';
 import { isAdmin, isOwner } from '../Shared/AppBehaviors';
-import { IRecipe, emptyRecipe } from '../Shared/Types';
+import {
+  IRecipe,
+  emptyRecipe,
+  RecipeType,
+  RecipeTypeArr
+} from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
@@ -81,8 +88,6 @@ export const UpdateRecipe = () => {
   };
   const disabled = !(
     recipe.title &&
-    // && recipe.source
-    // && recipe.serves
     recipe.ingredients &&
     recipe.directions
   );
@@ -104,6 +109,15 @@ export const UpdateRecipe = () => {
         label="Title"
         style={{ width: '50%' }}
       />
+      <Select
+        labelId="demo-simple-select-label"
+        value={recipe.type || ''}
+        onChange={e => handleChange('type', e.target.value)}
+      >
+        {RecipeTypeArr.map(rType => (
+          <MenuItem value={rType.type}>{rType.label}</MenuItem>
+        ))}
+      </Select>
       <TextField
         value={recipe.source || ''}
         onChange={e => handleChange('source', e.target.value)}

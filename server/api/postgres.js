@@ -125,10 +125,11 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       recipe.picture,
       recipe.mainIngredient,
       recipe.region,
-      recipe.netCarbs
+      recipe.netCarbs,
+      recipe.type
     ];
     await db.any(
-      'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7, "mainIngredient" = $8, "region" = $9, "netCarbs" = $10 WHERE "id" = $1',
+      'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7, "mainIngredient" = $8, "region" = $9, "netCarbs" = $10, "type" = $11 WHERE "id" = $1',
       values
     );
     res.send({ id: recipe.id });

@@ -12,10 +12,22 @@ export interface IRecipe {
   netCarbs?: string;
 }
 
-
+export const RecipeTypeArr = [
+  { label: 'All', type: '' },
+  { label: 'Appetizer', type: 'Appetizer' },
+  { label: 'Breads', type: 'Bread' },
+  { label: 'Desserts', type: 'Dessert' },
+  { label: 'Drinks', type: 'Drink' },
+  { label: 'Entrée', type: 'Entrée' },
+  { label: 'Soups', type: 'Soup' },
+  { label: 'Salads', type: 'Salad' },
+  { label: 'Vegetable', type: 'Vegetable' },
+  { label: 'Wine', type: 'Wine' }
+];
 
 export const emptyRecipe: IRecipe = {
   id: undefined,
+  type: '',
   title: '',
   picture: '',
   source: '',
@@ -24,7 +36,7 @@ export const emptyRecipe: IRecipe = {
   directions: '',
   mainIngredient: '',
   region: '',
-  netCarbs: '',
+  netCarbs: ''
 };
 
 export type IShoppingList = IRecipe[];
@@ -45,4 +57,4 @@ export const emptyUser: IUser = {
   password: '',
   isAdmin: false,
   isOwner: false
-}
+};
