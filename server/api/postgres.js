@@ -144,10 +144,10 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       recipe.region,
       recipe.netCarbs,
       recipe.picture,
-
+      recipe.type
     ];
     const newRecipe = await db.one(
-      'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions", "mainIngredient", "region", "netCarbs", "picture") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
+      'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions", "mainIngredient", "region", "netCarbs", "picture", "type") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
       values
     );
     res.send(newRecipe);

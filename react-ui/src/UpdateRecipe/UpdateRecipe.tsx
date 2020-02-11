@@ -7,18 +7,15 @@ import {
   Typography,
   Box,
   Select,
-  MenuItem
+  MenuItem,
+  FormControl,
+  FormHelperText
 } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom';
 import { ImageUploader } from './ImageUploader';
 import { isAdmin, isOwner } from '../Shared/AppBehaviors';
-import {
-  IRecipe,
-  emptyRecipe,
-  RecipeType,
-  RecipeTypeArr
-} from '../Shared/Types';
+import { IRecipe, emptyRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
@@ -86,11 +83,7 @@ export const UpdateRecipe = () => {
     window.location.href = `/r/${json.id}`;
     SnackbarService.success('recipe saved');
   };
-  const disabled = !(
-    recipe.title &&
-    recipe.ingredients &&
-    recipe.directions
-  );
+  const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
   return (
     <Box className={classes.formContainer}>
@@ -101,23 +94,27 @@ export const UpdateRecipe = () => {
         setPicture={(newImage: string) => handleChange('picture', newImage)}
         picture={recipe.picture}
       />
-      <TextField
-        value={recipe.title || ''}
-        onChange={e => handleChange('title', e.target.value)}
-        required
-        id="title"
-        label="Title"
-        style={{ width: '50%' }}
-      />
-      <Select
-        labelId="demo-simple-select-label"
-        value={recipe.type || ''}
-        onChange={e => handleChange('type', e.target.value)}
-      >
-        {RecipeTypeArr.map(rType => (
-          <MenuItem value={rType.type}>{rType.label}</MenuItem>
-        ))}
-      </Select>
+      <Box display="flex" width="50%" alignItems='end' justifyContent='end'>
+        <TextField
+          value={recipe.title || ''}
+          onChange={e => handleChange('title', e.target.value)}
+          required
+          id="title"
+          label="Title"
+          style={{ height: '44px', width: '60%', marginBottom: '4px' }}
+        />
+        <FormControl style={{ width: '40%' }}>
+          <FormHelperText>Recipe Type</FormHelperText>
+          <Select
+            value={recipe.type || ''}
+            onChange={e => handleChange('type', e.target.value)}
+          >
+            {RecipeTypeArr.map(rType => (
+              <MenuItem value={rType.type}>{rType.label}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
       <TextField
         value={recipe.source || ''}
         onChange={e => handleChange('source', e.target.value)}
