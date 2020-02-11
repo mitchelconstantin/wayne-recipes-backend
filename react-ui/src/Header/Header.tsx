@@ -13,10 +13,15 @@ import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
 import { isLoggedIn, logOut, isAdmin, isOwner } from '../Shared/AppBehaviors';
 const useStyles = makeStyles(theme => ({
   title: {
-    marginRight: 'auto'
+    marginRight: 'auto',
+    fontWeight: 700
+  },
+  subTitle: {
+    marginRight: 'auto',
+    fontWeight: 400
   },
   toolbar: {
-    backgroundColor: '#e4673d',
+    background: 'linear-gradient(0.25turn, #f44723, #f56730, #f44723)',
     paddingLeft: '20px',
     paddingRight: '20px'
   },
@@ -132,7 +137,7 @@ export const Header = () => {
               <Typography className={classes.title} variant="h2">
                 {title}
               </Typography>
-              <Typography className={classes.title} variant="h6">
+              <Typography className={classes.subTitle} variant="h6">
                 {description}
               </Typography>
             </Center>
