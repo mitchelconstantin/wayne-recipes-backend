@@ -79,6 +79,7 @@ export const Home = () => {
             value={searchTerm}
             onChange={handleChangeInput}
             endAdornment={<SearchIcon />}
+            style={{marginLeft: '10px'}}
           />
           <Tabs
             value={value}
