@@ -21,6 +21,7 @@ import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
 
 const getRecipeData = async (setRecipe: Function, recipeId: number) => {
+  if (!recipeId)  return setRecipe(emptyRecipe);
   const recipe = await RecipeAPI.getRecipe(recipeId);
   if (!recipe) {
     SnackbarService.error('could not find that recipe');
@@ -66,12 +67,7 @@ export const UpdateRecipe = () => {
   const classes = useContainerStyles();
 
   useEffect(() => {
-    if (recipeId) {
-      getRecipeData(setRecipe, recipeId);
-    } else {
-      setRecipe(emptyRecipe);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getRecipeData(setRecipe, recipeId);
   }, []);
 
   const handleChange = (type: string, newValue: any) => {
@@ -80,8 +76,8 @@ export const UpdateRecipe = () => {
 
   const saveRecipe = async () => {
     const json = await RecipeAPI.saveRecipe(recipe);
-    window.location.href = `/r/${json.id}`;
     SnackbarService.success('recipe saved');
+    setTimeout(() => (window.location.href = `/r/${json.id}`), 1500);
   };
   const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
