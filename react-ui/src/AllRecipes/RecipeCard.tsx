@@ -29,20 +29,27 @@ export const RecipeCard = ({ recipe }: Props) => {
   interface ImgProps {
   picture?: string;
 }
-  const RecipeImg = ({picture}: ImgProps) => (
+  const RecipeImg = ({picture}: ImgProps) =>{ 
+    const imageToUse = () => {
+      if (!picture || picture[0].toLowerCase() === 'x') {
+        return noImage
+      }
+      return picture
+    }
+    return (
     <img
       onError={onError}
-      src={picture || noImage}
+      src={imageToUse()}
       alt={'a tasty dish!'}
       style={{ height: '300px', width: '300px' }}
     />
-  );
+  )};
 
   return (
     <Box justifySelf="center" alignSelf="center">
       <Paper className={classes.card} onClick={selectRecipe}>
         <LazyLoadComponent
-          visibleByDefault={true} 
+          visibleByDefault={false} 
           threshold={100}
           placeholder={<RecipeImg />}
         >
