@@ -38,6 +38,7 @@
     "body-parser": "^1.19.0",
     "form-data": "^2.5.0",
     "fuzzaldrin-plus": "^0.6.0",
+    "lodash": "^4.17.15",
     "material-ui": "^1.0.0-beta.47",
     "mui-datatables": "^2.13.3",
     "node-fetch": "^2.6.0",
@@ -45,6 +46,7 @@
     "react-lazy-load-image-component": "^1.4.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "use-debounce": "^3.3.0"
   }
 }

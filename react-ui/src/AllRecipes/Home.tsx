@@ -1,3 +1,4 @@
+// eslint-disable react-hooks/exhaustive-deps
 import React, { useState, useEffect } from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 //@ts-ignore
@@ -8,6 +9,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
+//@ts-ignore
+import { useDebounce } from 'use-debounce';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -18,40 +21,55 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const filterRecipes = (
+  selectedTab: number,
+  recipes: IRecipe[],
+  debouncedSearchTerm: string
+) => {
+  console.log('filtering recipes');
+  const filteredResults =
+    selectedTab !== 0
+      ? recipes.filter(
+          recipe => recipe.type === RecipeTypeArr[selectedTab].type
+        )
+      : recipes;
+  if (!debouncedSearchTerm) return filteredResults;
+  return filter(filteredResults, debouncedSearchTerm, { key: 'title' });
+};
+
 export const Home = () => {
   const [recipes, setRecipe] = useState<IRecipe[]>([]);
+  const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [value, setValue] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
+
+  useEffect(() => {
+    RecipeAPI.getAllSortedRecipes().then(recipes => {
+      setRecipe(recipes);
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    const filteredRecipes = filterRecipes(
+      selectedTab,
+      recipes,
+      debouncedSearchTerm
+    );
+    setFilteredRecipes(filteredRecipes);
+  }, [debouncedSearchTerm, selectedTab, recipes]);
 
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
   };
-  const handleChangeTab = (event: any, newValue: number) => setValue(newValue);
-  const RecipeZone = Box;
-  const Container = Box;
-  const getRecipes = async () => {
-    const recipeList = await RecipeAPI.getAllRecipes();
-    const sortedRecipe = recipeList.sort((a, b) =>
-      a.title.localeCompare(b.title)
-    );
-    setRecipe(sortedRecipe);
-    setLoading(false);
+  const handleChangeTab = (e: any, newValue: number) => {
+    setSelectedTab(newValue);
   };
 
-  useEffect(() => {
-    getRecipes();
-  }, []);
-
-  const filterRecipes = (recipes: IRecipe[]) => {
-    const filteredResults =
-      value !== 0
-        ? filter(recipes, RecipeTypeArr[value].type, { key: 'type' })
-        : recipes;
-    if (!searchTerm) return filteredResults;
-    return filter(filteredResults, searchTerm, { key: 'title' });
-  };
+  const [Container, RecipeZone] = [Box, Box];
 
   if (loading)
     return (
@@ -79,10 +97,10 @@ export const Home = () => {
             value={searchTerm}
             onChange={handleChangeInput}
             endAdornment={<SearchIcon />}
-            style={{marginLeft: '10px'}}
+            style={{ marginLeft: '10px' }}
           />
           <Tabs
-            value={value}
+            value={selectedTab}
             onChange={handleChangeTab}
             variant="scrollable"
             scrollButtons="auto"
@@ -100,7 +118,7 @@ export const Home = () => {
         flexDirection="row"
         flexWrap="wrap"
       >
-        {filterRecipes(recipes).map((recipe: IRecipe) => (
+        {filteredRecipes.map((recipe: IRecipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </RecipeZone>
