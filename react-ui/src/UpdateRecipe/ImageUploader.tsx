@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import noImage from '../Shared/noImage.png';
@@ -14,7 +15,6 @@ export const ImageUploader = ({ picture, setPicture }: Props) => {
     //@ts-ignore
     const img = await RecipeAPI.uploadImage(imageBlob);
     setPicture(img);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 

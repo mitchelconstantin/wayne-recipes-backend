@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import noImage from '../Shared/noImage.png';
@@ -93,27 +94,23 @@ export const RecipeDisplay = () => {
   const [loading, setLoading] = useState(true);
   const { recipeId } = useParams();
   const [responsive] = useState(getLayout());
-  const getRecipe = async () => {
-    const recipe = await RecipeAPI.getRecipe(recipeId);
-    setRecipe(recipe);
-    setLoading(false);
-  };
 
   useEffect(() => {
-    getRecipe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    RecipeAPI.getRecipe(recipeId).then(recipe => {
+      setRecipe(recipe);
+      setLoading(false);
+    });
   }, []);
-
-  if (loading) return <Loading />
-
+  
   const onError = (ev: { target: any }) => {
     const eventTarget = ev.target;
     eventTarget.src = noImage;
   };
+
   const [Container, RecipeDetails] = [Box, Box];
-  //@ts-ignore
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
- 
+  
+  if (loading) return <Loading />
   return (
     <Container
       mt="50px"

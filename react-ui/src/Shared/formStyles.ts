@@ -13,11 +13,4 @@ export const useContainerStyles = makeStyles(theme => ({
     backgroundColor: '#e4673d',
     variant: 'contained'
   },
-  checkBox: {
-    fill: 'orange',
-    color: 'green',
-    '&$checked': {
-      color: 'red'
-    }
-  },
 }));

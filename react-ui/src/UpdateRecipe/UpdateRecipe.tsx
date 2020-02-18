@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -19,15 +20,16 @@ import { IRecipe, emptyRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
+import { Loading } from '../Shared/Components/Loading';
 
-const getRecipeData = async (setRecipe: Function, recipeId: number) => {
-  if (!recipeId)  return setRecipe(emptyRecipe);
+const getRecipeData = async (recipeId: number) => {
+  if (!recipeId) return emptyRecipe;
   const recipe = await RecipeAPI.getRecipe(recipeId);
   if (!recipe) {
     SnackbarService.error('could not find that recipe');
     window.location.href = '/';
   }
-  setRecipe({ ...recipe });
+  return { ...recipe };
 };
 interface DialogProps {
   onClose: any;
@@ -64,10 +66,14 @@ export const UpdateRecipe = () => {
   const [openModal, setOpenModal] = useState(false);
   const { recipeId } = useParams();
   const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
+  const [loading, setLoading] = useState(true);
   const classes = useContainerStyles();
 
   useEffect(() => {
-    getRecipeData(setRecipe, recipeId);
+    getRecipeData(recipeId).then(recipe => {
+      setRecipe(recipe);
+      setLoading(false);
+    });
   }, []);
 
   const handleChange = (type: string, newValue: any) => {
@@ -81,6 +87,7 @@ export const UpdateRecipe = () => {
   };
   const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
+  if (loading) return <Loading />
   return (
     <Box className={classes.formContainer}>
       <Typography variant="h6" gutterBottom>
@@ -106,7 +113,7 @@ export const UpdateRecipe = () => {
             onChange={e => handleChange('type', e.target.value)}
           >
             {RecipeTypeArr.map(rType => (
-              <MenuItem value={rType.type}>{rType.label}</MenuItem>
+              <MenuItem key={rType.label} value={rType.type}>{rType.label}</MenuItem>
             ))}
           </Select>
         </FormControl>

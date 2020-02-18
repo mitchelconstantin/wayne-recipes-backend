@@ -1,4 +1,4 @@
-// eslint-disable react-hooks/exhaustive-deps
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
