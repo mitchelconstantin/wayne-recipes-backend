@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import noImage from '../Shared/noImage.png';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   Box,
   Typography,
@@ -16,6 +15,7 @@ import {
   AddToShoppingListButton,
   EditRecipeButton
 } from '../Shared/Components/CustomButtons';
+import { Loading } from '../Shared/Components/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,17 +104,7 @@ export const RecipeDisplay = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (loading)
-    return (
-      <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-      </Box>
-    );
+  if (loading) return <Loading />
 
   const onError = (ev: { target: any }) => {
     const eventTarget = ev.target;

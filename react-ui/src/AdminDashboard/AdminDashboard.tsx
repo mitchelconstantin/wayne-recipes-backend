@@ -15,13 +15,8 @@ import SnackbarService from '../Shared/SnackbarService';
 import { UserAPI } from '../Shared/UserAPI';
 //@ts-ignore
 import { Redirect } from 'react-router-dom';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import { useContainerStyles } from '../Shared/formStyles';
-
-const getAndSetUsers = async (setUsers: any) => {
-  const users = await UserAPI.getAllUsers();
-  setUsers(users);
-};
+import { Loading } from '../Shared/Components/Loading';
 
 const updateUsers = async (users: IUser[]) => {
   await UserAPI.updateUsers(users);
@@ -29,12 +24,16 @@ const updateUsers = async (users: IUser[]) => {
 };
 export const AdminDashboard = () => {
   const [users, setUsers] = useState<IUser[]>([]);
+  const [loading, setLoading] = useState(true);
   const classes = useContainerStyles();
+  
   useEffect(() => {
-    getAndSetUsers(setUsers);
+    UserAPI.getAllUsers().then(users => {
+      setUsers(users);
+      setLoading(false);
+    });
   }, []);
-  if (!isOwner()) return <Redirect push to="/all" />;
-  if (!users.length) return <CircularProgress />;
+
   const handleChange = (user: IUser, i: number) => {
     const newUsers = users.slice();
     const newUser = { ...user, isAdmin: !user.isAdmin };
@@ -42,6 +41,8 @@ export const AdminDashboard = () => {
     setUsers(newUsers);
   };
 
+  if (!isOwner()) return <Redirect push to="/all" />;
+  if (loading) return <Loading />;
   return (
     <Box className={classes.formContainer}>
       <FormControl component="fieldset">

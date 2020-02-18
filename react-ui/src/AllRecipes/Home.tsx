@@ -1,6 +1,5 @@
 // eslint-disable react-hooks/exhaustive-deps
 import React, { useState, useEffect } from 'react';
-import CircularProgress from '@material-ui/core/CircularProgress';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard';
@@ -11,6 +10,7 @@ import { RecipeAPI } from '../Shared/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
 //@ts-ignore
 import { useDebounce } from 'use-debounce';
+import { Loading } from '../Shared/Components/Loading';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -78,18 +78,7 @@ export const Home = () => {
 
   const [Container, RecipeZone] = [Box, Box];
 
-  if (loading)
-    return (
-      <Container
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <CircularProgress />
-      </Container>
-    );
-
+  if (loading) return <Loading />
   return (
     <Container
       display="flex"
