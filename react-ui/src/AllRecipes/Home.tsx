@@ -4,7 +4,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard';
-import { Box, Input, Paper, Tab, Tabs } from '@material-ui/core';
+import { Box, Paper, Tab, Tabs, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
@@ -18,6 +18,13 @@ const useStyles = makeStyles(theme => ({
   },
   indicator: {
     backgroundColor: '#e4673d'
+  },
+  searchBox: {
+    marginLeft: '10px',
+    borderRadius: '25px',
+    backgroundColor: '#DFE1E5',
+    paddingLeft: '10px',
+    paddingRight: '10px'
   }
 }));
 
@@ -94,10 +101,11 @@ export const Home = () => {
         <Box width="100%" display="flex">
           <Input
             placeholder="search"
+            disableUnderline
+            className={classes.searchBox}
             value={searchTerm}
             onChange={handleChangeInput}
-            endAdornment={<SearchIcon />}
-            style={{ marginLeft: '10px' }}
+            endAdornment={<SearchIcon style={{ color: 'grey' }} />}
           />
           <Tabs
             value={selectedTab}
@@ -118,7 +126,7 @@ export const Home = () => {
         flexDirection="row"
         flexWrap="wrap"
       >
-        {filteredRecipes.map((recipe: IRecipe) => (
+        {filteredRecipes.map(recipe => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </RecipeZone>
