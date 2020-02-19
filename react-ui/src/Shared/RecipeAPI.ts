@@ -16,19 +16,14 @@ export class RecipeAPI {
   };
 
   static getRecipe = async (id: string): Promise<IRecipe> => {
-    console.log('trying to get that recipe', id);
     const res = await fetch(`/api/recipes/${id}`);
-    console.log('here is a res', res);
     if (!res.ok) window.location.href = '/all';
     const recipe = await res.json();
-    console.log('here is a recipe', recipe);
     return recipe;
   };
 
   static deleteRecipe = async (id: string) => {
-    console.log('deleting', id);
     const res = await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
-    console.log('rest', res);
     return;
   };
 

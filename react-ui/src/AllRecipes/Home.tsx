@@ -77,7 +77,6 @@ export const Home = () => {
   };
 
   const [Container, RecipeZone] = [Box, Box];
-console.log('recipes', recipes);
   if (loading) return <Loading />
   return (
     <Container
