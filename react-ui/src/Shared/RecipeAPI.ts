@@ -3,10 +3,7 @@ import { IRecipe } from './Types';
 export class RecipeAPI {
   static getAllSortedRecipes = async (): Promise<IRecipe[]> => {
     const recipeList = await RecipeAPI.getAllRecipes();
-    const sortedRecipe = recipeList.sort((a, b) =>
-      a.title.localeCompare(b.title)
-    );
-    return sortedRecipe;
+    return recipeList;
   };
 
   static getAllRecipes = async (): Promise<IRecipe[]> => {

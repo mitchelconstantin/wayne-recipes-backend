@@ -91,7 +91,10 @@ router.patch('/api/users', async (req, res) => {
 router.get('/api/recipes', async (req, res) => {
   const data = await db.any('select * from "Recipes"');
   const results = data.map(configureRecipe);
-  res.json(results);
+  const sortedRecipe = results.sort((a, b) =>
+    a.title.localeCompare(b.title)
+  );
+  res.json(sortedRecipe);
 });
 
 router.get('/api/recipes/:recipeId', async (req, res) => {
