@@ -4,12 +4,15 @@ import { useDropzone } from 'react-dropzone';
 import noImage from '../Shared/noImage.png';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import { Box } from '@material-ui/core';
-
+//@ts-ignore
+import { useParams } from 'react-router-dom';
 interface Props {
   picture?: string;
   setPicture: Function;
 }
 export const ImageUploader = ({ picture, setPicture }: Props) => {
+  const { recipeId } = useParams();
+  console.log('recipe ID in image uploader', recipeId);
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
     //@ts-ignore

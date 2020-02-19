@@ -1,5 +1,5 @@
 export interface IRecipe {
-  id: number | undefined;
+  id: string | undefined;
   type?: string;
   source?: string;
   serves?: string;

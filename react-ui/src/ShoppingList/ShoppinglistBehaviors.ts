@@ -11,7 +11,7 @@ export class ShoppingListBehaviors {
     ShoppingListBehaviors._setShoppingList(prev);
   }
 
-  static remove = (recipeId: number) => {
+  static remove = (recipeId: string) => {
     const prev = ShoppingListBehaviors.load();
     const indexToRemove = prev.findIndex((item) => item.id === recipeId)
     prev.splice(indexToRemove, 1);

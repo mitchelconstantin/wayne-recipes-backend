@@ -38,6 +38,7 @@
     "body-parser": "^1.19.0",
     "form-data": "^2.5.0",
     "fuzzaldrin-plus": "^0.6.0",
+    "hashids": "^2.2.1",
     "lodash": "^4.17.15",
     "material-ui": "^1.0.0-beta.47",
     "mui-datatables": "^2.13.3",

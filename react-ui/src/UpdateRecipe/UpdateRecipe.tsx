@@ -22,7 +22,7 @@ import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
 import { Loading } from '../Shared/Components/Loading';
 
-const getRecipeData = async (recipeId: number) => {
+const getRecipeData = async (recipeId: string) => {
   if (!recipeId) return emptyRecipe;
   const recipe = await RecipeAPI.getRecipe(recipeId);
   if (!recipe) {
@@ -33,7 +33,7 @@ const getRecipeData = async (recipeId: number) => {
 };
 interface DialogProps {
   onClose: any;
-  id: number;
+  id: string;
   open: boolean;
 }
 //@ts-ignore
@@ -43,8 +43,7 @@ const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
   const handleDelete = async () => {
     await RecipeAPI.deleteRecipe(id);
     SnackbarService.success('recipe deleted');
-    window.location.href = '/';
-    onClose();
+    setTimeout(() => (window.location.href = '/all'), 1500);
   };
 
   return (
@@ -195,7 +194,7 @@ export const UpdateRecipe = () => {
       )}
       <SimpleDialog
         open={openModal}
-        id={recipe.id || 1}
+        id={recipe.id || '1'}
         onClose={() => setOpenModal(false)}
       />
     </Box>

@@ -15,16 +15,21 @@ export class RecipeAPI {
     return json;
   };
 
-  static getRecipe = async (id: number): Promise<IRecipe> => {
+  static getRecipe = async (id: string): Promise<IRecipe> => {
+    console.log('trying to get that recipe', id);
     const res = await fetch(`/api/recipes/${id}`);
-    const [data] = await res.json();
-    return data;
+    console.log('here is a res', res);
+    if (!res.ok) window.location.href = '/all';
+    const recipe = await res.json();
+    console.log('here is a recipe', recipe);
+    return recipe;
   };
 
-  static deleteRecipe = async (id: number) => {
+  static deleteRecipe = async (id: string) => {
+    console.log('deleting', id);
     const res = await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
-    const [data] = await res.json();
-    return data;
+    console.log('rest', res);
+    return;
   };
 
   static saveRecipe = async (recipe: IRecipe) => {
@@ -40,14 +45,14 @@ export class RecipeAPI {
     return json;
   };
 
-  static uploadImage = async (image: string): Promise<string> => {
+  static uploadImage = async (image: string, recipeId: string): Promise<string> => {
     const res = await fetch(`/api/image`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ image: image })
+      body: JSON.stringify({ image: image, recipeId: recipeId })
     });
     const json = await res.json();
     return json.link;

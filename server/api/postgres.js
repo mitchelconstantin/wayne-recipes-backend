@@ -1,11 +1,26 @@
 const express = require('express');
 const router = express.Router();
-var FormData = require('form-data');
-const fetch = require('node-fetch');
+// var FormData = require('form-data');
+// const fetch = require('node-fetch');
 const bcrypt = require('bcrypt');
 var cloudinary = require('cloudinary').v2;
 const { db } = require('../lib/database');
+const Hashids = require('hashids/cjs');
 
+const hashids = new Hashids('wayne-recipes');
+
+const configureRecipe = recipe => {
+  return { ...recipe, id: encode(recipe.id) };
+};
+const encode = dbId => {
+  const recipeId = hashids.encode(dbId);
+  return recipeId;
+};
+
+const decode = recipeId => {
+  const [dbId] = hashids.decode(recipeId);
+  return dbId;
+};
 // const uploadToImgur = async blob => {
 //   return new Promise(async (resolve, reject) => {
 //     let formData = new FormData();
@@ -24,9 +39,9 @@ const { db } = require('../lib/database');
 //   });
 // };
 
-const uploadToCloudinary = async image => {
+const uploadToCloudinary = async (image, hashId) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(image, (err, url) => {
+    cloudinary.uploader.upload(image, {public_id: hashId}, (err, url) => {
       if (err) return reject(err);
       return resolve(url);
     });
@@ -93,30 +108,44 @@ router.get('/api/recipes', async (req, res) => {
   const data = await db.any(
     'select * from "Recipes"'
   );
-  res.json(data);
+  console.log('here is data', data[0]);
+  const results = data.map(configureRecipe);
+  res.json(results);
 });
 
-router.get('/api/recipes/:recipeID', async (req, res) => {
-  const data = await db.any(
+
+router.get('/api/recipes/:recipeId', async (req, res) => {
+  // const [dbId] = hashids.decode(req.params.recipeID);
+  console.log('recipeId', req.params.recipeId);
+  const dbId = decode(req.params.recipeId);
+  if (!dbId) res.status(404).send({ error: 'invalid recipe' });
+
+  const [recipe] = await db.any(
     'select * from "Recipes" WHERE id = $1',
-    req.params.recipeID
+    dbId
   );
-  res.json(data);
+  console.log('here is your recipe', recipe);
+  if (!recipe) res.status(404).send({ error: 'invalid recipe' });
+  res.json(configureRecipe(recipe));
 });
 
-router.delete('/api/recipes/:recipeID', async (req, res) => {
-  const data = await db.any(
+router.delete('/api/recipes/:recipeId', async (req, res) => {
+  const dbId = decode(req.params.recipeId);
+
+  const [data] = await db.any(
     'delete from "Recipes" WHERE id = $1',
-    req.params.recipeID
+    dbId
   );
   res.json(data);
 });
 
-router.patch('/api/recipes/:recipeID', async (req, res) => {
+router.patch('/api/recipes/:recipeId', async (req, res) => {
   const recipe = req.body.recipe;
+  const dbId = decode(recipe.id);
+
   if (recipe.id) {
     const values = [
-      recipe.id,
+      dbId,
       recipe.title,
       recipe.source,
       recipe.serves,
@@ -132,7 +161,7 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7, "mainIngredient" = $8, "region" = $9, "netCarbs" = $10, "type" = $11 WHERE "id" = $1',
       values
     );
-    res.send({ id: recipe.id });
+    res.send({ id: recipe.id});
   } else {
     const values = [
       recipe.title,
@@ -150,12 +179,14 @@ router.patch('/api/recipes/:recipeID', async (req, res) => {
       'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions", "mainIngredient", "region", "netCarbs", "picture", "type") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
       values
     );
-    res.send(newRecipe);
+    res.send(configureRecipe(newRecipe));
   }
 });
 
 router.post('/api/image', async (req, res) => {
-  const {url: link} = await uploadToCloudinary(req.body.image);
+  const hashId = hashids.encode(1);
+  
+  const {url: link} = await uploadToCloudinary(req.body.image, hashId);
   // const secondary = await uploadToImgur(req.body.image);
 
   res.send({ link });
