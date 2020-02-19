@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
 import { RecipeCard } from './RecipeCard';
-import { Box, Paper, Tab, Tabs, Input } from '@material-ui/core';
+import {
+  Box,
+  Paper,
+  Input,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
@@ -11,6 +15,7 @@ import SearchIcon from '@material-ui/icons/Search';
 //@ts-ignore
 import { useDebounce } from 'use-debounce';
 import { Loading } from '../Shared/Components/Loading';
+import { AdvancedFilters } from './AdvancedFilters';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -29,16 +34,13 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const filterRecipes = (
-  selectedTab: number,
+  selectedTab: any,
   recipes: IRecipe[],
   debouncedSearchTerm: string
 ) => {
-  console.log('filtering recipes');
   const filteredResults =
-    selectedTab !== 0
-      ? recipes.filter(
-          recipe => recipe.type === RecipeTypeArr[selectedTab].type
-        )
+    selectedTab.label !== 'All'
+      ? recipes.filter(recipe => recipe.type === selectedTab.type)
       : recipes;
   if (!debouncedSearchTerm) return filteredResults;
   return filter(filteredResults, debouncedSearchTerm, { key: 'title' });
@@ -48,9 +50,8 @@ export const Home = () => {
   const [recipes, setRecipe] = useState<IRecipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(RecipeTypeArr[0]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchTerm2, setSearchTerm2] = useState('');
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
 
@@ -74,13 +75,6 @@ export const Home = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleChangeInput2 = (event: any) => {
-    setSearchTerm2(event.target.value);
-  };
-  const handleChangeTab = (e: any, newValue: number) => {
-    setSelectedTab(newValue);
-  };
-
   const [Container, RecipeZone] = [Box, Box];
   if (loading) return <Loading />;
   return (
@@ -100,17 +94,10 @@ export const Home = () => {
             onChange={handleChangeInput}
             endAdornment={<SearchIcon style={{ color: 'grey' }} />}
           />
-          <Tabs
-            value={selectedTab}
-            onChange={handleChangeTab}
-            variant="scrollable"
-            scrollButtons="auto"
-            classes={{ indicator: classes.indicator }}
-          >
-            {RecipeTypeArr.map(rType => (
-              <Tab key={rType.label} label={rType.label} />
-            ))}
-          </Tabs>
+          <AdvancedFilters
+            selectedTab={selectedTab}
+            setSelectedTab={setSelectedTab}
+          />
         </Box>
       </Paper>
       <RecipeZone

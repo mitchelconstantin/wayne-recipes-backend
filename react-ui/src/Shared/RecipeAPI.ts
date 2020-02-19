@@ -20,7 +20,7 @@ export class RecipeAPI {
   };
 
   static deleteRecipe = async (id: string) => {
-    const res = await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
+    await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
     return;
   };
 
@@ -37,7 +37,10 @@ export class RecipeAPI {
     return json;
   };
 
-  static uploadImage = async (image: string, recipeId: string): Promise<string> => {
+  static uploadImage = async (
+    image: string,
+    recipeId: string
+  ): Promise<string> => {
     const res = await fetch(`/api/image`, {
       method: 'POST',
       headers: {
