@@ -19,10 +19,18 @@ const useStyles = makeStyles(theme => ({
   indicator: {
     backgroundColor: '#e4673d'
   },
+  searchContainer: {
+    width: '100%',
+    height: '60px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   searchBox: {
-    marginLeft: '10px',
     borderRadius: '25px',
     backgroundColor: '#DFE1E5',
+    height: '40px',
+    width: '40%',
     paddingLeft: '10px',
     paddingRight: '10px'
   }
@@ -53,7 +61,6 @@ export const Home = () => {
   useEffect(() => {
     RecipeAPI.getAllSortedRecipes().then(recipes => {
       setRecipe(recipes);
-      console.log('done loading');
       setLoading(false);
     });
   }, []);
@@ -77,25 +84,23 @@ export const Home = () => {
       alignItems="center"
       position="static"
     >
-      <Paper style={{ width: '100%' }}>
-        <Box width="100%" display="flex">
-          <Input
-            placeholder="search"
-            disableUnderline
-            className={classes.searchBox}
-            value={searchTerm}
-            onChange={handleChangeInput}
-            endAdornment={<SearchIcon style={{ color: 'grey' }} />}
-          />
-          <AdvancedFilters
-            selectedTab={selectedTab}
-            setSelectedTab={setSelectedTab}
-          />
-        </Box>
+      <Paper className={classes.searchContainer}>
+        <Input
+          placeholder="search"
+          disableUnderline
+          className={classes.searchBox}
+          value={searchTerm}
+          onChange={handleChangeInput}
+          endAdornment={<SearchIcon style={{ color: 'grey' }} />}
+        />
+        <AdvancedFilters
+          selectedTab={selectedTab}
+          setSelectedTab={setSelectedTab}
+        />
       </Paper>
-        {/* 
+      {/* 
   // @ts-ignore */}
-        <RecipeList loading={loading} recipes={filteredRecipes} />
+      <RecipeList loading={loading} recipes={filteredRecipes} />
     </Box>
   );
 };
