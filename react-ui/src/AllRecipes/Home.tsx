@@ -50,6 +50,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm2, setSearchTerm2] = useState('');
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
 
@@ -72,12 +73,16 @@ export const Home = () => {
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
   };
+
+  const handleChangeInput2 = (event: any) => {
+    setSearchTerm2(event.target.value);
+  };
   const handleChangeTab = (e: any, newValue: number) => {
     setSelectedTab(newValue);
   };
 
   const [Container, RecipeZone] = [Box, Box];
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   return (
     <Container
       display="flex"
@@ -114,9 +119,9 @@ export const Home = () => {
         flexDirection="row"
         flexWrap="wrap"
       >
-        {filteredRecipes.map(recipe => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
+        {filteredRecipes.map((recipe, i) =>
+          i >= 30 ? null : <RecipeCard key={recipe.id} recipe={recipe} />
+        )}
       </RecipeZone>
     </Container>
   );
