@@ -1,5 +1,5 @@
 const Hashids = require('hashids/cjs');
-const hashids = new Hashids('wayne-recipes');
+const hashids = new Hashids('wayne-recipes', 6);
 
 const configureRecipe = recipe => {
   return { ...recipe, id: encode(recipe.id) };

@@ -155,9 +155,10 @@ router.patch('/api/recipes/:recipeId', async (req, res) => {
 });
 
 router.post('/api/image', async (req, res) => {
-  const hashId = encode(1);
-
-  const { url: link } = await uploadToCloudinary(req.body.image, hashId);
+  const { url: link } = await uploadToCloudinary(
+    req.body.image,
+    req.body.recipeId
+  );
   // const secondary = await uploadToImgur(req.body.image);
 
   res.send({ link });

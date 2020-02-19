@@ -16,7 +16,7 @@ export const ImageUploader = ({ picture, setPicture }: Props) => {
   const onDrop = useCallback(async acceptedFiles => {
     const imageBlob = await readFileAsync(acceptedFiles);
     //@ts-ignore
-    const img = await RecipeAPI.uploadImage(imageBlob);
+    const img = await RecipeAPI.uploadImage(imageBlob, recipeId);
     setPicture(img);
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

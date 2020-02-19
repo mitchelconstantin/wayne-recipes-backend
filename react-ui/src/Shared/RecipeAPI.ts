@@ -47,7 +47,7 @@ export class RecipeAPI {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ image: image, recipeId: recipeId })
+      body: JSON.stringify({ image, recipeId })
     });
     const json = await res.json();
     return json.link;
