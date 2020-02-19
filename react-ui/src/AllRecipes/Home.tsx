@@ -2,20 +2,15 @@
 import React, { useState, useEffect } from 'react';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
-import { RecipeCard } from './RecipeCard';
-import {
-  Box,
-  Paper,
-  Input,
-} from '@material-ui/core';
+import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, RecipeTypeArr } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
 //@ts-ignore
 import { useDebounce } from 'use-debounce';
-import { Loading } from '../Shared/Components/Loading';
 import { AdvancedFilters } from './AdvancedFilters';
+import { RecipeList } from './RecipeList';
 
 const useStyles = makeStyles(theme => ({
   label: {
@@ -58,6 +53,7 @@ export const Home = () => {
   useEffect(() => {
     RecipeAPI.getAllSortedRecipes().then(recipes => {
       setRecipe(recipes);
+      console.log('done loading');
       setLoading(false);
     });
   }, []);
@@ -74,11 +70,8 @@ export const Home = () => {
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
   };
-
-  const [Container, RecipeZone] = [Box, Box];
-  if (loading) return <Loading />;
   return (
-    <Container
+    <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
@@ -100,16 +93,9 @@ export const Home = () => {
           />
         </Box>
       </Paper>
-      <RecipeZone
-        display="flex"
-        justifyContent="center"
-        flexDirection="row"
-        flexWrap="wrap"
-      >
-        {filteredRecipes.map((recipe, i) =>
-          i >= 30 ? null : <RecipeCard key={recipe.id} recipe={recipe} />
-        )}
-      </RecipeZone>
-    </Container>
+        {/* 
+  // @ts-ignore */}
+        <RecipeList loading={loading} recipes={filteredRecipes} />
+    </Box>
   );
 };
