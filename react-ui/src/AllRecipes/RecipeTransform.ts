@@ -1,35 +1,62 @@
-import React, { useState, useEffect } from 'react';
 //@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
-import { IRecipe, RecipeTypeArr } from '../Shared/Types';
+import { IRecipe } from '../Shared/Types';
 
 export class RecipeTransform {
-  // static addOneFilter = (recipes: IRecipe[], filter: any) => {
-  //   const filteredResults =
-  //     filters.selectedTab.label !== 'All'
-  //       ? recipes.filter(recipe => recipe.type === filters.selectedTab.type)
-  //       : recipes;
+  //@ts-ignore
+  static filterByAttribute = (
+    recipes: IRecipe[],
+    atttribute: string,
+    val: any
+  ) => {
+    //@ts-ignore
+    const result = recipes.filter(recipe => recipe[atttribute] === val);
+    return result;
+  };
 
-  //       return filteredResults;
-
-  // };
+  static filterBySearchTerm = (recipes: IRecipe[], searchTerm: string) => {
+    return filter(recipes, searchTerm, {
+      key: 'title'
+    });
+  };
 
   static filterRecipes = (
     recipes: IRecipe[],
-    filters: any,
-    searchTerm: string,
-    newFilters: any
+    selectedFilters: any,
+    searchTerm: string
   ) => {
-    //     mainIngredients: '',
-    // regions: '',
-    // types: '',
-    const filteredResults =
-      filters.selectedTab.label !== 'All'
-        ? recipes.filter(recipe => recipe.type === filters.selectedTab.type)
-        : recipes;
-    if (!searchTerm) return filteredResults;
-    return filter(filteredResults, searchTerm, {
-      key: 'title'
-    });
+    const { mainIngredient, region, type } = selectedFilters;
+    let filteredResults = recipes;
+    if (mainIngredient) {
+      filteredResults = RecipeTransform.filterByAttribute(
+        filteredResults,
+        'mainIngredient',
+        mainIngredient
+      );
+    }
+
+    if (region) {
+      filteredResults = RecipeTransform.filterByAttribute(
+        filteredResults,
+        'region',
+        region
+      );
+    }
+
+    if (type) {
+      filteredResults = RecipeTransform.filterByAttribute(
+        filteredResults,
+        'type',
+        type
+      );
+    }
+
+    if (searchTerm) {
+      filteredResults = RecipeTransform.filterBySearchTerm(
+        filteredResults,
+        searchTerm
+      );
+    }
+    return filteredResults;
   };
 }

@@ -14,7 +14,7 @@ import clsx from 'clsx';
 
 const useStyles = makeStyles(theme => ({
   select: {
-    width: '100px'
+    width: '120px'
   },
   expand: {
     transform: 'rotate(90deg)',

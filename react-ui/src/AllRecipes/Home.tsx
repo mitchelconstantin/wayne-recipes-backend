@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-//@ts-ignore
 import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { IRecipe, RecipeTypeArr } from '../Shared/Types';
+import { IRecipe } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
-//@ts-ignore
 import { useDebounce } from 'use-debounce';
 import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
@@ -30,47 +28,49 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+interface PageData {
+  recipes: IRecipe[];
+  mainIngredients: any;
+  regions: any;
+  types: any;
+}
+const emptyPageData = {
+  recipes: [],
+  mainIngredients: [],
+  regions: [],
+  types: []
+};
+
+const emptyFilters = {
+  mainIngredient: '',
+  region: '',
+  type: ''
+};
+
 export const Home = () => {
-  const [recipes, setRecipe] = useState<IRecipe[]>([]);
+  const [pageData, setPageData] = useState<PageData>(emptyPageData);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTab, setSelectedTab] = useState(RecipeTypeArr[0]);
-  //@ts-ignore
-  const [allFilters, setAllFilters] = useState({
-    mainIngredients: [],
-    regions: [],
-    types: []
-  });
-  //@ts-ignore
-  const [selectedFilters, setSelectedFilters] = useState({
-    mainIngredient: '',
-    region: '',
-    type: ''
-  });
+  const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
-  // console.log('here are your filters', filters);
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(res => {
-      console.log('here is res', res);
       const { recipes, mainIngredients, regions, types } = res;
-      //@ts-ignore
-      setRecipe(recipes);
-      setAllFilters({ mainIngredients, regions, types });
+      setPageData({ recipes, mainIngredients, regions, types });
       setLoading(false);
     });
   }, []);
 
   useEffect(() => {
     const filteredRecipes = RecipeTransform.filterRecipes(
-      recipes,
-      { selectedTab },
-      debouncedSearchTerm,
-      allFilters
+      pageData.recipes,
+      selectedFilters,
+      debouncedSearchTerm
     );
     setFilteredRecipes(filteredRecipes);
-  }, [debouncedSearchTerm, selectedTab, recipes]);
+  }, [debouncedSearchTerm, selectedFilters, pageData.recipes]);
 
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
@@ -92,7 +92,7 @@ export const Home = () => {
           endAdornment={<SearchIcon style={{ color: 'grey' }} />}
         />
         <AdvancedFilters
-          allFilters={allFilters}
+          allFilters={pageData}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />
