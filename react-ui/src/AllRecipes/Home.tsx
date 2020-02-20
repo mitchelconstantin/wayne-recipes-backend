@@ -11,14 +11,9 @@ import SearchIcon from '@material-ui/icons/Search';
 import { useDebounce } from 'use-debounce';
 import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
+import { RecipeTransform } from './RecipeTransform';
 
 const useStyles = makeStyles(theme => ({
-  label: {
-    color: '#FFF000'
-  },
-  indicator: {
-    backgroundColor: '#e4673d'
-  },
   searchContainer: {
     width: '100%',
     height: '60px',
@@ -36,39 +31,49 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const filterRecipes = (
-  selectedTab: any,
-  recipes: IRecipe[],
-  debouncedSearchTerm: string
-) => {
-  const filteredResults =
-    selectedTab.label !== 'All'
-      ? recipes.filter(recipe => recipe.type === selectedTab.type)
-      : recipes;
-  if (!debouncedSearchTerm) return filteredResults;
-  return filter(filteredResults, debouncedSearchTerm, { key: 'title' });
-};
+// const filterRecipes = (
+//   selectedTab: any,
+//   recipes: IRecipe[],
+//   debouncedSearchTerm: string
+// ) => {
+//   const filteredResults =
+//     selectedTab.label !== 'All'
+//       ? recipes.filter(recipe => recipe.type === selectedTab.type)
+//       : recipes;
+//   if (!debouncedSearchTerm) return filteredResults;
+//   return filter(filteredResults, debouncedSearchTerm, { key: 'title' });
+// };
 
 export const Home = () => {
   const [recipes, setRecipe] = useState<IRecipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(RecipeTypeArr[0]);
+  //@ts-ignore
+  const [filters, setFIlters] = useState({
+    mainIngredients: '',
+    regions: '',
+    types: '',
+  })
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
-
+console.log('here are your filters', filters);
   useEffect(() => {
-    RecipeAPI.getAllSortedRecipes().then(recipes => {
+    RecipeAPI.getAllRecipes().then(res => {
+      console.log('here is res', res);
+      const {recipes, mainIngredients, regions, types} = res;
+      //@ts-ignore
       setRecipe(recipes);
+      setFIlters({ mainIngredients, regions, types });
       setLoading(false);
     });
   }, []);
 
   useEffect(() => {
-    const filteredRecipes = filterRecipes(
-      selectedTab,
+    const filteredRecipes = RecipeTransform.filterRecipes(
       recipes,
+      {selectedTab},
       debouncedSearchTerm
     );
     setFilteredRecipes(filteredRecipes);

@@ -1,12 +1,13 @@
 import { IRecipe } from './Types';
+interface RecipePayload {
+  recipes: IRecipe[];
+  regions: any;
+  types: any;
+  mainIngredients: any;
+}
 
 export class RecipeAPI {
-  static getAllSortedRecipes = async (): Promise<IRecipe[]> => {
-    const recipeList = await RecipeAPI.getAllRecipes();
-    return recipeList;
-  };
-
-  static getAllRecipes = async (): Promise<IRecipe[]> => {
+  static getAllRecipes = async (): Promise<RecipePayload> => {
     const res = await fetch(`/api/recipes`);
     const json = await res.json();
     return json;

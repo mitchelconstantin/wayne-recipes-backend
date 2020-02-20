@@ -91,10 +91,22 @@ router.patch('/api/users', async (req, res) => {
 router.get('/api/recipes', async (req, res) => {
   const data = await db.any('select * from "Recipes"');
   const results = data.map(configureRecipe);
-  const sortedRecipe = results.sort((a, b) =>
-    a.title.localeCompare(b.title)
+  const recipes = results.sort((a, b) => a.title.localeCompare(b.title));
+
+  const preMainIngredients = await db.any(
+    'select DISTINCT "mainIngredient" from "Recipes"'
   );
-  res.json(sortedRecipe);
+  const mainIngredients = preMainIngredients
+    .map(obj => obj.mainIngredient)
+    .sort();
+
+  const preRegions = await db.any('select DISTINCT "region" from "Recipes"');
+  const regions = preRegions.map(obj => obj.region).sort();
+
+  const preTypes = await db.any('select DISTINCT "type" from "Recipes"');
+  const types = preTypes.map(obj => obj.type).sort();
+
+  res.json({ recipes, mainIngredients, regions, types });
 });
 
 router.get('/api/recipes/:recipeId', async (req, res) => {
