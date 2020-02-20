@@ -71,6 +71,7 @@ export const AdvancedFilters = ({ allFilters, selectedFilters, setSelectedFilter
             onChange={handleChangeMainIngredient}
             className={classes.select}
           >
+            <MenuItem value={''}>All</MenuItem>
             {mainIngredients.map((mi: any) => (
               //@ts-ignore
               <MenuItem key={mi} value={mi}>
@@ -86,6 +87,7 @@ export const AdvancedFilters = ({ allFilters, selectedFilters, setSelectedFilter
             onChange={handleChangeRegion}
             className={classes.select}
           >
+            <MenuItem value={''}>All</MenuItem>
             {regions.map((region: any) => (
               //@ts-ignore
               <MenuItem key={region} value={region}>
@@ -101,6 +103,7 @@ export const AdvancedFilters = ({ allFilters, selectedFilters, setSelectedFilter
             onChange={handleChangeType}
             className={classes.select}
           >
+            <MenuItem value={''}>All</MenuItem>
             {types.map((type: any) => (
               //@ts-ignore
               <MenuItem key={type} value={type}>
