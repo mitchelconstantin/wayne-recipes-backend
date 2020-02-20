@@ -17,8 +17,12 @@ export class RecipeTransform {
   static filterRecipes = (
     recipes: IRecipe[],
     filters: any,
-    searchTerm: string
+    searchTerm: string,
+    newFilters: any
   ) => {
+    //     mainIngredients: '',
+    // regions: '',
+    // types: '',
     const filteredResults =
       filters.selectedTab.label !== 'All'
         ? recipes.filter(recipe => recipe.type === filters.selectedTab.type)

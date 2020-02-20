@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 //@ts-ignore
-import { filter } from 'fuzzaldrin-plus';
 import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, RecipeTypeArr } from '../Shared/Types';
@@ -31,41 +30,34 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const filterRecipes = (
-//   selectedTab: any,
-//   recipes: IRecipe[],
-//   debouncedSearchTerm: string
-// ) => {
-//   const filteredResults =
-//     selectedTab.label !== 'All'
-//       ? recipes.filter(recipe => recipe.type === selectedTab.type)
-//       : recipes;
-//   if (!debouncedSearchTerm) return filteredResults;
-//   return filter(filteredResults, debouncedSearchTerm, { key: 'title' });
-// };
-
 export const Home = () => {
   const [recipes, setRecipe] = useState<IRecipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState(RecipeTypeArr[0]);
   //@ts-ignore
-  const [filters, setFIlters] = useState({
-    mainIngredients: '',
-    regions: '',
-    types: '',
-  })
+  const [allFilters, setAllFilters] = useState({
+    mainIngredients: [],
+    regions: [],
+    types: []
+  });
+  //@ts-ignore
+  const [selectedFilters, setSelectedFilters] = useState({
+    mainIngredient: '',
+    region: '',
+    type: ''
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
-console.log('here are your filters', filters);
+  // console.log('here are your filters', filters);
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(res => {
       console.log('here is res', res);
-      const {recipes, mainIngredients, regions, types} = res;
+      const { recipes, mainIngredients, regions, types } = res;
       //@ts-ignore
       setRecipe(recipes);
-      setFIlters({ mainIngredients, regions, types });
+      setAllFilters({ mainIngredients, regions, types });
       setLoading(false);
     });
   }, []);
@@ -73,8 +65,9 @@ console.log('here are your filters', filters);
   useEffect(() => {
     const filteredRecipes = RecipeTransform.filterRecipes(
       recipes,
-      {selectedTab},
-      debouncedSearchTerm
+      { selectedTab },
+      debouncedSearchTerm,
+      allFilters
     );
     setFilteredRecipes(filteredRecipes);
   }, [debouncedSearchTerm, selectedTab, recipes]);
@@ -99,8 +92,9 @@ console.log('here are your filters', filters);
           endAdornment={<SearchIcon style={{ color: 'grey' }} />}
         />
         <AdvancedFilters
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
+          allFilters={allFilters}
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
         />
       </Paper>
       {/* 

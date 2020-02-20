@@ -9,7 +9,6 @@ import {
   InputLabel,
   Select
 } from '@material-ui/core';
-import { RecipeTypeArr } from '../Shared/Types';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import clsx from 'clsx';
 
@@ -29,19 +28,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 //@ts-ignore
-export const AdvancedFilters = ({ setSelectedTab, selectedTab }) => {
+export const AdvancedFilters = ({ allFilters, selectedFilters, setSelectedFilters }) => {
   const [expanded, setExpanded] = useState(false);
   const classes = useStyles();
+  const { mainIngredients, regions, types } = allFilters;
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleExpandClick = () => setExpanded(!expanded);
+  //@ts-ignore
+  const handleChangeMainIngredient = e => handleChange(e, 'mainIngredient');
+  //@ts-ignore
+  const handleChangeRegion = e => handleChange(e, 'region');
+  //@ts-ignore
+  const handleChangeType = e => handleChange(e, 'type');
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  //@ts-ignore
+  const handleChange = (
+    e: React.ChangeEvent<{ value: unknown }>,
+    x: any
+  ) => {
     //@ts-ignore
-    setSelectedTab(event.target.value);
+    setSelectedFilters(prev => ({ ...prev, [x]: e.target.value }));
   };
-
   return (
     <>
       <Tooltip title="advanced filters">
@@ -58,16 +65,46 @@ export const AdvancedFilters = ({ setSelectedTab, selectedTab }) => {
       </Tooltip>
       <Collapse in={expanded} unmountOnExit>
         <FormControl>
-          <InputLabel>Type</InputLabel>
+          <InputLabel>Main Ingredient</InputLabel>
           <Select
-            value={selectedTab}
-            onChange={handleChange}
+            value={selectedFilters.mainIngredient}
+            onChange={handleChangeMainIngredient}
             className={classes.select}
           >
-            {RecipeTypeArr.map(rType => (
+            {mainIngredients.map((mi: any) => (
               //@ts-ignore
-              <MenuItem key={rType.label} value={rType}>
-                {rType.label}
+              <MenuItem key={mi} value={mi}>
+                {mi}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Region</InputLabel>
+          <Select
+            value={selectedFilters.region}
+            onChange={handleChangeRegion}
+            className={classes.select}
+          >
+            {regions.map((region: any) => (
+              //@ts-ignore
+              <MenuItem key={region} value={region}>
+                {region}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel>Recipe Type</InputLabel>
+          <Select
+            value={selectedFilters.type}
+            onChange={handleChangeType}
+            className={classes.select}
+          >
+            {types.map((type: any) => (
+              //@ts-ignore
+              <MenuItem key={type} value={type}>
+                {type}
               </MenuItem>
             ))}
           </Select>
