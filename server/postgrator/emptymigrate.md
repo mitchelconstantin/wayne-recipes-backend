@@ -1,0 +1,1 @@
+I need this file so that heroku doesn't trim the empty migrations folder. Fun!
