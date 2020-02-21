@@ -19,9 +19,7 @@ export const RecipeList = ({ loading, recipes }: Props) => {
       flexWrap="wrap"
     >
       {recipes.length ? (
-        recipes.map((recipe, i) =>
-          i >= 30 ? null : <RecipeCard key={recipe.id} recipe={recipe} />
-        )
+        recipes.map(recipe => <RecipeCard key={recipe.id} recipe={recipe} />)
       ) : (
         <div>no recipes match that search!</div>
       )}
