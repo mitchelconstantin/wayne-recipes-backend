@@ -4,13 +4,36 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 //@ts-ignore
-import { LazyLoadComponent} from 'react-lazy-load-image-component';
+import { LazyLoadComponent } from 'react-lazy-load-image-component';
 
 const useStyles = makeStyles(theme => ({
   card: {
     cursor: 'pointer',
     margin: '20px',
+    width: '300px',
+    minHeight: '370px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  image: {
+    objectFit: 'cover',
+    maxHeight: '300px',
+    maxWidth: '300px'
+  },
+  boxAroundImage: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '300px',
     width: '300px'
+  },
+  textBox: {
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 'auto'
   }
 }));
 
@@ -27,39 +50,40 @@ export const RecipeCard = ({ recipe }: Props) => {
   };
 
   interface ImgProps {
-  picture?: string;
-}
-  const RecipeImg = ({picture}: ImgProps) =>{ 
+    picture?: string;
+  }
+  const RecipeImg = ({ picture }: ImgProps) => {
     const imageToUse = () => {
       if (!picture || picture[0].toLowerCase() === 'x') {
-        return noImage
+        return noImage;
       }
-      return picture
-    }
+      return picture;
+    };
     return (
-    <img
-      onError={onError}
-      src={imageToUse()}
-      alt={'a tasty dish!'}
-      style={{ height: '300px', width: '300px' }}
-    />
-  )};
+      <img
+        onError={onError}
+        src={imageToUse()}
+        alt={'a tasty dish!'}
+        className={classes.image}
+      />
+    );
+  };
 
   return (
-    <Box justifySelf="center" alignSelf="center">
-      <Paper className={classes.card} onClick={selectRecipe}>
+    <Paper className={classes.card} onClick={selectRecipe}>
+      <Box className={classes.boxAroundImage}>
         <LazyLoadComponent
-          visibleByDefault={false} 
-          threshold={100}
+          visibleByDefault={false}
+          threshold={200}
           placeholder={<RecipeImg />}
         >
           <RecipeImg picture={recipe.picture} />
         </LazyLoadComponent>
-        <Box p="10px">
-          <Typography>{recipe.title}</Typography>
-          <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
-        </Box>
-      </Paper>
-    </Box>
+      </Box>
+      <Box className={classes.textBox}>
+        <Typography>{recipe.title}</Typography>
+        <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
+      </Box>
+    </Paper>
   );
 };
