@@ -20,7 +20,7 @@ export const RecipeList = ({ loading, recipes }: Props) => {
     >
       {recipes.length ? (
         recipes.map((recipe, i) =>
-          i >= 300 ? null : <RecipeCard key={recipe.id} recipe={recipe} />
+          i >= 30 ? null : <RecipeCard key={recipe.id} recipe={recipe} />
         )
       ) : (
         <div>no recipes match that search!</div>
