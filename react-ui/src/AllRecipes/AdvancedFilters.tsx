@@ -27,8 +27,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-//@ts-ignore
-export const AdvancedFilters = ({ allFilters, selectedFilters, setSelectedFilters }) => {
+interface AdvancedFiltersProps {
+  allFilters: any;
+  selectedFilters: any;
+  setSelectedFilters: any;
+}
+export const AdvancedFilters = ({
+  allFilters,
+  selectedFilters,
+  setSelectedFilters
+}: AdvancedFiltersProps) => {
   const [expanded, setExpanded] = useState(false);
   const classes = useStyles();
   const { mainIngredients, regions, types } = allFilters;
