@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   image: {
     objectFit: 'cover',
     maxHeight: '300px',
-    maxWidth: '300px'
+    maxWidth: '100%'
   },
   boxAroundImage: {
     display: 'flex',
