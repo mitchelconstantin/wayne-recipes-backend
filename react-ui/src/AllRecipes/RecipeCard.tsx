@@ -16,6 +16,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     justifyContent: 'center'
   },
+  title: {
+    fontWeight: 600,
+  },
+  detail: {
+    fontWeight: 300,
+  },
   image: {
     objectFit: 'cover',
     maxHeight: '300px',
@@ -32,7 +38,6 @@ const useStyles = makeStyles(theme => ({
     padding: '10px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     marginTop: 'auto'
   }
 }));
@@ -57,7 +62,9 @@ export const RecipeCard = ({ recipe }: Props) => {
       if (!picture || picture[0].toLowerCase() === 'x') {
         return noImage;
       }
-      return picture;
+      const ar = picture.split('upload');
+      const newUrl = `${ar[0]}upload/w_300,h_300,c_fill,g_auto${ar[1]}`;
+      return newUrl;
     };
     return (
       <img
@@ -81,8 +88,9 @@ export const RecipeCard = ({ recipe }: Props) => {
         </LazyLoadComponent>
       </Box>
       <Box className={classes.textBox}>
-        <Typography>{recipe.title}</Typography>
-        <Typography>{`from: ${recipe.source || 'unknown'}`}</Typography>
+        <Typography className={classes.title}>{recipe.title}</Typography>
+        <Typography className={classes.detail}>{`from: ${recipe.source ||
+          'unknown'}`}</Typography>
       </Box>
     </Paper>
   );
