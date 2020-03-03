@@ -34,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 export const Header = () => {
   const [Container, TopRow, ButtonSet, Center] = [Box, Box, Box, Box, Box];
   const classes = useStyles();
+  const goHome = () => (window.location.href = '/all');
   const title = `WAYNE'S FAMILY RECIPES`;
   const description = 'Traditional Cajun food and so much more!';
   const ShoppingListLabel = () => {
@@ -55,7 +56,7 @@ export const Header = () => {
 
     return (
       <ButtonSet ml="auto">
-        <Button href="/all" className={classes.button}>
+        <Button onClick={goHome} className={classes.button}>
           All Recipes
         </Button>
         <Button onClick={handleClick} className={classes.button}>
@@ -108,9 +109,15 @@ export const Header = () => {
             width="100%"
           >
             <img
+              onClick={goHome}
               src={logo}
               alt={'Logo'}
-              style={{ height: '40px', width: '40px', marginRight: '30px' }}
+              style={{
+                height: '40px',
+                width: '40px',
+                marginRight: '30px',
+                cursor: 'pointer'
+              }}
             />
             <UserButtons />
           </Center>
@@ -127,9 +134,10 @@ export const Header = () => {
               width="100%"
             >
               <img
+                onClick={goHome}
                 src={logo}
                 alt={'Logo'}
-                style={{ height: '80px', width: '80px' }}
+                style={{ height: '80px', width: '80px', cursor: 'pointer' }}
               />
               <UserButtons />
             </TopRow>
