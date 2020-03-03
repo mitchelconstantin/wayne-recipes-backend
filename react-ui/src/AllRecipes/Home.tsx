@@ -9,11 +9,18 @@ import { useDebounce } from 'use-debounce';
 import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
 import { RecipeTransform } from './RecipeTransform';
+import { ShowFiltersChip } from './ShowFiltersChip';
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
     width: '100%',
-    height: '60px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchBarLine: {
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -24,7 +31,8 @@ const useStyles = makeStyles(theme => ({
     height: '40px',
     width: '40%',
     paddingLeft: '10px',
-    paddingRight: '10px'
+    paddingRight: '10px',
+    margin: '10px' 
   }
 }));
 
@@ -53,6 +61,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
   useEffect(() => {
@@ -83,15 +92,22 @@ export const Home = () => {
       position="static"
     >
       <Paper className={classes.searchContainer}>
-        <Input
-          placeholder="search"
-          disableUnderline
-          className={classes.searchBox}
-          value={searchTerm}
-          onChange={handleChangeInput}
-          endAdornment={<SearchIcon style={{ color: 'grey' }} />}
-        />
+        <Box className={classes.searchBarLine}>
+          <Input
+            placeholder="search"
+            disableUnderline
+            className={classes.searchBox}
+            value={searchTerm}
+            onChange={handleChangeInput}
+            endAdornment={<SearchIcon style={{ color: 'grey' }} />}
+          />
+          <ShowFiltersChip
+            expanded={filtersExpanded}
+            setExpanded={setFiltersExpanded}
+          />
+        </Box>
         <AdvancedFilters
+          expanded={filtersExpanded}
           allFilters={pageData}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
