@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import {
   makeStyles,
@@ -16,6 +17,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+const emptyFilterOptions = { mainIngredients: [], regions: [], types: [] };
+
+const emptyFilters = {
+  mainIngredient: '',
+  region: '',
+  type: ''
+};
 interface AdvancedFiltersProps {
   selectedFilters: any;
   setSelectedFilters: any;
@@ -27,14 +35,10 @@ export const AdvancedFilters = ({
   expanded
 }: AdvancedFiltersProps) => {
   const classes = useStyles();
-  const [allFilters, setAllFilters] = useState({
-    mainIngredients: [],
-    regions: [],
-    types: []
-  });
+  const [allFilters, setAllFilters] = useState(emptyFilterOptions);
 
   useEffect(() => {
-    if (expanded) {
+    if (expanded && !allFilters.mainIngredients.length) {
       RecipeAPI.getFilters().then(res => {
         //@ts-ignore
         const { mainIngredients, regions, types } = res;
@@ -44,6 +48,10 @@ export const AdvancedFilters = ({
           types
         });
       });
+    }
+    if (!expanded && allFilters.mainIngredients.length) {
+      console.log('clearing filters');
+      setSelectedFilters(emptyFilters);
     }
   }, [expanded]);
   //@ts-ignore
@@ -62,10 +70,10 @@ export const AdvancedFilters = ({
     }));
   };
 
-  const { mainIngredients, regions, types } = allFilters; 
+  const { mainIngredients, regions, types } = allFilters;
 
   return (
-    <Collapse in={expanded} unmountOnExit>
+    <Collapse in={expanded}>
       <FormControl className={classes.select}>
         <InputLabel>Main Ingredient</InputLabel>
         <Select
