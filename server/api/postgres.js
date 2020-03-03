@@ -89,30 +89,30 @@ router.patch('/api/users', async (req, res) => {
 
 //recipes
 router.get('/api/recipes', async (req, res) => {
-  const preRecipes = await db.any('select * from "Recipes"');
+  const preRecipes = await db.any('select * from "Recipes" ORDER BY "title" ASC');
 
-  const recipes = preRecipes
-    .map(configureRecipe)
-    .sort((a, b) => a.title.localeCompare(b.title));
+  const recipes = preRecipes.map(configureRecipe)
 
   res.json({ recipes });
 });
 
 router.get('/api/recipes/filters', async (req, res) => {
-  const preRecipes = await db.any('select * from "Recipes"');
   const preMainIngredients = await db.any(
-    'select DISTINCT "mainIngredient" from "Recipes"'
+    'select DISTINCT "mainIngredient" from "Recipes" ORDER BY "mainIngredient" ASC'
   );
-  const preRegions = await db.any('select DISTINCT "region" from "Recipes"');
-  const preTypes = await db.any('select DISTINCT "type" from "Recipes"');
+  const preRegions = await db.any(
+    'select DISTINCT "region" from "Recipes"ORDER BY "region" ASC'
+  );
+  const preTypes = await db.any(
+    'select DISTINCT "type" from "Recipes" ORDER BY "type" ASC'
+  );
 
   const mainIngredients = preMainIngredients
     .map(obj => obj.mainIngredient)
-    .sort();
 
-  const regions = preRegions.map(obj => obj.region).sort();
+  const regions = preRegions.map(obj => obj.region)
 
-  const types = preTypes.map(obj => obj.type).sort();
+  const types = preTypes.map(obj => obj.type)
 
   res.json({ mainIngredients, regions, types });
 });
