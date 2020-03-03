@@ -98,13 +98,13 @@ router.get('/api/recipes', async (req, res) => {
 
 router.get('/api/recipes/filters', async (req, res) => {
   const preMainIngredients = await db.any(
-    'select DISTINCT "mainIngredient" from "Recipes" ORDER BY "mainIngredient" ASC'
+    'select DISTINCT "mainIngredient" from "Recipes" WHERE "mainIngredient" IS NOT NULL ORDER BY "mainIngredient" ASC'
   );
   const preRegions = await db.any(
-    'select DISTINCT "region" from "Recipes"ORDER BY "region" ASC'
+    'select DISTINCT "region" from "Recipes" WHERE "region" IS NOT NULL ORDER BY "region" ASC'
   );
   const preTypes = await db.any(
-    'select DISTINCT "type" from "Recipes" ORDER BY "type" ASC'
+    'select DISTINCT "type" from "Recipes" WHERE "type" IS NOT NULL ORDER BY "type" ASC'
   );
 
   const mainIngredients = preMainIngredients
