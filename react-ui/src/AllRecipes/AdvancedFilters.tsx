@@ -39,9 +39,7 @@ export const AdvancedFilters = ({
 
   useEffect(() => {
     if (expanded && !allFilters.mainIngredients.length) {
-      RecipeAPI.getFilters().then(res => {
-        //@ts-ignore
-        const { mainIngredients, regions, types } = res;
+      RecipeAPI.getFilters().then(({ mainIngredients, regions, types }) => {
         setAllFilters({
           mainIngredients,
           regions,
@@ -50,7 +48,6 @@ export const AdvancedFilters = ({
       });
     }
     if (!expanded && allFilters.mainIngredients.length) {
-      console.log('clearing filters');
       setSelectedFilters(emptyFilters);
     }
   }, [expanded]);

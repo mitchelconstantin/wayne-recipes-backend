@@ -52,8 +52,8 @@ export const Home = () => {
   const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
   const classes = useStyles();
   useEffect(() => {
-    RecipeAPI.getAllRecipes().then(res => {
-      setRecipes(res.recipes);
+    RecipeAPI.getAllRecipes().then(recipes => {
+      setRecipes(recipes);
       setLoading(false);
     });
   }, []);
