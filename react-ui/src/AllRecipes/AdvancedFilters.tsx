@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Box,
   makeStyles,
   MenuItem,
   InputLabel,
@@ -8,6 +7,7 @@ import {
   Collapse,
   FormControl
 } from '@material-ui/core';
+import { RecipeAPI } from '../Shared/RecipeAPI';
 
 const useStyles = makeStyles(theme => ({
   select: {
@@ -17,20 +17,35 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface AdvancedFiltersProps {
-  allFilters: any;
   selectedFilters: any;
   setSelectedFilters: any;
   expanded: boolean;
 }
 export const AdvancedFilters = ({
-  allFilters,
   selectedFilters,
   setSelectedFilters,
   expanded
 }: AdvancedFiltersProps) => {
   const classes = useStyles();
-  const { mainIngredients, regions, types } = allFilters;
+  const [allFilters, setAllFilters] = useState({
+    mainIngredients: [],
+    regions: [],
+    types: []
+  });
 
+  useEffect(() => {
+    if (expanded) {
+      RecipeAPI.getFilters().then(res => {
+        //@ts-ignore
+        const { mainIngredients, regions, types } = res;
+        setAllFilters({
+          mainIngredients,
+          regions,
+          types
+        });
+      });
+    }
+  }, [expanded]);
   //@ts-ignore
   const handleChangeMainIngredient = e => handleChange(e, 'mainIngredient');
   //@ts-ignore
@@ -41,8 +56,14 @@ export const AdvancedFilters = ({
   //@ts-ignore
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>, x: any) => {
     //@ts-ignore
-    setSelectedFilters(prev => ({ ...prev, [x]: e.target.value }));
+    setSelectedFilters(prev => ({
+      ...prev,
+      [x]: e.target.value
+    }));
   };
+
+  const { mainIngredients, regions, types } = allFilters; 
+
   return (
     <Collapse in={expanded} unmountOnExit>
       <FormControl className={classes.select}>

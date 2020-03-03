@@ -56,7 +56,7 @@ export const Header = () => {
 
     return (
       <ButtonSet ml="auto">
-        <Button onClick={goHome} className={classes.button}>
+        <Button href='/all' className={classes.button}>
           All Recipes
         </Button>
         <Button onClick={handleClick} className={classes.button}>

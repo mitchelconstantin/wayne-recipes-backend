@@ -32,22 +32,9 @@ const useStyles = makeStyles(theme => ({
     width: '40%',
     paddingLeft: '10px',
     paddingRight: '10px',
-    margin: '10px' 
+    margin: '10px'
   }
 }));
-
-interface PageData {
-  recipes: IRecipe[];
-  mainIngredients: any;
-  regions: any;
-  types: any;
-}
-const emptyPageData = {
-  recipes: [],
-  mainIngredients: [],
-  regions: [],
-  types: []
-};
 
 const emptyFilters = {
   mainIngredient: '',
@@ -56,7 +43,7 @@ const emptyFilters = {
 };
 
 export const Home = () => {
-  const [pageData, setPageData] = useState<PageData>(emptyPageData);
+  const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
@@ -66,20 +53,19 @@ export const Home = () => {
   const classes = useStyles();
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(res => {
-      const { recipes, mainIngredients, regions, types } = res;
-      setPageData({ recipes, mainIngredients, regions, types });
+      setRecipes(res.recipes);
       setLoading(false);
     });
   }, []);
 
   useEffect(() => {
     const filteredRecipes = RecipeTransform.filterRecipes(
-      pageData.recipes,
+      recipes,
       selectedFilters,
       debouncedSearchTerm
     );
     setFilteredRecipes(filteredRecipes);
-  }, [debouncedSearchTerm, selectedFilters, pageData.recipes]);
+  }, [debouncedSearchTerm, selectedFilters, recipes]);
 
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
@@ -108,7 +94,6 @@ export const Home = () => {
         </Box>
         <AdvancedFilters
           expanded={filtersExpanded}
-          allFilters={pageData}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
         />

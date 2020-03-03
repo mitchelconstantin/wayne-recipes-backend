@@ -1,6 +1,8 @@
 import { IRecipe } from './Types';
 interface RecipePayload {
   recipes: IRecipe[];
+}
+interface FiltersPayload {
   regions: any;
   types: any;
   mainIngredients: any;
@@ -9,6 +11,11 @@ interface RecipePayload {
 export class RecipeAPI {
   static getAllRecipes = async (): Promise<RecipePayload> => {
     const res = await fetch(`/api/recipes`);
+    const json = await res.json();
+    return json;
+  };
+  static getFilters = async (): Promise<FiltersPayload> => {
+    const res = await fetch(`/api/recipes/filters`);
     const json = await res.json();
     return json;
   };
