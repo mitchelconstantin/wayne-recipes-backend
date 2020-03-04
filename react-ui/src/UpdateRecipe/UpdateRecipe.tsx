@@ -77,8 +77,6 @@ export const UpdateRecipe = () => {
       />
       <Dropdown
         handleChange={(e: any, value: any) =>{
-          console.log('e', e);
-          console.log('value', value);
           handleChange('type', value)}}
         items={filters.types}
         value={recipe.type || ''}

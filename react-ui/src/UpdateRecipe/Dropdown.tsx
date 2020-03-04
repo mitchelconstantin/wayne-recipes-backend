@@ -22,8 +22,9 @@ export const Dropdown = ({ handleChange, items, value, title }: props) => {
         flexDirection: 'column',
         alignItems: 'center'
       }}
+      onChange={handleChange}
       freeSolo
-      onInputChange={handleChange}
+      autoSelect
       renderInput={params => (
         <TextField
           {...params}
