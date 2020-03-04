@@ -7,10 +7,6 @@ import {
   TextField,
   Typography,
   Box,
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText
 } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom';
@@ -21,6 +17,7 @@ import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
 import { Loading } from '../Shared/Components/Loading';
+import { Dropdown } from './Dropdown';
 
 const getRecipeData = async (recipeId: string) => {
   if (!recipeId) return emptyRecipe;
@@ -30,7 +27,7 @@ const getRecipeData = async (recipeId: string) => {
     SnackbarService.error('could not find that recipe');
     window.location.href = '/';
   }
-  return { recipe: {...recipe}, filters: { ...filters } };
+  return { recipe: { ...recipe }, filters: { ...filters } };
 };
 interface DialogProps {
   onClose: any;
@@ -62,7 +59,6 @@ const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
   );
 };
 
-
 export const UpdateRecipe = () => {
   const [openModal, setOpenModal] = useState(false);
   const { recipeId } = useParams();
@@ -73,7 +69,7 @@ export const UpdateRecipe = () => {
 
   useEffect(() => {
     //@ts-ignore
-    getRecipeData(recipeId).then(({recipe, filters}) => {
+    getRecipeData(recipeId).then(({ recipe, filters }) => {
       console.log('recipe', recipe);
       console.log('filters', filters);
       setFilters(filters);
@@ -103,37 +99,27 @@ export const UpdateRecipe = () => {
         setPicture={(newImage: string) => handleChange('picture', newImage)}
         picture={recipe.picture}
       />
-      <Box display="flex" width="50%" alignItems="end" justifyContent="end">
-        <TextField
-          value={recipe.title || ''}
-          onChange={e => handleChange('title', e.target.value)}
-          required
-          id="title"
-          label="Title"
-          style={{ height: '44px', width: '60%', marginBottom: '4px' }}
-        />
-        <FormControl style={{ paddingLeft: '20px', width: '40%' }}>
-          <FormHelperText>Recipe Type</FormHelperText>
-          <Select
-            value={recipe.type || ''}
-            onChange={e => handleChange('type', e.target.value)}
-          >
-            {filters.types.map((type: any) => (
-              //@ts-ignore
-              <MenuItem key={type} value={type}>
-                {type}
-              </MenuItem>
-            ))} 
-          </Select>
-        </FormControl>
-      </Box>
+      <TextField
+        value={recipe.title || ''}
+        onChange={e => handleChange('title', e.target.value)}
+        required
+        id="title"
+        label="Title"
+        className={classes.formTextField}
+      />
+      <Dropdown
+        handleChange={(e: any) => handleChange('type', e.target.value)}
+        items={filters.types}
+        value={recipe.type || ''}
+        title={'Recipe Type'}
+      />
       <TextField
         value={recipe.source || ''}
         onChange={e => handleChange('source', e.target.value)}
         required
         id="from"
         label="From"
-        style={{ width: '50%' }}
+        className={classes.formTextField}
       />
       <TextField
         value={recipe.serves || ''}
@@ -141,23 +127,21 @@ export const UpdateRecipe = () => {
         required
         id="serves"
         label="Serves"
-        style={{ width: '50%' }}
+        className={classes.formTextField}
       />
-      <TextField
+      <Dropdown
+        handleChange={(e: any) =>
+          handleChange('mainIngredient', e.target.value)
+        }
+        items={filters.mainIngredients}
         value={recipe.mainIngredient || ''}
-        onChange={e => handleChange('mainIngredient', e.target.value)}
-        required
-        id="mainIngredient"
-        label="Main Ingredient"
-        style={{ width: '50%' }}
+        title={'Main Ingredient'}
       />
-      <TextField
+      <Dropdown
+        handleChange={(e: any) => handleChange('region', e.target.value)}
+        items={filters.regions}
         value={recipe.region || ''}
-        onChange={e => handleChange('region', e.target.value)}
-        required
-        id="region"
-        label="Region"
-        style={{ width: '50%' }}
+        title={'Region'}
       />
       <TextField
         value={recipe.netCarbs || ''}
@@ -165,15 +149,15 @@ export const UpdateRecipe = () => {
         required
         id="netCarbs"
         label="Net Carbs"
-        style={{ width: '50%' }}
+        className={classes.formTextField}
       />
       <TextField
         value={recipe.ingredients || ''}
         onChange={e => handleChange('ingredients', e.target.value)}
         required
         id="ingredients"
+        className={classes.formTextField}
         label="Ingredients"
-        style={{ width: '50%' }}
         multiline
         rows="4"
       />
@@ -183,7 +167,7 @@ export const UpdateRecipe = () => {
         required
         id="directions"
         label="Directions"
-        style={{ width: '50%' }}
+        className={classes.formTextField}
         multiline
         rows="4"
       />

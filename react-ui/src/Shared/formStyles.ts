@@ -13,4 +13,10 @@ export const useContainerStyles = makeStyles(theme => ({
     backgroundColor: '#e4673d',
     variant: 'contained'
   },
+  formTextField: {
+    width: '50%'
+  },
+  formDropdown: {
+
+  },
 }));
