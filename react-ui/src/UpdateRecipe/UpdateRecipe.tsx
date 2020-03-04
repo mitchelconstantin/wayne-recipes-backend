@@ -55,7 +55,6 @@ export const UpdateRecipe = () => {
   const handleChange = (type: string, newValue: any) => {
     setRecipe(prev => ({ ...prev, [type]: newValue }));
   };
-
   const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
   if (loading) return <Loading />;
@@ -77,7 +76,10 @@ export const UpdateRecipe = () => {
         className={classes.formTextField}
       />
       <Dropdown
-        handleChange={(e: any) => handleChange('type', e.target.value)}
+        handleChange={(e: any, value: any) =>{
+          console.log('e', e);
+          console.log('value', value);
+          handleChange('type', value)}}
         items={filters.types}
         value={recipe.type || ''}
         title={'Recipe Type'}
@@ -99,15 +101,15 @@ export const UpdateRecipe = () => {
         className={classes.formTextField}
       />
       <Dropdown
-        handleChange={(e: any) =>
-          handleChange('mainIngredient', e.target.value)
+        handleChange={(e: any, value: any) =>
+          handleChange('mainIngredient', value)
         }
         items={filters.mainIngredients}
         value={recipe.mainIngredient || ''}
         title={'Main Ingredient'}
       />
       <Dropdown
-        handleChange={(e: any) => handleChange('region', e.target.value)}
+        handleChange={(e: any, value: any) => handleChange('region', value)}
         items={filters.regions}
         value={recipe.region || ''}
         title={'Region'}
@@ -143,7 +145,7 @@ export const UpdateRecipe = () => {
       <Button
         disabled={disabled}
         className={classes.formButton}
-        onClick={()=> saveRecipe(recipe)}
+        onClick={() => saveRecipe(recipe)}
       >
         {recipeId ? 'update recipe' : 'save new recipe'}
       </Button>

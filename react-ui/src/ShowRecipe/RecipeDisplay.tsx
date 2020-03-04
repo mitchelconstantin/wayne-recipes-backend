@@ -109,7 +109,6 @@ export const RecipeDisplay = () => {
 
   const [Container, RecipeDetails] = [Box, Box];
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
-  console.log('recipe details from display', recipe);
   if (loading) return <Loading />
   return (
     <Container

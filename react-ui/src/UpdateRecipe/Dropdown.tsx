@@ -1,7 +1,7 @@
 import React from 'react';
 import { useContainerStyles } from '../Shared/formStyles';
-import { FormControl, FormHelperText, Select, MenuItem } from '@material-ui/core';
-
+import { TextField } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 interface props {
   handleChange: any;
   items: any;
@@ -9,24 +9,28 @@ interface props {
   title: string;
 }
 
-export const Dropdown = ({handleChange, items, value, title }: props) => {
+export const Dropdown = ({ handleChange, items, value, title }: props) => {
   const classes = useContainerStyles();
-
   return (
-    <FormControl className={classes.formTextField}>
-      <FormHelperText>{title}</FormHelperText>
-      <Select
-        value={value}
-        onChange={handleChange}
-      >
-        {items.map((item: any) => (
-          //@ts-ignore
-          <MenuItem key={item} value={item}>
-            {item}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <Autocomplete
+      id="combo-box-demo"
+      options={items}
+      value={value}
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+      freeSolo
+      onInputChange={handleChange}
+      renderInput={params => (
+        <TextField
+          {...params}
+          label={title}
+          className={classes.formTextField}
+        />
+      )}
+    />
   );
-
 };
