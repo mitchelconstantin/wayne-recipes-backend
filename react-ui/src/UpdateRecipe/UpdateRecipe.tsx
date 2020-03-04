@@ -2,8 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Button,
-  Dialog,
-  DialogTitle,
   TextField,
   Typography,
   Box,
@@ -18,6 +16,7 @@ import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
 import { Loading } from '../Shared/Components/Loading';
 import { Dropdown } from './Dropdown';
+import { DeleteRecipeDialog } from './DeleteRecipeDialog';
 
 const getRecipeData = async (recipeId: string) => {
   if (!recipeId) return emptyRecipe;
@@ -29,35 +28,12 @@ const getRecipeData = async (recipeId: string) => {
   }
   return { recipe: { ...recipe }, filters: { ...filters } };
 };
-interface DialogProps {
-  onClose: any;
-  id: string;
-  open: boolean;
-}
-//@ts-ignore
-const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
-  const classes = useContainerStyles();
 
-  const handleDelete = async () => {
-    await RecipeAPI.deleteRecipe(id);
-    SnackbarService.success('recipe deleted');
-    setTimeout(() => (window.location.href = '/all'), 1500);
+  const saveRecipe = async (recipe: IRecipe) => {
+    const json = await RecipeAPI.saveRecipe(recipe);
+    SnackbarService.success('recipe saved');
+    setTimeout(() => (window.location.href = `/r/${json.id}`), 1500);
   };
-
-  return (
-    <Dialog onClose={onClose} aria-labelledby="simple-dialog-title" open={open}>
-      <DialogTitle id="simple-dialog-title">
-        Are you sure you want to delete this recipe?
-      </DialogTitle>
-      <Button className={classes.formButton} onClick={handleDelete}>
-        YES DELETE IT
-      </Button>
-      <Button className={classes.formButton} onClick={onClose}>
-        oops, no
-      </Button>
-    </Dialog>
-  );
-};
 
 export const UpdateRecipe = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -70,8 +46,6 @@ export const UpdateRecipe = () => {
   useEffect(() => {
     //@ts-ignore
     getRecipeData(recipeId).then(({ recipe, filters }) => {
-      console.log('recipe', recipe);
-      console.log('filters', filters);
       setFilters(filters);
       setRecipe(recipe);
       setLoading(false);
@@ -82,11 +56,6 @@ export const UpdateRecipe = () => {
     setRecipe(prev => ({ ...prev, [type]: newValue }));
   };
 
-  const saveRecipe = async () => {
-    const json = await RecipeAPI.saveRecipe(recipe);
-    SnackbarService.success('recipe saved');
-    setTimeout(() => (window.location.href = `/r/${json.id}`), 1500);
-  };
   const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
   if (loading) return <Loading />;
@@ -174,7 +143,7 @@ export const UpdateRecipe = () => {
       <Button
         disabled={disabled}
         className={classes.formButton}
-        onClick={saveRecipe}
+        onClick={()=> saveRecipe(recipe)}
       >
         {recipeId ? 'update recipe' : 'save new recipe'}
       </Button>
@@ -186,7 +155,7 @@ export const UpdateRecipe = () => {
           delete recipe
         </Button>
       )}
-      <SimpleDialog
+      <DeleteRecipeDialog
         open={openModal}
         id={recipe.id || '1'}
         onClose={() => setOpenModal(false)}
