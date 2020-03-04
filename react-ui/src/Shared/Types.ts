@@ -12,18 +12,13 @@ export interface IRecipe {
   netCarbs?: string;
 }
 
-export const RecipeTypeArr = [
-  { label: 'All', type: '' },
-  { label: 'Appetizer', type: 'Appetizer' },
-  { label: 'Breads', type: 'Bread' },
-  { label: 'Desserts', type: 'Dessert' },
-  { label: 'Drinks', type: 'Drink' },
-  { label: 'Entrée', type: 'Entrée' },
-  { label: 'Salads', type: 'Salad' },
-  { label: 'Soups', type: 'Soup' },
-  { label: 'Vegetable', type: 'Vegetable' },
-  { label: 'Wine', type: 'Wine' }
-];
+export const emptyFilterOptions = { mainIngredients: [], regions: [], types: [] };
+
+export const emptyFilters = {
+  mainIngredient: '',
+  region: '',
+  type: ''
+};
 
 export const emptyRecipe: IRecipe = {
   id: undefined,

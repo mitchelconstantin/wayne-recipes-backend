@@ -9,6 +9,7 @@ import {
   FormControl
 } from '@material-ui/core';
 import { RecipeAPI } from '../Shared/RecipeAPI';
+import { emptyFilterOptions, emptyFilters } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
   select: {
@@ -17,13 +18,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const emptyFilterOptions = { mainIngredients: [], regions: [], types: [] };
-
-const emptyFilters = {
-  mainIngredient: '',
-  region: '',
-  type: ''
-};
 interface AdvancedFiltersProps {
   selectedFilters: any;
   setSelectedFilters: any;

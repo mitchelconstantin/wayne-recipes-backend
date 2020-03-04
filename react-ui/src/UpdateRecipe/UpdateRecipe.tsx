@@ -16,7 +16,7 @@ import {
 import { Redirect, useParams } from 'react-router-dom';
 import { ImageUploader } from './ImageUploader';
 import { isAdmin, isOwner } from '../Shared/AppBehaviors';
-import { IRecipe, emptyRecipe, RecipeTypeArr } from '../Shared/Types';
+import { IRecipe, emptyRecipe, emptyFilterOptions } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 import { useContainerStyles } from '../Shared/formStyles';
@@ -25,11 +25,12 @@ import { Loading } from '../Shared/Components/Loading';
 const getRecipeData = async (recipeId: string) => {
   if (!recipeId) return emptyRecipe;
   const recipe = await RecipeAPI.getRecipe(recipeId);
+  const filters = await RecipeAPI.getFilters();
   if (!recipe) {
     SnackbarService.error('could not find that recipe');
     window.location.href = '/';
   }
-  return { ...recipe };
+  return { recipe: {...recipe}, filters: { ...filters } };
 };
 interface DialogProps {
   onClose: any;
@@ -61,15 +62,21 @@ const SimpleDialog = ({ onClose, id, open }: DialogProps) => {
   );
 };
 
+
 export const UpdateRecipe = () => {
   const [openModal, setOpenModal] = useState(false);
   const { recipeId } = useParams();
   const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
+  const [filters, setFilters] = useState(emptyFilterOptions);
   const [loading, setLoading] = useState(true);
   const classes = useContainerStyles();
 
   useEffect(() => {
-    getRecipeData(recipeId).then(recipe => {
+    //@ts-ignore
+    getRecipeData(recipeId).then(({recipe, filters}) => {
+      console.log('recipe', recipe);
+      console.log('filters', filters);
+      setFilters(filters);
       setRecipe(recipe);
       setLoading(false);
     });
@@ -86,7 +93,7 @@ export const UpdateRecipe = () => {
   };
   const disabled = !(recipe.title && recipe.ingredients && recipe.directions);
   if (!isAdmin()) return <Redirect push to="/all" />;
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   return (
     <Box className={classes.formContainer}>
       <Typography variant="h6" gutterBottom>
@@ -111,9 +118,12 @@ export const UpdateRecipe = () => {
             value={recipe.type || ''}
             onChange={e => handleChange('type', e.target.value)}
           >
-            {RecipeTypeArr.map(rType => (
-              <MenuItem key={rType.label} value={rType.type}>{rType.label}</MenuItem>
-            ))}
+            {filters.types.map((type: any) => (
+              //@ts-ignore
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))} 
           </Select>
         </FormControl>
       </Box>

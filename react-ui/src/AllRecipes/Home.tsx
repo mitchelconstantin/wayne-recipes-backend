@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { IRecipe } from '../Shared/Types';
+import { IRecipe, emptyFilters } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
 import { useDebounce } from 'use-debounce';
@@ -35,12 +35,6 @@ const useStyles = makeStyles(theme => ({
     margin: '10px'
   }
 }));
-
-const emptyFilters = {
-  mainIngredient: '',
-  region: '',
-  type: ''
-};
 
 export const Home = () => {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
