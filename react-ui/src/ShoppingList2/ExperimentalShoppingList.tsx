@@ -13,6 +13,9 @@ import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 import SnackbarService from '../Shared/SnackbarService';
 import { PrintButton } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
+import { isLoggedIn } from '../Shared/AppBehaviors';
+//@ts-ignore
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -137,6 +140,7 @@ export const ExperimentalShoppingList = () => {
       ))}
     </>
   );
+  if (!isLoggedIn()) return <Redirect push to="/all" />;
 
   if (loading) return <Loading />
   return (

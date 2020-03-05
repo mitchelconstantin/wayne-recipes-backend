@@ -71,9 +71,15 @@ export const Header = () => {
         >
           <Box display="flex" flexDirection="column">
             {!!isLoggedIn() ? (
-              <Button onClick={logOut} className={classes.menuButton}>
-                Logout
-              </Button>
+              <>
+                <Button onClick={logOut} className={classes.menuButton}>
+                  Logout
+                </Button>
+                {/* feature flag */}
+                <Button href="/ExperimentalList" className={classes.menuButton}>
+                  Experiemntal Shopping List
+                </Button>
+              </>
             ) : (
               <Button href="/login" className={classes.menuButton}>
                 Login
@@ -91,10 +97,6 @@ export const Header = () => {
             )}
             <Button href="/list" className={classes.menuButton}>
               {ShoppingListLabel()}
-            </Button>
-            {/* feature flag */}
-            <Button href="/ExperimentalList" className={classes.menuButton}>
-              Experiemntal Shopping List
             </Button>
           </Box>
         </Menu>
