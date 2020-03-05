@@ -10,9 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
 import { EIShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
-import DeleteForever from '@material-ui/icons/DeleteForever';
 import SnackbarService from '../Shared/SnackbarService';
 import { PrintButton } from '../Shared/Components/CustomButtons';
+import { Loading } from '../Shared/Components/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,10 +82,12 @@ export const LongList = ({
 export const ExperimentalShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<EIShoppingList>();
   const [load, setLoad] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     ExperimentalShoppingListBehaviors.load().then(list => {
       setShoppingList(list);
+      setLoading(false);
     });
   }, [load]);
   const classes = useStyles();
@@ -136,7 +138,7 @@ export const ExperimentalShoppingList = () => {
     </>
   );
 
-  console.log('here is your shoppingList', shoppingList);
+  if (loading) return <Loading />
   return (
     <Container
       display="flex"
@@ -145,7 +147,7 @@ export const ExperimentalShoppingList = () => {
       position="static"
     >
       <Buttons display="flex">
-        <Typography variant="h2"> Shopping List</Typography>
+        <Typography variant="h2">Experimental Shopping List</Typography>
         <PrintButton label="Shopping List" />
       </Buttons>
       <Divider />

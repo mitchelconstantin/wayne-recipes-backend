@@ -39,7 +39,7 @@ export const ExperimentalAddToShoppingListButton = ({ recipe }) => {
   };
   return (
     <Tooltip title="Add to Experimnetal Shopping List">
-      <IconButton onClick={addToShoppingList} aria-label="upload picture">
+      <IconButton onClick={addToShoppingList} style={{color: 'green'}} aria-label="upload picture">
         <AddShoppingCart />
       </IconButton>
     </Tooltip>
