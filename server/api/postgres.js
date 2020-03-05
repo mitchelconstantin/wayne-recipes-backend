@@ -87,6 +87,17 @@ router.patch('/api/users', async (req, res) => {
   res.json('success');
 });
 
+// router.get('/api/shoppingList', async (req, res) => {
+//   const { email } = req.body;
+
+//   const shoppingList = await db.any(
+//     'select * from "ShoppingList" WHERE "email" = $1'
+//   );
+
+//   res.json({ recipes });
+// });
+
+
 //recipes
 router.get('/api/recipes', async (req, res) => {
   const preRecipes = await db.any('select * from "Recipes" ORDER BY "title" ASC');

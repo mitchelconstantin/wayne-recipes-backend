@@ -56,7 +56,7 @@ export const Header = () => {
 
     return (
       <ButtonSet ml="auto">
-        <Button href='/all' className={classes.button}>
+        <Button href="/all" className={classes.button}>
           All Recipes
         </Button>
         <Button onClick={handleClick} className={classes.button}>
@@ -91,6 +91,9 @@ export const Header = () => {
             )}
             <Button href="/list" className={classes.menuButton}>
               {ShoppingListLabel()}
+            </Button>
+            <Button href="/ExperimentalList" className={classes.menuButton}>
+              Experiemntal Shopping List
             </Button>
           </Box>
         </Menu>
