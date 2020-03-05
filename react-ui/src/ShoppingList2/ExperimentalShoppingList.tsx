@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
-import { IShoppingList } from '../Shared/Types';
+import { EIShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 import DeleteForever from '@material-ui/icons/DeleteForever';
 import SnackbarService from '../Shared/SnackbarService';
@@ -31,6 +31,12 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column'
   }
 }));
+
+const getTitle = (title: string, quantity: string) => {
+  //@ts-ignore
+  if (quantity < 2) return title;
+  return `${title} x${quantity}`;
+};
 
 interface LongListProps {
   content: any;
@@ -74,23 +80,25 @@ export const LongList = ({
 };
 
 export const ExperimentalShoppingList = () => {
-  const [shoppingList, setShoppingList] = useState<IShoppingList>();
+  const [shoppingList, setShoppingList] = useState<EIShoppingList>();
+  const [load, setLoad] = useState(0);
 
   useEffect(() => {
     ExperimentalShoppingListBehaviors.load().then(list => {
       setShoppingList(list);
     });
-  }, []);
-  const updateShoppingList = ()=> {};
+  }, [load]);
+  const updateShoppingList = () => {};
   // const updateShoppingList = () =>
   //   setShoppingList(ExperimentalShoppingListBehaviors.load());
   const classes = useStyles();
 
   const [Container, Buttons] = [Box, Box];
 
-  const removeFromShoppingList = (title: string, i: number) => {
-    ExperimentalShoppingListBehaviors.removeByIndex(i);
-    updateShoppingList();
+  const removeFromShoppingList = async (recipeId: string, title: number) => {
+    await ExperimentalShoppingListBehaviors.remove(recipeId);
+    // updateShoppingList();
+    setLoad(load + 1);
     SnackbarService.success(`Removed ${title} from Shopping List`);
   };
 
@@ -101,7 +109,7 @@ export const ExperimentalShoppingList = () => {
   };
 
   interface ShoppingListProps {
-    shoppingList: IShoppingList;
+    shoppingList: EIShoppingList;
   }
   const ShoppingListItems = ({ shoppingList }: ShoppingListProps) => (
     <>
@@ -116,11 +124,11 @@ export const ExperimentalShoppingList = () => {
       {shoppingList.map((item: any, i: number) => (
         <Box key={i} display="flex" alignItems="center">
           <Typography className={classes.secondaryHeading}>
-            {item.title}
+            {getTitle(item.title, item.quantity)}
           </Typography>
           <Tooltip title="Remove from Shopping List">
             <IconButton
-              onClick={() => removeFromShoppingList(item.title, i)}
+              onClick={() => removeFromShoppingList(item.recipe_id, item.title)}
               aria-label="upload picture"
             >
               <RemoveShoppingCart />
@@ -136,13 +144,14 @@ export const ExperimentalShoppingList = () => {
       {shoppingList.map((item: any, i: number) => (
         <LongList
           key={i}
-          title={item.title}
+          title={getTitle(item.title, item.quantity)}
           content={item.ingredients || 'unknown'}
         />
       ))}
     </>
   );
 
+  console.log('here is your shoppingList', shoppingList);
   return (
     <Container
       display="flex"

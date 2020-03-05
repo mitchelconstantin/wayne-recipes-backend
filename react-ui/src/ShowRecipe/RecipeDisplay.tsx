@@ -130,7 +130,8 @@ export const RecipeDisplay = () => {
         <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
           <AddToShoppingListButton recipe={recipe} />
-          {/* <ExperimentalAddToShoppingListButton recipe={recipe} /> */}
+          {/* feature flag */}
+          <ExperimentalAddToShoppingListButton recipe={recipe} />
           <PrintButton label="Recipe" />
           {isAdmin() && <EditRecipeButton id={recipe.id} />}
         </Box>

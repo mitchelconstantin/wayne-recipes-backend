@@ -30,12 +30,6 @@ export const App = () => {
           <Route path='/r/:recipeId/edit' render={(props: any) => <UpdateRecipe {...props} />} />
           <Route path='/dashboard' render={(props: any) => <AdminDashboard {...props} />} />
 
-          {/* <Route path='/login' component={Login} />
-          <Route exact path='/all' component={Home} />
-          <Route path='/list' component={ShoppingList} />
-          <Route path='/new' component={UpdateRecipe} />
-          <Route exact path='/r/:recipeId' component={RecipeDisplay} />
-          <Route path='/r/:recipeId/edit' component={UpdateRecipe} /> */}
           <Redirect from="/" to="/all" />
         </Switch>
       </div>

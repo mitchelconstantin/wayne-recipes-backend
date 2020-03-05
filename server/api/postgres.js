@@ -3,25 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 var cloudinary = require('cloudinary').v2;
 const { db } = require('../lib/database');
-const { configureRecipe, encode, decode } = require('../lib/hashIdService');
-
-// const uploadToImgur = async blob => {
-//   return new Promise(async (resolve, reject) => {
-//     let formData = new FormData();
-//     formData.append('image', blob.split(',')[1]);
-//     const imgurFile = await fetch('https://api.imgur.com/3/image', {
-//       method: 'POST',
-//       headers: {
-//         Authorization: process.env.IMGUR_CLIENT_ID,
-//         'Cache-Control': null, //required for cors
-//         'X-Requested-With': null //required for cors
-//       },
-//       body: formData
-//     });
-//     const json = await imgurFile.json();
-//     resolve(json.data.link);
-//   });
-// };
+const { configureRecipe, configureListItem, encode, decode } = require('../lib/hashIdService');
 
 const uploadToCloudinary = async (image, hashId) => {
   return new Promise((resolve, reject) => {
@@ -88,18 +70,29 @@ router.patch('/api/users', async (req, res) => {
 });
 
 router.get('/api/shoppingList/:email', async (req, res) => {
-  console.log('here is your email', req.params.email);
-  const list = await db.any('select * from shoppinglist WHERE "user_email" = $1', [req.params.email]);
+  const preList = await db.any(
+    'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1',
+    [req.params.email]
+  );
+    const list = preList.map(configureListItem);
   res.json({ list });
 });
 
 router.patch('/api/shoppingList/:email', async (req, res) => {
   const recipeId = req.body.recipeId;
   const dbId = decode(recipeId);
-  const [{count}] = await db.any('select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2', [req.params.email, dbId])
+  const [
+    { count }
+  ] = await db.any(
+    'select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
+    [req.params.email, dbId]
+  );
   console.log('count', count);
   if (count > 0) {
-    await db.any('UPDATE shoppinglist SET quantity = quantity + 1 WHERE "user_email" = $1 AND "recipe_id" = $2', [req.params.email, dbId])
+    await db.any(
+      'UPDATE shoppinglist SET quantity = quantity + 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
+      [req.params.email, dbId]
+    );
     res.json('success');
   } else {
     const [recipe] = await db.any(
@@ -113,6 +106,31 @@ router.patch('/api/shoppingList/:email', async (req, res) => {
       values
     );
     console.log('added this recipe to shoppingList', dbId);
+    res.json('success');
+  }
+});
+
+router.delete('/api/shoppingList/:email', async (req, res) => {
+  const recipeId = req.body.recipeId;
+  const dbId = decode(recipeId);
+  const [
+    { quantity }
+  ] = await db.any(
+    'select quantity from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
+    [req.params.email, dbId]
+  );
+  console.log('count', quantity);
+  if (quantity > 1) {
+    await db.any(
+      'UPDATE shoppinglist SET quantity = quantity - 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
+      [req.params.email, dbId]
+    );
+    res.json('success');
+  } else {
+    await db.any(
+      'delete from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
+      [req.params.email, dbId]
+    );
     res.json('success');
   }
 });

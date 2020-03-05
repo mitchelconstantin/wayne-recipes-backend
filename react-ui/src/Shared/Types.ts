@@ -36,6 +36,16 @@ export const emptyRecipe: IRecipe = {
 
 export type IShoppingList = IRecipe[];
 
+export type EIShoppingListItem = {
+  id: string | undefined;
+  title: string;
+  picture?: string;
+  ingredients: string;
+  quantity: string;
+};
+
+export type EIShoppingList = EIShoppingListItem[];
+
 export interface IUser {
   firstName: string;
   lastName: string;
