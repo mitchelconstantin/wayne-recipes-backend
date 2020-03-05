@@ -88,24 +88,14 @@ export const ExperimentalShoppingList = () => {
       setShoppingList(list);
     });
   }, [load]);
-  const updateShoppingList = () => {};
-  // const updateShoppingList = () =>
-  //   setShoppingList(ExperimentalShoppingListBehaviors.load());
   const classes = useStyles();
 
   const [Container, Buttons] = [Box, Box];
 
   const removeFromShoppingList = async (recipeId: string, title: number) => {
     await ExperimentalShoppingListBehaviors.remove(recipeId);
-    // updateShoppingList();
     setLoad(load + 1);
     SnackbarService.success(`Removed ${title} from Shopping List`);
-  };
-
-  const clearShoppingList = () => {
-    ExperimentalShoppingListBehaviors.clear();
-    updateShoppingList();
-    SnackbarService.success('Shopping List Cleared');
   };
 
   interface ShoppingListProps {
@@ -115,11 +105,6 @@ export const ExperimentalShoppingList = () => {
     <>
       <Box display="flex" alignItems="center">
         <Typography variant="h6">Recipes on the shopping list</Typography>
-        <Tooltip title="Clear Entire Shopping List">
-          <IconButton onClick={clearShoppingList} aria-label="upload picture">
-            <DeleteForever />
-          </IconButton>
-        </Tooltip>
       </Box>
       {shoppingList.map((item: any, i: number) => (
         <Box key={i} display="flex" alignItems="center">
