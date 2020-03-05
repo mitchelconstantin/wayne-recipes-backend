@@ -8,13 +8,14 @@ import {
   Divider,
 } from '@material-ui/core/';
 import { isAdmin } from '../Shared/AppBehaviors';
-import { RecipeAPI } from '../Shared/RecipeAPI';
+import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 //@ts-ignore
 import { useParams } from 'react-router-dom';
 import {
   PrintButton,
   AddToShoppingListButton,
-  EditRecipeButton
+  EditRecipeButton,
+  ExperimentalAddToShoppingListButton
 } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
 
@@ -129,6 +130,7 @@ export const RecipeDisplay = () => {
         <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
           <AddToShoppingListButton recipe={recipe} />
+          {/* <ExperimentalAddToShoppingListButton recipe={recipe} /> */}
           <PrintButton label="Recipe" />
           {isAdmin() && <EditRecipeButton id={recipe.id} />}
         </Box>

@@ -12,7 +12,7 @@ import {
 import { isOwner } from '../Shared/AppBehaviors';
 import { IUser } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
-import { UserAPI } from '../Shared/UserAPI';
+import { UserAPI } from '../Shared/APIs/UserAPI';
 //@ts-ignore
 import { Redirect } from 'react-router-dom';
 import { useContainerStyles } from '../Shared/formStyles';

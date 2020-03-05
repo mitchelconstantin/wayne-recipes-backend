@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Button, TextField } from '@material-ui/core';
 import { emptyUser } from '../Shared/Types';
-import { UserAPI } from '../Shared/UserAPI';
+import { UserAPI } from '../Shared/APIs/UserAPI';
 import { useContainerStyles } from '../Shared/formStyles';
 
 export const SignUp = () => {

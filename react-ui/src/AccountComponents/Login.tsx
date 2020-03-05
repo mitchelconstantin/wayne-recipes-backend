@@ -3,7 +3,7 @@ import { Box, Button, TextField } from '@material-ui/core';
 import { logIn } from '../Shared/AppBehaviors';
 import { emptyUser } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
-import { UserAPI } from '../Shared/UserAPI';
+import { UserAPI } from '../Shared/APIs/UserAPI';
 import { useContainerStyles } from '../Shared/formStyles';
 
 export const Login = () => {

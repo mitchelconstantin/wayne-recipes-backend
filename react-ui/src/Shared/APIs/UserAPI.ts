@@ -1,5 +1,5 @@
-import { IUser } from './Types';
-import SnackbarService from './SnackbarService';
+import { IUser } from '../Types';
+import SnackbarService from '../SnackbarService';
 
 export class UserAPI {
   static loginToServer = async (user: IUser) => {

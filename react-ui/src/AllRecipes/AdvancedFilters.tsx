@@ -8,7 +8,7 @@ import {
   Collapse,
   FormControl
 } from '@material-ui/core';
-import { RecipeAPI } from '../Shared/RecipeAPI';
+import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { emptyFilterOptions, emptyFilters } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({

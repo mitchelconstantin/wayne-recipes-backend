@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, emptyFilters } from '../Shared/Types';
-import { RecipeAPI } from '../Shared/RecipeAPI';
+import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
 import { useDebounce } from 'use-debounce';
 import { AdvancedFilters } from './AdvancedFilters';

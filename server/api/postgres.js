@@ -87,22 +87,43 @@ router.patch('/api/users', async (req, res) => {
   res.json('success');
 });
 
-// router.get('/api/shoppingList', async (req, res) => {
-//   const { email } = req.body;
+router.get('/api/shoppingList/:email', async (req, res) => {
+  console.log('here is your email', req.params.email);
+  const list = await db.any('select * from shoppinglist WHERE "user_email" = $1', [req.params.email]);
+  res.json({ list });
+});
 
-//   const shoppingList = await db.any(
-//     'select * from "ShoppingList" WHERE "email" = $1'
-//   );
+router.patch('/api/shoppingList/:email', async (req, res) => {
+  const recipeId = req.body.recipeId;
+  const dbId = decode(recipeId);
+  const [{count}] = await db.any('select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2', [req.params.email, dbId])
+  console.log('count', count);
+  if (count > 0) {
+    await db.any('UPDATE shoppinglist SET quantity = quantity + 1 WHERE "user_email" = $1 AND "recipe_id" = $2', [req.params.email, dbId])
+    res.json('success');
+  } else {
+    const [recipe] = await db.any(
+      'select * from "Recipes" WHERE id = $1',
+      dbId
+    );
 
-//   res.json({ recipes });
-// });
-
+    const values = [dbId, req.params.email, 1, recipe.ingredients];
+    const newRecipe = await db.one(
+      'INSERT INTO shoppinglist("recipe_id", "user_email", "quantity", "ingredients") VALUES($1, $2, $3, $4) RETURNING id',
+      values
+    );
+    console.log('added this recipe to shoppingList', dbId);
+    res.json('success');
+  }
+});
 
 //recipes
 router.get('/api/recipes', async (req, res) => {
-  const preRecipes = await db.any('select * from "Recipes" ORDER BY "title" ASC');
+  const preRecipes = await db.any(
+    'select * from "Recipes" ORDER BY "title" ASC'
+  );
 
-  const recipes = preRecipes.map(configureRecipe)
+  const recipes = preRecipes.map(configureRecipe);
 
   res.json({ recipes });
 });
@@ -118,12 +139,11 @@ router.get('/api/recipes/filters', async (req, res) => {
     'select DISTINCT "type" from "Recipes" WHERE "type" IS NOT NULL ORDER BY "type" ASC'
   );
 
-  const mainIngredients = preMainIngredients
-    .map(obj => obj.mainIngredient)
+  const mainIngredients = preMainIngredients.map(obj => obj.mainIngredient);
 
-  const regions = preRegions.map(obj => obj.region)
+  const regions = preRegions.map(obj => obj.region);
 
-  const types = preTypes.map(obj => obj.type)
+  const types = preTypes.map(obj => obj.type);
 
   res.json({ mainIngredients, regions, types });
 });

@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import { useContainerStyles } from '../Shared/formStyles';
-import { RecipeAPI } from '../Shared/RecipeAPI';
+import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import SnackbarService from '../Shared/SnackbarService';
 
 interface props {

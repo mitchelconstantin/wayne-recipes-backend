@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Divider,
@@ -7,7 +7,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
+import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
 import { IShoppingList } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 import DeleteForever from '@material-ui/icons/DeleteForever';
@@ -74,23 +74,28 @@ export const LongList = ({
 };
 
 export const ExperimentalShoppingList = () => {
-  const [shoppingList, setShoppingList] = useState<IShoppingList>(
-    ShoppingListBehaviors.load()
-  );
-  const updateShoppingList = () =>
-    setShoppingList(ShoppingListBehaviors.load());
+  const [shoppingList, setShoppingList] = useState<IShoppingList>();
+
+  useEffect(() => {
+    ExperimentalShoppingListBehaviors.load().then(list => {
+      setShoppingList(list);
+    });
+  }, []);
+  const updateShoppingList = ()=> {};
+  // const updateShoppingList = () =>
+  //   setShoppingList(ExperimentalShoppingListBehaviors.load());
   const classes = useStyles();
 
   const [Container, Buttons] = [Box, Box];
 
   const removeFromShoppingList = (title: string, i: number) => {
-    ShoppingListBehaviors.removeByIndex(i);
+    ExperimentalShoppingListBehaviors.removeByIndex(i);
     updateShoppingList();
     SnackbarService.success(`Removed ${title} from Shopping List`);
   };
 
   const clearShoppingList = () => {
-    ShoppingListBehaviors.clear();
+    ExperimentalShoppingListBehaviors.clear();
     updateShoppingList();
     SnackbarService.success('Shopping List Cleared');
   };
@@ -150,7 +155,7 @@ export const ExperimentalShoppingList = () => {
         <PrintButton label="Shopping List" />
       </Buttons>
       <Divider />
-      {shoppingList.length ? (
+      {shoppingList && shoppingList.length ? (
         <Box display="flex" flexDirection="column" alignItems="left">
           <ShoppingListItems shoppingList={shoppingList} />
           <Divider />

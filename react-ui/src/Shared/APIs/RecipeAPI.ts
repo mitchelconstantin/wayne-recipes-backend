@@ -1,4 +1,4 @@
-import { IRecipe } from './Types';
+import { IRecipe } from '../Types';
 
 interface FiltersPayload {
   regions: any;

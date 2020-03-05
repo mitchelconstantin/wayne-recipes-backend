@@ -2,7 +2,7 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import noImage from '../Shared/noImage.png';
-import { RecipeAPI } from '../Shared/RecipeAPI';
+import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { Box } from '@material-ui/core';
 //@ts-ignore
 import { useParams } from 'react-router-dom';
