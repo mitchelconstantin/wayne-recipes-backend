@@ -13,7 +13,13 @@ import { isLoggedIn } from '../Shared/AppBehaviors';
 //@ts-ignore
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
-import { ShoppingListIngredients } from './ShoppingListIngredients';
+import { LongList } from './LongList';
+
+const getTitle = (title: string, quantity: string) => {
+  //@ts-ignore
+  if (quantity < 2) return title;
+  return `${title} x${quantity}`;
+};
 
 export const ExperimentalShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<EIShoppingList>();
@@ -50,9 +56,18 @@ export const ExperimentalShoppingList = () => {
       <Divider />
       {shoppingList && shoppingList.length ? (
         <Box display="flex" flexDirection="column" alignItems="left">
-          <ShoppingListItems shoppingList={shoppingList} removeFromShoppingList={removeFromShoppingList} />
+          <ShoppingListItems
+            shoppingList={shoppingList}
+            removeFromShoppingList={removeFromShoppingList}
+          />
           <Divider />
-          <ShoppingListIngredients shoppingList={shoppingList} />
+          {shoppingList.map((item: any, i: number) => (
+            <LongList
+              key={i}
+              title={getTitle(item.title, item.quantity)}
+              content={item.ingredients || 'unknown'}
+            />
+          ))}
         </Box>
       ) : (
         <Typography variant="h2"> Shopping List is Empty</Typography>

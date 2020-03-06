@@ -65,13 +65,13 @@ export const LongList = ({ content, title }: LongListProps) => {
     const newList = [...lineList];
     newList.splice(i, 1, newLine);
     setLineList(newList);
+    // updateList(newList);
   };
 
   return (
     <Box className={classes.ListItemContainer}>
       <Typography variant="h6">{title}</Typography>
       {lineList.map((line: string, i: any) => {
-        console.log('mapping');
         return (
           <ShoppingListLine key={i} line={line} setLine={createSetLine(i)} />
         );

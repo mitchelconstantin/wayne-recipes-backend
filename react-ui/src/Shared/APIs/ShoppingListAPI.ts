@@ -33,26 +33,14 @@ export class ShoppingListAPI {
            return json;
          };
 
-         static getRecipe = async (id: string): Promise<any> => {
-           const res = await fetch(`/api/recipes/${id}`);
-           if (!res.ok) window.location.href = '/all';
-           const recipe = await res.json();
-           return recipe;
-         };
-
-         static deleteRecipe = async (id: string) => {
-           await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
-           return;
-         };
-
-         static saveRecipe = async (recipe: any) => {
-           const res = await fetch(`/api/recipes/${recipe.id}`, {
+         static update = async (email: string, list: any) => {
+           const res = await fetch(`/api/shoppingList/${email}`, {
              method: 'PATCH',
              headers: {
                Accept: 'application/json',
                'Content-Type': 'application/json'
              },
-             body: JSON.stringify({ recipe })
+             body: JSON.stringify({ list })
            });
            const json = await res.json();
            return json;

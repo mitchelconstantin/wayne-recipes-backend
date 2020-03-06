@@ -18,4 +18,9 @@ export class ExperimentalShoppingListBehaviors {
     const apiList = await ShoppingListAPI.get(userEmail());
     return apiList;
   };
+
+  static update = async (list: EIShoppingList): Promise<EIShoppingList> => {
+    const apiList = await ShoppingListAPI.update(userEmail(), list);
+    return apiList;
+  };
 }
