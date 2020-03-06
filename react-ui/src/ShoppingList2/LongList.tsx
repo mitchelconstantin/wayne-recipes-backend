@@ -24,14 +24,21 @@ interface LongListProps {
   numbered?: boolean;
 }
 
+const isChecked = (line: string) => line.startsWith('<checked>');
+
+const formatLine = (line: string) =>
+  isChecked(line) ? <del>{line.slice(9)}</del> : line;
+
 //@ts-ignore
-const ShoppingListLine = ({ line }) => {
+const ShoppingListLine = ({ line, setLine }) => {
   const classes = useStyles();
-  const [checked, setChecked] = useState(false);
-  const displayLine = checked ? <del>{line}</del> : line;
 
   const handleCheck = () => {
-    setChecked(!checked);
+    if (isChecked(line)) {
+      setLine(line.slice(9));
+    } else {
+      setLine(`<checked>${line}`);
+    }
   };
   return (
     <FormControlLabel
@@ -41,24 +48,34 @@ const ShoppingListLine = ({ line }) => {
           style={{
             color: '#e4673d'
           }}
-          checked={checked}
+          checked={isChecked(line)}
           onChange={handleCheck}
         />
       }
-      label={displayLine}
+      label={formatLine(line)}
     />
   );
 };
 
 export const LongList = ({ content, title }: LongListProps) => {
   const classes = useStyles();
-  const processedContent = content.split('\n');
+  const [lineList, setLineList] = useState(content.split('\n'));
+  //@ts-ignore
+  const createSetLine = i => newLine => {
+    const newList = [...lineList];
+    newList.splice(i, 1, newLine);
+    setLineList(newList);
+  };
+
   return (
     <Box className={classes.ListItemContainer}>
       <Typography variant="h6">{title}</Typography>
-      {processedContent.map((line: string, i: any) => (
-        <ShoppingListLine key={i} line={line} />
-      ))}
+      {lineList.map((line: string, i: any) => {
+        console.log('mapping');
+        return (
+          <ShoppingListLine key={i} line={line} setLine={createSetLine(i)} />
+        );
+      })}
     </Box>
   );
 };
