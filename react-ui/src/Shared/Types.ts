@@ -34,17 +34,14 @@ export const emptyRecipe: IRecipe = {
   netCarbs: ''
 };
 
-export type IShoppingList = IRecipe[];
-
-export type EIShoppingListItem = {
+export type IShoppingListItem = {
   id: string | undefined;
   title: string;
   picture?: string;
   ingredients: string;
   quantity: string;
+  recipe_id: string;
 };
-
-export type EIShoppingList = EIShoppingListItem[];
 
 export interface IUser {
   firstName: string;

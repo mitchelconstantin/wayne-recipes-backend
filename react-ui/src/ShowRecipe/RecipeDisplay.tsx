@@ -15,7 +15,6 @@ import {
   PrintButton,
   AddToShoppingListButton,
   EditRecipeButton,
-  ExperimentalAddToShoppingListButton
 } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
 
@@ -130,8 +129,6 @@ export const RecipeDisplay = () => {
         <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
           <AddToShoppingListButton recipe={recipe} />
-          {/* feature flag */}
-          <ExperimentalAddToShoppingListButton recipe={recipe} />
           <PrintButton label="Recipe" />
           {isAdmin() && <EditRecipeButton id={recipe.id} />}
         </Box>

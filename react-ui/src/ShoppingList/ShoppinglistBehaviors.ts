@@ -1,37 +1,28 @@
-import { IRecipe, IShoppingList } from '../Shared/Types';
+import { IRecipe, IShoppingListItem } from '../Shared/Types';
+import { ShoppingListAPI } from '../Shared/APIs/ShoppingListAPI';
+import { userEmail } from '../Shared/AppBehaviors';
 
 export class ShoppingListBehaviors {
-  static clear = () => {
-    ShoppingListBehaviors._setShoppingList([]);
+  static remove = async (recipeId: string) => {
+    await ShoppingListAPI.removeFromList(userEmail(), recipeId);
+    return;
   };
 
-  static removeByIndex = (index: number) => {
-    const prev = ShoppingListBehaviors.load();
-    prev.splice(index, 1);
-    ShoppingListBehaviors._setShoppingList(prev);
-  }
-
-  static remove = (recipeId: string) => {
-    const prev = ShoppingListBehaviors.load();
-    const indexToRemove = prev.findIndex((item) => item.id === recipeId)
-    prev.splice(indexToRemove, 1);
-    ShoppingListBehaviors._setShoppingList(prev);
-  }
-
-  static add = (recipe: IRecipe) => {
-    const listItem = { id: recipe.id, ingredients: recipe.ingredients, title: recipe.title };
-    const prev = ShoppingListBehaviors.load();
-    //@ts-ignore
-    ShoppingListBehaviors._setShoppingList([...prev, listItem]);
+  static add = async (recipe: IRecipe) => {
+    if (!recipe.id) return;
+    await ShoppingListAPI.addToList(userEmail(), recipe.id);
+    return;
   };
 
-  static load = (): IShoppingList => {
-    const list = localStorage.getItem('shoppingList');
-    if (!list) return [];
-    return JSON.parse(list);
+  static load = async (): Promise<IShoppingListItem[]> => {
+    const apiList = await ShoppingListAPI.get(userEmail());
+    return apiList;
   };
 
-  static _setShoppingList = (list: IShoppingList): void => {
-    localStorage.setItem('shoppingList', JSON.stringify(list));
+  //@ts-ignore
+  static update = async (list: IShoppingListItem): Promise<IShoppingList> => {
+    console.log('updating list with ', list);
+    const apiList = await ShoppingListAPI.update(userEmail(), list);
+    return apiList;
   };
-};
+}

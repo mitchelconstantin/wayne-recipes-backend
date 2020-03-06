@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, IconButton, Tooltip, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { EIShoppingList } from '../Shared/Types';
+import { IShoppingListItem } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 
 const useStyles = makeStyles(theme => ({
@@ -29,7 +29,7 @@ const getTitle = (title: string, quantity: string) => {
 };
 
 interface ShoppingListProps {
-  shoppingList: EIShoppingList;
+  shoppingList: IShoppingListItem[];
   removeFromShoppingList: Function;
 }
 
@@ -44,7 +44,7 @@ export const ShoppingListItems = ({
       <Box display="flex" alignItems="center">
         <Typography variant="h6">Recipes on the shopping list</Typography>
       </Box>
-      {shoppingList.map((item: any, i: number) => (
+      {shoppingList.map((item, i: number) => (
         <Box key={i} display="flex" alignItems="center">
           <Typography className={classes.secondaryHeading}>
             {getTitle(item.title, item.quantity)}

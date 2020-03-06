@@ -1,143 +1,54 @@
-import React, { useState } from 'react';
-import {
-  Box,
-  Divider,
-  IconButton,
-  Tooltip,
-  Typography
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
-import { IShoppingList } from '../Shared/Types';
-import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
-import DeleteForever from '@material-ui/icons/DeleteForever';
+import React, { useState, useEffect } from 'react';
+import { Box, Divider, Typography } from '@material-ui/core';
+import { IShoppingListItem } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
 import { PrintButton } from '../Shared/Components/CustomButtons';
+import { Loading } from '../Shared/Components/Loading';
+import { isLoggedIn } from '../Shared/AppBehaviors';
+//@ts-ignore
+import { Redirect } from 'react-router-dom';
+import { ShoppingListItems } from './ShoppingListItems';
+import { IngredientsList } from './IngredientsList';
+import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  details: {
-    flexDirection: 'column'
-  }
-}));
-
-interface LongListProps {
-  content: any;
-  title: string;
-  numbered?: boolean;
-}
-
-export const LongList = ({
-  content,
-  title,
-  numbered = false
-}: LongListProps) => {
-  const classes = useStyles();
-
-  const getLine = (index: number, line: any) => {
-    if (!numbered || !line) return line;
-    const val = Math.floor(index / 2 + 1);
-    return `${val}. ${line}`;
-  };
-  const processedContent = content.split('\n').map((line: any, i: number) => {
-    return (
-      <Box mt="10px" key={i}>
-        <Typography className={classes.secondaryHeading}>
-          {getLine(i, line)}
-        </Typography>
-      </Box>
-    );
-  });
-  return (
-    <Box
-      mt="20px"
-      mb="20px"
-      display="flex"
-      flexDirection="column"
-      alignItems="left"
-    >
-      <Typography variant="h6">{title}</Typography>
-      {processedContent}
-    </Box>
-  );
+const getTitle = (title: string, quantity: string) => {
+  //@ts-ignore
+  if (quantity < 2) return title;
+  return `${title} x${quantity}`;
 };
 
 export const ShoppingList = () => {
-  const [shoppingList, setShoppingList] = useState<IShoppingList>(
-    ShoppingListBehaviors.load()
-  );
-  const updateShoppingList = () =>
-    setShoppingList(ShoppingListBehaviors.load());
-  const classes = useStyles();
-
+  const [shoppingList, setShoppingList] = useState<IShoppingListItem[]>();
+  const [load, setLoad] = useState(0);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    ShoppingListBehaviors.load().then((list: IShoppingListItem[]) => {
+      setShoppingList(list);
+      setLoading(false);
+    });
+  }, [load]);
   const [Container, Buttons] = [Box, Box];
 
-  const removeFromShoppingList = (title: string, i: number) => {
-    ShoppingListBehaviors.removeByIndex(i);
-    updateShoppingList();
+  const updateShoppingList = (newRecipe: any, i: any) => {
+    //@ts-ignore
+    const newList = [...shoppingList];
+    //@ts-ignore
+    newList[i].ingredients = newRecipe.join('\n');
+    //@ts-ignore
+    setShoppingList(newList);
+    //@ts-ignore
+    ShoppingListBehaviors.update(newList[i]);
+    setLoad(load+1);
+  };
+
+  const removeFromShoppingList = async (recipeId: string, title: number) => {
+    await ShoppingListBehaviors.remove(recipeId);
+    setLoad(load + 1);
     SnackbarService.success(`Removed ${title} from Shopping List`);
   };
 
-  const clearShoppingList = () => {
-    ShoppingListBehaviors.clear();
-    updateShoppingList();
-    SnackbarService.success('Shopping List Cleared');
-  };
-
-  interface ShoppingListProps {
-    shoppingList: IShoppingList;
-  }
-  const ShoppingListItems = ({ shoppingList }: ShoppingListProps) => (
-    <>
-      <Box display="flex" alignItems="center">
-        <Typography variant="h6">Recipes on the shopping list</Typography>
-        <Tooltip title="Clear Entire Shopping List">
-          <IconButton onClick={clearShoppingList} aria-label="upload picture">
-            <DeleteForever />
-          </IconButton>
-        </Tooltip>
-      </Box>
-      {shoppingList.map((item: any, i: number) => (
-        <Box key={i} display="flex" alignItems="center">
-          <Typography className={classes.secondaryHeading}>
-            {item.title}
-          </Typography>
-          <Tooltip title="Remove from Shopping List">
-            <IconButton
-              onClick={() => removeFromShoppingList(item.title, i)}
-              aria-label="upload picture"
-            >
-              <RemoveShoppingCart />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      ))}
-    </>
-  );
-
-  const ShoppingListIngredients = ({ shoppingList }: ShoppingListProps) => (
-    <>
-      {shoppingList.map((item: any, i: number) => (
-        <LongList
-          key={i}
-          title={item.title}
-          content={item.ingredients || 'unknown'}
-        />
-      ))}
-    </>
-  );
-
+  if (!isLoggedIn()) return <Redirect push to="/all" />;
+  if (loading) return <Loading />;
   return (
     <Container
       display="flex"
@@ -146,15 +57,27 @@ export const ShoppingList = () => {
       position="static"
     >
       <Buttons display="flex">
-        <Typography variant="h2"> Shopping List</Typography>
+        <Typography variant="h2">Shopping List</Typography>
         <PrintButton label="Shopping List" />
       </Buttons>
       <Divider />
-      {shoppingList.length ? (
+      {shoppingList && shoppingList.length ? (
         <Box display="flex" flexDirection="column" alignItems="left">
-          <ShoppingListItems shoppingList={shoppingList} />
+          <ShoppingListItems
+            shoppingList={shoppingList}
+            removeFromShoppingList={removeFromShoppingList}
+          />
           <Divider />
-          <ShoppingListIngredients shoppingList={shoppingList} />
+          {shoppingList.map((recipe: any, i: number) => (
+            <IngredientsList
+              key={i}
+              title={getTitle(recipe.title, recipe.quantity)}
+              lineList={recipe.ingredients.split('\n') || 'unknown'}
+              setLineList={(newList: any) => {
+                updateShoppingList(newList, i);
+              }}
+            />
+          ))}
         </Box>
       ) : (
         <Typography variant="h2"> Shopping List is Empty</Typography>

@@ -37,9 +37,9 @@ export const Header = () => {
   const goHome = () => (window.location.href = '/all');
   const title = `WAYNE'S FAMILY RECIPES`;
   const description = 'Traditional Cajun food and so much more!';
-  const ShoppingListLabel = () => {
+  const ShoppingListLabel = async () => {
     const text = 'Shopping List';
-    const list = ShoppingListBehaviors.load();
+    const list = await ShoppingListBehaviors.load(); 
     if (!list.length) return text;
     return `${text}(${list.length})`;
   };
@@ -75,9 +75,8 @@ export const Header = () => {
                 <Button onClick={logOut} className={classes.menuButton}>
                   Logout
                 </Button>
-                {/* feature flag */}
-                <Button href="/ExperimentalList" className={classes.menuButton}>
-                  Experiemntal Shopping List
+                <Button href="/list" className={classes.menuButton}>
+                  Shopping List
                 </Button>
               </>
             ) : (
@@ -95,9 +94,6 @@ export const Header = () => {
                 Admin Dashboard
               </Button>
             )}
-            <Button href="/list" className={classes.menuButton}>
-              {ShoppingListLabel()}
-            </Button>
           </Box>
         </Menu>
       </ButtonSet>

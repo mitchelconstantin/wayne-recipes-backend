@@ -1,7 +1,7 @@
-import { EIShoppingList } from '../Types';
+import { IShoppingListItem } from '../Types';
 
 export class ShoppingListAPI {
-         static get = async (email: string): Promise<EIShoppingList> => {
+         static get = async (email: string): Promise<IShoppingListItem[]> => {
            const res = await fetch(`/api/shoppingList/${email}`);
            const { list } = await res.json();
            return list;
@@ -33,7 +33,7 @@ export class ShoppingListAPI {
            return json;
          };
 
-         static update = async (email: string, list: any) => {
+         static update = async (email: string, list: IShoppingListItem) => {
            const res = await fetch(`/api/shoppingList/${email}`, {
              method: 'PATCH',
              headers: {
