@@ -4,7 +4,6 @@ import {
   Divider,
   Typography
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
 import { EIShoppingList } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
@@ -15,24 +14,6 @@ import { isLoggedIn } from '../Shared/AppBehaviors';
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
 import { ShoppingListIngredients } from './ShoppingListIngredients';
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  details: {
-    flexDirection: 'column'
-  }
-}));
 
 export const ExperimentalShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<EIShoppingList>();
@@ -52,7 +33,6 @@ export const ExperimentalShoppingList = () => {
     setLoad(load + 1);
     SnackbarService.success(`Removed ${title} from Shopping List`);
   };
-
 
   if (!isLoggedIn()) return <Redirect push to="/all" />;
   if (loading) return <Loading />

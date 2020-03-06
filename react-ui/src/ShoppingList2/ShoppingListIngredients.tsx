@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { EIShoppingList } from '../Shared/Types';
 import { LongList } from './LongList';
 

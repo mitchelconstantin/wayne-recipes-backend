@@ -71,7 +71,7 @@ router.patch('/api/users', async (req, res) => {
 
 router.get('/api/shoppingList/:email', async (req, res) => {
   const preList = await db.any(
-    'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1',
+    'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1 ORDER BY "title" ASC', 
     [req.params.email]
   );
     const list = preList.map(configureListItem);

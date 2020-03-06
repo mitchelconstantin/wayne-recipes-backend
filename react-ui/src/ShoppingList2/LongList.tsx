@@ -1,21 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Box,
-  Divider,
-  IconButton,
-  Tooltip,
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
-import { EIShoppingList } from '../Shared/Types';
-import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
-import SnackbarService from '../Shared/SnackbarService';
-import { PrintButton } from '../Shared/Components/CustomButtons';
-import { Loading } from '../Shared/Components/Loading';
-import { isLoggedIn } from '../Shared/AppBehaviors';
-//@ts-ignore
-import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {

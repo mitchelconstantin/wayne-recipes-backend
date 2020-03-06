@@ -4,19 +4,18 @@ import { userEmail } from '../Shared/AppBehaviors';
 
 export class ExperimentalShoppingListBehaviors {
   static remove = async (recipeId: string) => {
-    const apiList = await ShoppingListAPI.removeFromList(
-      userEmail(),
-      recipeId
-    );
+    await ShoppingListAPI.removeFromList(userEmail(), recipeId);
+    return;
   };
 
   static add = async (recipe: IRecipe) => {
-    if (!recipe.id) return
-    const apiList = await ShoppingListAPI.addToList(userEmail(), recipe.id);
+    if (!recipe.id) return;
+    await ShoppingListAPI.addToList(userEmail(), recipe.id);
+    return;
   };
 
   static load = async (): Promise<EIShoppingList> => {
     const apiList = await ShoppingListAPI.get(userEmail());
     return apiList;
   };
-};
+}
