@@ -1,22 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Checkbox, Typography, FormControlLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%'
+  ListItemContainer: {
+    marginTop: '20px',
+    marginBottom: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'left'
   },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
+  label: {
+    marginTop: '10px'
   },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  details: {
-    flexDirection: 'column'
+  checkBox: {
+    color: '#e4673d'
   }
 }));
 
@@ -26,43 +24,41 @@ interface LongListProps {
   numbered?: boolean;
 }
 
-export const LongList = ({
-  content,
-  title,
-}: LongListProps) => {
+//@ts-ignore
+const ShoppingListLine = ({ line }) => {
   const classes = useStyles();
+  const [checked, setChecked] = useState(false);
+  const displayLine = checked ? <del>{line}</del> : line;
 
-  const processedContent = content.split('\n').map((line: any, i: number) => {
-    return (
-      <Box mt="10px" key={i}>
-        <FormControlLabel
-          //@ts-ignore
-          control={
-            <Checkbox
-              checked={false}
-              // onChange={() => handleChange(user, i)}
-              style={{
-                color: '#e4673d'
-              }}
-            />
-          }
-          label={
-            <Typography className={classes.secondaryHeading}>{line}</Typography>
-          }
-        />
-      </Box>
-    );
-  });
+  const handleCheck = () => {
+    setChecked(!checked);
+  };
   return (
-    <Box
-      mt="20px"
-      mb="20px"
-      display="flex"
-      flexDirection="column"
-      alignItems="left"
-    >
+    <FormControlLabel
+      className={classes.label}
+      control={
+        <Checkbox
+          style={{
+            color: '#e4673d'
+          }}
+          checked={checked}
+          onChange={handleCheck}
+        />
+      }
+      label={displayLine}
+    />
+  );
+};
+
+export const LongList = ({ content, title }: LongListProps) => {
+  const classes = useStyles();
+  const processedContent = content.split('\n');
+  return (
+    <Box className={classes.ListItemContainer}>
       <Typography variant="h6">{title}</Typography>
-      {processedContent}
+      {processedContent.map((line: string, i: any) => (
+        <ShoppingListLine key={i} line={line} />
+      ))}
     </Box>
   );
 };
