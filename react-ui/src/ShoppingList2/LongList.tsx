@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Typography
-} from '@material-ui/core';
+import { Box, Checkbox, Typography, FormControlLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -32,21 +29,27 @@ interface LongListProps {
 export const LongList = ({
   content,
   title,
-  numbered = false
 }: LongListProps) => {
   const classes = useStyles();
 
-  const getLine = (index: number, line: any) => {
-    if (!numbered || !line) return line;
-    const val = Math.floor(index / 2 + 1);
-    return `${val}. ${line}`;
-  };
   const processedContent = content.split('\n').map((line: any, i: number) => {
     return (
       <Box mt="10px" key={i}>
-        <Typography className={classes.secondaryHeading}>
-          {getLine(i, line)}
-        </Typography>
+        <FormControlLabel
+          //@ts-ignore
+          control={
+            <Checkbox
+              checked={false}
+              // onChange={() => handleChange(user, i)}
+              style={{
+                color: '#e4673d'
+              }}
+            />
+          }
+          label={
+            <Typography className={classes.secondaryHeading}>{line}</Typography>
+          }
+        />
       </Box>
     );
   });
