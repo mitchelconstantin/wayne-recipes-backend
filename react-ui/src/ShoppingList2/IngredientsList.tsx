@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Checkbox, Typography, FormControlLabel } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -18,10 +18,10 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-interface LongListProps {
-  content: any;
+interface IngredientsListProps { 
+  lineList: any;
+  setLineList: Function;
   title: string;
-  numbered?: boolean;
 }
 
 const isChecked = (line: string) => line.startsWith('<checked>');
@@ -57,15 +57,13 @@ const ShoppingListLine = ({ line, setLine }) => {
   );
 };
 
-export const LongList = ({ content, title }: LongListProps) => {
+export const IngredientsList = ({ lineList, setLineList, title }: IngredientsListProps) => {
   const classes = useStyles();
-  const [lineList, setLineList] = useState(content.split('\n'));
   //@ts-ignore
   const createSetLine = i => newLine => {
     const newList = [...lineList];
     newList.splice(i, 1, newLine);
     setLineList(newList);
-    // updateList(newList);
   };
 
   return (

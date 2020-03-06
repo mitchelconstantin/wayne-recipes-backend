@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Divider,
-  Typography
-} from '@material-ui/core';
+import { Box, Divider, Typography } from '@material-ui/core';
 import { ExperimentalShoppingListBehaviors } from './ExperimentalShoppinglistBehaviors';
 import { EIShoppingList } from '../Shared/Types';
 import SnackbarService from '../Shared/SnackbarService';
@@ -13,7 +9,7 @@ import { isLoggedIn } from '../Shared/AppBehaviors';
 //@ts-ignore
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
-import { LongList } from './LongList';
+import { IngredientsList } from './IngredientsList';
 
 const getTitle = (title: string, quantity: string) => {
   //@ts-ignore
@@ -25,7 +21,6 @@ export const ExperimentalShoppingList = () => {
   const [shoppingList, setShoppingList] = useState<EIShoppingList>();
   const [load, setLoad] = useState(0);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     ExperimentalShoppingListBehaviors.load().then(list => {
       setShoppingList(list);
@@ -34,6 +29,18 @@ export const ExperimentalShoppingList = () => {
   }, [load]);
   const [Container, Buttons] = [Box, Box];
 
+  const updateShoppingList = (newRecipe: any, i: any) => {
+    //@ts-ignore
+    const newList = [...shoppingList];
+    //@ts-ignore
+    newList[i].ingredients = newRecipe.join('\n');
+    //@ts-ignore
+    setShoppingList(newList);
+    //@ts-ignore
+    ExperimentalShoppingListBehaviors.update(newList[i]);
+    setLoad(load+1);
+  };
+
   const removeFromShoppingList = async (recipeId: string, title: number) => {
     await ExperimentalShoppingListBehaviors.remove(recipeId);
     setLoad(load + 1);
@@ -41,7 +48,7 @@ export const ExperimentalShoppingList = () => {
   };
 
   if (!isLoggedIn()) return <Redirect push to="/all" />;
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   return (
     <Container
       display="flex"
@@ -61,11 +68,14 @@ export const ExperimentalShoppingList = () => {
             removeFromShoppingList={removeFromShoppingList}
           />
           <Divider />
-          {shoppingList.map((item: any, i: number) => (
-            <LongList
+          {shoppingList.map((recipe: any, i: number) => (
+            <IngredientsList
               key={i}
-              title={getTitle(item.title, item.quantity)}
-              content={item.ingredients || 'unknown'}
+              title={getTitle(recipe.title, recipe.quantity)}
+              lineList={recipe.ingredients.split('\n') || 'unknown'}
+              setLineList={(newList: any) => {
+                updateShoppingList(newList, i);
+              }}
             />
           ))}
         </Box>

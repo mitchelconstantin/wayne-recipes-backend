@@ -78,7 +78,7 @@ router.get('/api/shoppingList/:email', async (req, res) => {
   res.json({ list });
 });
 
-router.patch('/api/shoppingList/:email', async (req, res) => {
+router.post('/api/shoppingList/:email', async (req, res) => {
   const recipeId = req.body.recipeId;
   const dbId = decode(recipeId);
   const [
@@ -133,6 +133,15 @@ router.delete('/api/shoppingList/:email', async (req, res) => {
     );
     res.json('success');
   }
+});
+
+router.patch('/api/shoppingList/:email', async (req, res) => {
+  const {list} = req.body;
+  const values = [list.ingredients, list.user_email, list.id];
+  await db.any(
+    'UPDATE shoppinglist SET ingredients = $1 WHERE "user_email" = $2 AND "id" = $3',
+    values
+  );
 });
 
 //recipes

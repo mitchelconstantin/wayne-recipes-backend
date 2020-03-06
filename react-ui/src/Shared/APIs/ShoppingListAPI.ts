@@ -6,10 +6,10 @@ export class ShoppingListAPI {
            const { list } = await res.json();
            return list;
          };
-         //@ts-ignore
+         //@ts-ignore 
          static addToList = async (email: string, recipeId: string) => {
            const res = await fetch(`/api/shoppingList/${email}`, {
-             method: 'PATCH',
+             method: 'POST',
              headers: {
                Accept: 'application/json',
                'Content-Type': 'application/json'
