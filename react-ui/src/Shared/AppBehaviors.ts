@@ -21,8 +21,8 @@ export const logOut = () => {
   localStorage.setItem('isOwner', 'false');
   window.location.reload();
 };
-export const isLoggedIn = () => getLocalStorage('isLoggedIn');
-export const userEmail = () => getLocalStorage('userEmail', true);
-export const isAdmin = () => getLocalStorage('isAdmin');
-export const isOwner = () => getLocalStorage('isOwner');
+export const isLoggedIn = (): boolean => !!getLocalStorage('isLoggedIn');
+export const userEmail = (): string => getLocalStorage('userEmail', true);
+export const isAdmin = (): boolean => !!getLocalStorage('isAdmin');
+export const isOwner = (): boolean => !!getLocalStorage('isOwner');
 

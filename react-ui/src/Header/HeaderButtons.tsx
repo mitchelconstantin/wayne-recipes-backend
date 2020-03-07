@@ -1,42 +1,23 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Box,
-  Menu,
-  AppBar,
-  Toolbar,
-  Typography,
-  Button
-} from '@material-ui/core/';
-import logo from './logo.svg';
-import { ShoppingListBehaviors } from '../ShoppingList/ShoppinglistBehaviors';
+import { Box, Menu, Button } from '@material-ui/core/';
 import { isLoggedIn, logOut, isAdmin, isOwner } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
-  title: {
-    marginRight: 'auto',
-    fontWeight: 700
-  },
-  subTitle: {
-    marginRight: 'auto',
-    fontWeight: 400
-  },
-  toolbar: {
-    background: 'linear-gradient(0.25turn, #f44723, #f56730, #f44723)',
-    paddingLeft: '20px',
-    paddingRight: '20px'
-  },
   button: {
     color: 'white'
   },
-  menuButton: {}
+  menuButton: {},
+  menu: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
 }));
 export const HeaderButtons = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyles();
 
-  //@ts-ignore
-  const handleClick = event => {
+  const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -53,14 +34,13 @@ export const HeaderButtons = () => {
         Menu
       </Button>
       <Menu
-        id="simple-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <Box display="flex" flexDirection="column">
-          {!!isLoggedIn() ? (
+        <Box className={classes.menu}>
+          {isLoggedIn() ? (
             <>
               <Button onClick={logOut} className={classes.menuButton}>
                 Logout
