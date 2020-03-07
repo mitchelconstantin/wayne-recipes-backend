@@ -43,7 +43,6 @@ export const UpdateRecipe = () => {
   const classes = useContainerStyles();
 
   useEffect(() => {
-    //@ts-ignore
     getRecipeData(recipeId).then(({ recipe, filters }) => {
       setFilters(filters);
       setRecipe(recipe);

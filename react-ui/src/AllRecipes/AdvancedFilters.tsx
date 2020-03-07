@@ -45,19 +45,20 @@ export const AdvancedFilters = ({
       setSelectedFilters(emptyFilters);
     }
   }, [expanded]);
-  //@ts-ignore
-  const handleChangeMainIngredient = e => handleChange(e, 'mainIngredient');
-  //@ts-ignore
-  const handleChangeRegion = e => handleChange(e, 'region');
-  //@ts-ignore
-  const handleChangeType = e => handleChange(e, 'type');
+  const handleChangeMainIngredient = (
+    e: React.ChangeEvent<{ value: unknown }>
+  ) => handleChange(e, 'mainIngredient');
+  const handleChangeRegion = (e: React.ChangeEvent<{ value: unknown }>) =>
+    handleChange(e, 'region');
+  const handleChangeType = (e: React.ChangeEvent<{ value: unknown }>) =>
+    handleChange(e, 'type');
 
   //@ts-ignore
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>, x: any) => {
     //@ts-ignore
-    setSelectedFilters(prev => ({
+    setSelectedFilters((prev: any) => ({
       ...prev,
-      [x]: e.target.value
+      [x]: e.target.value 
     }));
   };
 
@@ -73,7 +74,6 @@ export const AdvancedFilters = ({
         >
           <MenuItem value={''}>All</MenuItem>
           {mainIngredients.map((mi: any) => (
-            //@ts-ignore
             <MenuItem key={mi} value={mi}>
               {mi}
             </MenuItem>
@@ -85,7 +85,6 @@ export const AdvancedFilters = ({
         <Select value={selectedFilters.region} onChange={handleChangeRegion}>
           <MenuItem value={''}>All</MenuItem>
           {regions.map((region: any) => (
-            //@ts-ignore
             <MenuItem key={region} value={region}>
               {region}
             </MenuItem>
@@ -97,7 +96,6 @@ export const AdvancedFilters = ({
         <Select value={selectedFilters.type} onChange={handleChangeType}>
           <MenuItem value={''}>All</MenuItem>
           {types.map((type: any) => (
-            //@ts-ignore
             <MenuItem key={type} value={type}>
               {type}
             </MenuItem>

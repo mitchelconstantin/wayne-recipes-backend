@@ -61,7 +61,7 @@ export const Home = () => {
     setFilteredRecipes(filteredRecipes);
   }, [debouncedSearchTerm, selectedFilters, recipes]);
 
-  const handleChangeInput = (event: any) => {
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => { 
     setSearchTerm(event.target.value);
   };
 

@@ -51,7 +51,6 @@ export const AdminDashboard = () => {
           {users.map((user, i) => (
             <div key={i}>
               <FormControlLabel
-                //@ts-ignore
                 control={
                   <Checkbox
                     checked={user.isAdmin}
