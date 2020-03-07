@@ -17,10 +17,10 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center'
   },
   title: {
-    fontWeight: 600,
+    fontWeight: 600
   },
   detail: {
-    fontWeight: 300,
+    fontWeight: 300
   },
   image: {
     objectFit: 'cover',
@@ -54,39 +54,28 @@ export const RecipeCard = ({ recipe }: Props) => {
     eventTarget.src = noImage;
   };
 
-  interface ImgProps {
-    picture?: string;
-  }
-  const RecipeImg = ({ picture }: ImgProps) => {
-    const imageToUse = () => {
-      if (!picture || picture[0].toLowerCase() === 'x') {
-        return noImage;
-      }
-      const ar = picture.split('upload');
-      const newUrl = `${ar[0]}upload/w_300,h_300,c_fill,g_auto${ar[1]}`;
-      return newUrl;
-    };
-    return (
-      <img
-        onError={onError}
-        src={imageToUse()}
-        alt={'a tasty dish!'}
-        className={classes.image}
-      />
-    );
+  const imageToUse = () => {
+    if (!recipe.picture) return noImage;
+
+    const ar = recipe.picture.split('upload');
+    const newUrl = `${ar[0]}upload/w_300,h_300,c_fill,g_auto${ar[1]}`;
+    return newUrl;
   };
 
   return (
     <Paper className={classes.card} onClick={selectRecipe}>
-      <Box className={classes.boxAroundImage}>
-        <LazyLoadComponent
-          visibleByDefault={false}
-          threshold={200}
-          placeholder={<RecipeImg />}
-        >
-          <RecipeImg picture={recipe.picture} />
-        </LazyLoadComponent>
-      </Box>
+      <LazyLoadComponent 
+        className={classes.boxAroundImage}
+        visibleByDefault={false}
+        threshold={200}
+      >
+        <img
+          onError={onError}
+          src={imageToUse()}
+          alt={'a tasty dish!'}
+          className={classes.image}
+        />
+      </LazyLoadComponent>
       <Box className={classes.textBox}>
         <Typography className={classes.title}>{recipe.title}</Typography>
         <Typography className={classes.detail}>{`from: ${recipe.source ||
