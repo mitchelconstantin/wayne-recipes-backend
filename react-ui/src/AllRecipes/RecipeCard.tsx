@@ -4,9 +4,37 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
+import { isMobile } from '../Shared/AppBehaviors';
 
-
-const useStyles = makeStyles(theme => ({
+const useMobileStyles = makeStyles(theme => ({
+  card: {
+    margin: '8px',
+    width: '43%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center'
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: '.8rem'
+  },
+  detail: {
+    fontWeight: 300,
+    fontSize: '.7rem'
+  },
+  image: {
+    objectFit: 'cover',
+    maxHeight: '300px',
+    maxWidth: '100%'
+  },
+  textBox: {
+    padding: '8px',
+    display: 'flex',
+    flexDirection: 'column',
+    marginTop: 'auto'
+  }
+}));
+const useDesktopStyles = makeStyles(theme => ({
   card: {
     cursor: 'pointer',
     margin: '20px',
@@ -17,22 +45,18 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center'
   },
   title: {
-    fontWeight: 600
+    fontWeight: 600,
+    fontSize: '1.1rem'
+
   },
   detail: {
-    fontWeight: 300
+    fontWeight: 300,
+    fontSize: '1.0rem'
   },
   image: {
     objectFit: 'cover',
     maxHeight: '300px',
     maxWidth: '100%'
-  },
-  boxAroundImage: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '300px',
-    width: '300px'
   },
   textBox: {
     padding: '10px',
@@ -47,7 +71,9 @@ interface Props {
 }
 
 export const RecipeCard = ({ recipe }: Props) => {
-  const classes = useStyles();
+  const mobileStyles = useMobileStyles();
+  const desktopStyles = useDesktopStyles();
+  const classes = isMobile() ? mobileStyles : desktopStyles;
   const selectRecipe = () => (window.location.href = `/r/${recipe.id}`);
   const onError = (ev: any) => {
     const eventTarget = ev.target;
@@ -64,8 +90,7 @@ export const RecipeCard = ({ recipe }: Props) => {
 
   return (
     <Paper className={classes.card} onClick={selectRecipe}>
-      <LazyLoadComponent 
-        className={classes.boxAroundImage}
+      <LazyLoadComponent
         visibleByDefault={false}
         threshold={200}
       >
