@@ -10,7 +10,6 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
 import { RecipeTransform } from './RecipeTransform';
 import { ShowFiltersChip } from './ShowFiltersChip';
-import { isMobile } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {

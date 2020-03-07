@@ -1,11 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  TextField,
-  Typography,
-  Box,
-} from '@material-ui/core';
+import { Button, TextField, Typography, Box } from '@material-ui/core';
 //@ts-ignore
 import { Redirect, useParams } from 'react-router-dom';
 import { ImageUploader } from './ImageUploader';
@@ -19,8 +14,12 @@ import { Dropdown } from './Dropdown';
 import { DeleteRecipeDialog } from './DeleteRecipeDialog';
 
 const getRecipeData = async (recipeId: string) => {
-  if (!recipeId) return emptyRecipe;
-  const recipe = await RecipeAPI.getRecipe(recipeId);
+  let recipe;
+  if (!recipeId) {
+    recipe = emptyRecipe;
+  } else {
+    recipe = await RecipeAPI.getRecipe(recipeId);
+  }
   const filters = await RecipeAPI.getFilters();
   if (!recipe) {
     SnackbarService.error('could not find that recipe');
@@ -29,11 +28,11 @@ const getRecipeData = async (recipeId: string) => {
   return { recipe: { ...recipe }, filters: { ...filters } };
 };
 
-  const saveRecipe = async (recipe: IRecipe) => {
-    const json = await RecipeAPI.saveRecipe(recipe);
-    SnackbarService.success('recipe saved');
-    setTimeout(() => (window.location.href = `/r/${json.id}`), 1500);
-  };
+const saveRecipe = async (recipe: IRecipe) => {
+  const json = await RecipeAPI.saveRecipe(recipe);
+  SnackbarService.success('recipe saved');
+  setTimeout(() => (window.location.href = `/r/${json.id}`), 1500);
+};
 
 export const UpdateRecipe = () => {
   const [openModal, setOpenModal] = useState(false);
@@ -76,8 +75,9 @@ export const UpdateRecipe = () => {
         className={classes.formTextField}
       />
       <Dropdown
-        handleChange={(e: any, value: any) =>{
-          handleChange('type', value)}}
+        handleChange={(e: any, value: any) => {
+          handleChange('type', value);
+        }}
         items={filters.types}
         value={recipe.type || ''}
         title={'Recipe Type'}
