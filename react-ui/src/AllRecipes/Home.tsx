@@ -10,6 +10,7 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
 import { RecipeTransform } from './RecipeTransform';
 import { ShowFiltersChip } from './ShowFiltersChip';
+import { isMobile } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -64,12 +65,13 @@ export const Home = () => {
   const handleChangeInput = (event: any) => {
     setSearchTerm(event.target.value);
   };
+
   return (
     <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
-      position="static"
+      paddingTop={isMobile() ? '70px': '0px' }
     >
       <Paper className={classes.searchContainer}>
         <Box className={classes.searchBarLine}>

@@ -7,7 +7,7 @@ import {
   Typography,
   Divider,
 } from '@material-ui/core/';
-import { isAdmin } from '../Shared/AppBehaviors';
+import { isAdmin, isMobile } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 //@ts-ignore
 import { useParams } from 'react-router-dom';
@@ -35,10 +35,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column'
   }
 }));
-
-const isMobile = () => {
-  return window.orientation !== undefined;
-};
 
 const getLayout = () =>
   isMobile()

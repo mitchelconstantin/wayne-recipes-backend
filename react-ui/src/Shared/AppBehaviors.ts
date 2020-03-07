@@ -25,4 +25,4 @@ export const isLoggedIn = (): boolean => !!getLocalStorage('isLoggedIn');
 export const userEmail = (): string => getLocalStorage('userEmail', true);
 export const isAdmin = (): boolean => !!getLocalStorage('isAdmin');
 export const isOwner = (): boolean => !!getLocalStorage('isOwner');
-
+export const isMobile = (): boolean =>  window.orientation !== undefined;

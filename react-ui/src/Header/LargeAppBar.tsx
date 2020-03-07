@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, AppBar, Typography } from '@material-ui/core/';
 import { HeaderButtons } from './HeaderButtons';
 import { Logo } from '../Shared/Components/Logo';
+import { isMobile } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -33,12 +34,14 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400
   }
 }));
+
 export const LargeAppBar = () => {
   const classes = useStyles();
 
   const title = `WAYNE'S FAMILY RECIPES`;
   const description = 'Traditional Cajun food and so much more!';
-  
+
+  if (isMobile()) return null; 
   return (
     <AppBar className={classes.toolbar} position="sticky">
       <Box className={classes.topRow}>

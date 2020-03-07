@@ -13,7 +13,8 @@ const useStyles = makeStyles(theme => ({
     background: 'linear-gradient(0.25turn, #f44723, #f56730, #f44723)',
     padding: '15px',
     paddingLeft: '20px',
-    paddingRight: '20px'
+    paddingRight: '20px',
+    height: '70px'
   },
   image: {
     height: '40px',
