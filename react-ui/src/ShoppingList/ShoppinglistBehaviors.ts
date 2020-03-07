@@ -19,9 +19,7 @@ export class ShoppingListBehaviors {
     return apiList;
   };
 
-  //@ts-ignore
-  static update = async (list: IShoppingListItem): Promise<IShoppingList> => {
-    console.log('updating list with ', list);
+  static update = async (list: IShoppingListItem): Promise<IShoppingListItem[]> => {
     const apiList = await ShoppingListAPI.update(userEmail(), list);
     return apiList;
   };

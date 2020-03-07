@@ -5,14 +5,12 @@ import SnackbarService from '../Shared/SnackbarService';
 import { PrintButton } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
 import { isLoggedIn } from '../Shared/AppBehaviors';
-//@ts-ignore
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
 import { IngredientsList } from './IngredientsList';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
 
-const getTitle = (title: string, quantity: string) => {
-  //@ts-ignore
+const getTitle = (title: string, quantity: number) => {
   if (quantity < 2) return title;
   return `${title} x${quantity}`;
 };
@@ -32,13 +30,10 @@ export const ShoppingList = () => {
   const updateShoppingList = (newRecipe: any, i: any) => {
     //@ts-ignore
     const newList = [...shoppingList];
-    //@ts-ignore
     newList[i].ingredients = newRecipe.join('\n');
-    //@ts-ignore
     setShoppingList(newList);
-    //@ts-ignore
     ShoppingListBehaviors.update(newList[i]);
-    setLoad(load+1);
+    setLoad(load + 1);
   };
 
   const removeFromShoppingList = async (recipeId: string, title: number) => {

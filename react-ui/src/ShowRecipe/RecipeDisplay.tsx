@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core/';
 import { isAdmin, isMobile } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
-//@ts-ignore
 import { useParams } from 'react-router-dom';
 import {
   PrintButton,
@@ -17,6 +16,7 @@ import {
   EditRecipeButton,
 } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
+import { IRecipe, emptyRecipe } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -85,8 +85,7 @@ export const LongList = ({
 };
 
 export const RecipeDisplay = () => {
-  //@ts-ignore
-  const [recipe, setRecipe] = useState<Recipe>({});
+  const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
   const [loading, setLoading] = useState(true);
   const { recipeId } = useParams();
   const [responsive] = useState(getLayout());
@@ -135,7 +134,7 @@ export const RecipeDisplay = () => {
         <Divider />
         <Box mt="10px" display="flex" flexDirection="column">
           <div>{`Yield: ${recipe.serves || 'unknown'}`}</div>
-          <div>{`Time: ${recipe.time || 'unknown'}`}</div>
+          {/* <div>{`Time: ${recipe.time || 'unknown'}`}</div> */}
           <div>{`NetCarbs: ${recipe.netCarbs || 'unknown'}`}</div>
           <div>{`Main Ingredient: ${recipe.mainIngredient || 'unknown'}`}</div>
           <div>{`Region: ${recipe.region || 'unknown'}`}</div>

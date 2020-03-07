@@ -39,7 +39,7 @@ export type IShoppingListItem = {
   title: string;
   picture?: string;
   ingredients: string;
-  quantity: string;
+  quantity: number;
   recipe_id: string;
 };
 

@@ -22,8 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const getTitle = (title: string, quantity: string) => {
-  //@ts-ignore
+const getTitle = (title: string, quantity: number) => {
   if (quantity < 2) return title;
   return `${title} x${quantity}`;
 };

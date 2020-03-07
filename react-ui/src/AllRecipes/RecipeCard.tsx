@@ -3,8 +3,8 @@ import noImage from '../Shared/noImage.png';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
-//@ts-ignore
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
+
 
 const useStyles = makeStyles(theme => ({
   card: {

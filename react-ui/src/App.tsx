@@ -3,7 +3,6 @@ import './App.css'
 import { Header } from './Header/Header'
 import { UpdateRecipe } from './UpdateRecipe/UpdateRecipe'
 import { ShoppingList } from './ShoppingList/ShoppingList'
-//@ts-ignore
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { Home } from './AllRecipes/Home'
 import { Login } from './AccountComponents/Login'
@@ -17,7 +16,6 @@ export const App = () => {
         <Header />
       <div className="App">
         <Switch>
-
           <Route path='/login' render={(props: any) => <Login {...props} />} />
           <Route path='/signup' render={(props: any) => <SignUp {...props} />} />
           <Route exact path='/all' render={(props: any) => <Home {...props} />} />
@@ -26,7 +24,6 @@ export const App = () => {
           <Route exact path='/r/:recipeId' render={(props: any) => <RecipeDisplay {...props} />} />
           <Route path='/r/:recipeId/edit' render={(props: any) => <UpdateRecipe {...props} />} />
           <Route path='/dashboard' render={(props: any) => <AdminDashboard {...props} />} />
-
           <Redirect from="/" to="/all" />
         </Switch>
       </div>

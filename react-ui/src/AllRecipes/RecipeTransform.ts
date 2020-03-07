@@ -1,9 +1,7 @@
-//@ts-ignore
 import { filter } from 'fuzzaldrin-plus';
 import { IRecipe } from '../Shared/Types';
 
 export class RecipeTransform {
-  //@ts-ignore
   static filterByAttribute = (
     recipes: IRecipe[],
     atttribute: string,

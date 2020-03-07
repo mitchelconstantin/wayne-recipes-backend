@@ -5,9 +5,12 @@ import Print from '@material-ui/icons/Print';
 import Edit from '@material-ui/icons/Edit';
 import { ShoppingListBehaviors } from '../../ShoppingList/ShoppinglistBehaviors';
 import SnackbarService from '../SnackbarService';
+import { IRecipe } from '../Types';
 
-//@ts-ignore
-export const PrintButton = ({ label }) => {
+interface PrintButtonProps {
+  label: string;
+}
+export const PrintButton = ({ label }: PrintButtonProps) => {
   return (
     <Tooltip title={`Print ${label}`}>
       <IconButton onClick={window.print}>
@@ -16,22 +19,28 @@ export const PrintButton = ({ label }) => {
     </Tooltip>
   );
 };
-//@ts-ignore
-export const AddToShoppingListButton = ({ recipe }) => {
+
+interface ShoppingButtonProps {
+  recipe: IRecipe;
+}
+export const AddToShoppingListButton = ({ recipe }: ShoppingButtonProps) => {
   const addToShoppingList = () => {
     ShoppingListBehaviors.add(recipe);
     SnackbarService.success('added to list!');
   };
   return (
     <Tooltip title="Add to Shopping List">
-      <IconButton onClick={addToShoppingList}  aria-label="add to list">
+      <IconButton onClick={addToShoppingList} aria-label="add to list">
         <AddShoppingCart />
       </IconButton>
     </Tooltip>
   );
 };
-//@ts-ignore
-export const EditRecipeButton = ({id}) => {
+
+interface EditButtonProps {
+  id?: string 
+}
+export const EditRecipeButton = ({ id }: EditButtonProps) => {
   return (
     <Tooltip title="Edit Recipe">
       <IconButton href={`/r/${id}/edit`} aria-label="edit recipe">

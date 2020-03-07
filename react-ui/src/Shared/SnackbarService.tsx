@@ -1,4 +1,4 @@
-import React, { useState, FC } from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -8,11 +8,9 @@ import { amber, green } from '@material-ui/core/colors';
 import WarningIcon from '@material-ui/icons/Warning';
 import ReactDOM from 'react-dom';
 import { SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
-// @ts-ignore
-// import { createWrapper } from 'Web/react2angular/renderReactComponent/renderReactComponent';
 
 type Variant = 'success' | 'warning' | 'error' | 'info';
-interface Args {
+interface Props {
   message: string;
   variant: Variant;
 }
@@ -51,8 +49,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(0.5),
   },
 }));
-export const SimpleSnackbar: FC<Args> = ({ message, variant }) => {
-  //@ts-ignore
+export const SimpleSnackbar = ({ message, variant }: Props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(true);
 
@@ -81,7 +78,7 @@ export const SimpleSnackbar: FC<Args> = ({ message, variant }) => {
           </span>
         }
         action={[
-          // @ts-ignore
+          //@ts-ignore
           <IconButton
             key='close'
             aria-label='close'
@@ -123,8 +120,6 @@ export default class SnackbarService {
     snackbarContainer.id = uniqueId;
     document.body.appendChild(snackbarContainer);
     const SnackbarBody = () => <SimpleSnackbar message={message} variant={variant} />;
-    // @ts-ignore
-    // const WrappedSnackbarBody = createWrapper(SnackbarBody);
     ReactDOM.render(<SnackbarBody />, snackbarContainer);
   }
 }
