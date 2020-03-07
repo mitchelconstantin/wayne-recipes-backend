@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     height: '80px',
     width: '80px',
     cursor: 'pointer'
-  }, 
+  },
   title: {
     marginTop: '10px',
     marginRight: 'auto',
@@ -30,16 +30,15 @@ const useStyles = makeStyles(theme => ({
   subTitle: {
     marginBottom: '10px',
     marginRight: 'auto',
-    fontWeight: 400,
-  },
-  
+    fontWeight: 400
+  }
 }));
 export const LargeAppBar = () => {
   const classes = useStyles();
 
   const title = `WAYNE'S FAMILY RECIPES`;
   const description = 'Traditional Cajun food and so much more!';
-
+  
   return (
     <AppBar className={classes.toolbar} position="sticky">
       <Box className={classes.topRow}>
