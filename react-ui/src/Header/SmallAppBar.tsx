@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
     padding: '15px',
     paddingLeft: '20px',
     paddingRight: '20px',
-    height: '70px'
+    height: '70px',
   },
   image: {
     height: '40px',
@@ -27,7 +27,10 @@ export const SmallAppBar = () => {
   const classes = useStyles();
 
   return (
-    <AppBar className={classes.toolbar} position="fixed">
+    <AppBar
+      className={classes.toolbar}
+      position="fixed"
+    >
       <Logo className={classes.image} />
       <HeaderButtons />
     </AppBar>

@@ -71,7 +71,6 @@ export const Home = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      paddingTop={isMobile() ? '70px': '0px' }
     >
       <Paper className={classes.searchContainer}>
         <Box className={classes.searchBarLine}>
