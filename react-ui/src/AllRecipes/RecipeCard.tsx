@@ -5,6 +5,7 @@ import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { isMobile } from '../Shared/AppBehaviors';
+import { OverflowTip } from './OverflowTip';
 
 const useMobileStyles = makeStyles(theme => ({
   card: {
@@ -16,7 +17,10 @@ const useMobileStyles = makeStyles(theme => ({
   },
   title: {
     fontWeight: 600,
-    fontSize: '.8rem'
+    fontSize: '.8rem', 
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden'
   },
   detail: {
     fontWeight: 300,
@@ -28,6 +32,7 @@ const useMobileStyles = makeStyles(theme => ({
     maxWidth: '100%'
   },
   textBox: {
+    width: '100%', 
     padding: '8px',
     display: 'flex',
     flexDirection: 'column',
@@ -45,13 +50,16 @@ const useDesktopStyles = makeStyles(theme => ({
     justifyContent: 'center'
   },
   title: {
-    fontWeight: 600,
-    fontSize: '1.1rem'
-
+    fontSize: '1.3rem',
+    fontWeight: 500,
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden'
   },
   detail: {
-    fontWeight: 300,
-    fontSize: '1.0rem'
+    fontSize: '0.85rem',
+    textTransform: 'uppercase',
+    color: '#999'
   },
   image: {
     objectFit: 'cover',
@@ -90,10 +98,7 @@ export const RecipeCard = ({ recipe }: Props) => {
 
   return (
     <Paper className={classes.card} onClick={selectRecipe}>
-      <LazyLoadComponent
-        visibleByDefault={false}
-        threshold={200}
-      >
+      <LazyLoadComponent visibleByDefault={false} threshold={200}>
         <img
           onError={onError}
           src={imageToUse()}
@@ -102,9 +107,14 @@ export const RecipeCard = ({ recipe }: Props) => {
         />
       </LazyLoadComponent>
       <Box className={classes.textBox}>
-        <Typography className={classes.title}>{recipe.title}</Typography>
-        <Typography className={classes.detail}>{`from: ${recipe.source ||
-          'unknown'}`}</Typography>
+        <OverflowTip
+          //@ts-ignore
+          title={recipe.title}
+          classes={classes.title}
+        />
+        <Typography noWrap className={classes.detail}>
+          {recipe.source || 'unknown'}
+        </Typography>
       </Box>
     </Paper>
   );

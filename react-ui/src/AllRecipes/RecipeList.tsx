@@ -17,6 +17,7 @@ export const RecipeList = ({ loading, recipes }: Props) => {
       justifyContent="center"
       flexDirection="row"
       flexWrap="wrap"
+      maxWidth="100%"
     >
       {recipes.length ? (
         recipes.map(recipe => <RecipeCard key={recipe.id} recipe={recipe} />)
