@@ -6,15 +6,22 @@ import {
   InputLabel,
   Select,
   Collapse,
-  FormControl
+  FormControl,
+  Button
 } from '@material-ui/core';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { emptyFilterOptions, emptyFilters } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
+  container: {
+  },
   select: {
     width: '140px',
     margin: '10px'
+  },
+  button: {
+    height: '100%',
+    marginTop: 'auto'
   }
 }));
 
@@ -58,14 +65,14 @@ export const AdvancedFilters = ({
     //@ts-ignore
     setSelectedFilters((prev: any) => ({
       ...prev,
-      [x]: e.target.value 
+      [x]: e.target.value
     }));
   };
 
   const { mainIngredients, regions, types } = allFilters;
 
   return (
-    <Collapse in={expanded}>
+    <Collapse className={classes.container} in={expanded}>
       <FormControl className={classes.select}>
         <InputLabel>Main Ingredient</InputLabel>
         <Select
@@ -102,6 +109,12 @@ export const AdvancedFilters = ({
           ))}
         </Select>
       </FormControl>
+      <Button
+        className={classes.select}
+        onClick={() => setSelectedFilters(emptyFilters)}
+      >
+        Clear All
+      </Button>
     </Collapse>
   );
 };
