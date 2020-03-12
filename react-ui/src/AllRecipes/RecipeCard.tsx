@@ -4,27 +4,47 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
-import { isMobile } from '../Shared/AppBehaviors';
 import { OverflowTip } from './OverflowTip';
 
-const useMobileStyles = makeStyles(theme => ({
+const useStyles = makeStyles(theme => ({
   card: {
-    margin: '8px',
-    width: '43%',
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      margin: '8px',
+      width: '43%'
+    },
+    [theme.breakpoints.up('md')]: {
+      cursor: 'pointer',
+      margin: '20px',
+      width: '300px',
+      minHeight: '370px'
+    }
   },
   title: {
-    fontWeight: 600,
-    fontSize: '.8rem', 
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    [theme.breakpoints.down('sm')]: {
+      fontWeight: 600,
+      fontSize: '.8rem'
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.3rem',
+      fontWeight: 500
+    }
   },
   detail: {
-    fontWeight: 300,
-    fontSize: '.7rem'
+    [theme.breakpoints.down('sm')]: {
+      fontWeight: 300,
+      fontSize: '.7rem'
+    },
+    [theme.breakpoints.up('md')]: {
+      fontSize: '0.85rem',
+      textTransform: 'uppercase',
+      color: '#999'
+    }
   },
   image: {
     objectFit: 'cover',
@@ -32,45 +52,16 @@ const useMobileStyles = makeStyles(theme => ({
     maxWidth: '100%'
   },
   textBox: {
-    width: '100%', 
-    padding: '8px',
     display: 'flex',
     flexDirection: 'column',
-    marginTop: 'auto'
-  }
-}));
-const useDesktopStyles = makeStyles(theme => ({
-  card: {
-    cursor: 'pointer',
-    margin: '20px',
-    width: '300px',
-    minHeight: '370px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center'
-  },
-  title: {
-    fontSize: '1.3rem',
-    fontWeight: 500,
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden'
-  },
-  detail: {
-    fontSize: '0.85rem',
-    textTransform: 'uppercase',
-    color: '#999'
-  },
-  image: {
-    objectFit: 'cover',
-    maxHeight: '300px',
-    maxWidth: '100%'
-  },
-  textBox: {
-    padding: '10px',
-    display: 'flex',
-    flexDirection: 'column',
-    marginTop: 'auto'
+    marginTop: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      padding: '8px'
+    },
+    [theme.breakpoints.up('md')]: {
+      padding: '10px'
+    }
   }
 }));
 
@@ -79,9 +70,7 @@ interface Props {
 }
 
 export const RecipeCard = ({ recipe }: Props) => {
-  const mobileStyles = useMobileStyles();
-  const desktopStyles = useDesktopStyles();
-  const classes = isMobile() ? mobileStyles : desktopStyles;
+  const classes = useStyles();
   const selectRecipe = () => (window.location.href = `/r/${recipe.id}`);
   const onError = (ev: any) => {
     const eventTarget = ev.target;
