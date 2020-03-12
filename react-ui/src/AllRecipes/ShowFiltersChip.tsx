@@ -27,8 +27,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface AdvancedFiltersProps {
-  expanded: any;
-  setExpanded: any;
+  expanded: boolean;
+  setExpanded: Function;
 }
 export const ShowFiltersChip = ({
   expanded,

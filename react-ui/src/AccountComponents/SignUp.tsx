@@ -8,7 +8,7 @@ export const SignUp = () => {
   const [user, setUser] = useState(emptyUser);
   const [signedUp, setSignedUp] = useState(false);
   const classes = useContainerStyles();
-  const handleChange = (type: string, newValue: any) => {
+  const handleChange = (type: string, newValue: string) => {
     setUser(prev => ({ ...prev, [type]: newValue }));
   };
 

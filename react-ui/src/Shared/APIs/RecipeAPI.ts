@@ -1,9 +1,9 @@
 import { IRecipe } from '../Types';
 
 interface FiltersPayload {
-  regions: any;
-  types: any;
-  mainIngredients: any;
+  regions: string[];
+  types: string[];
+  mainIngredients: string[];
 }
 
 export class RecipeAPI {

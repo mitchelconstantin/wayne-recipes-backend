@@ -12,7 +12,11 @@ export interface IRecipe {
   netCarbs?: string;
 }
 
-export const emptyFilterOptions = { mainIngredients: [], regions: [], types: [] };
+const mainIngredients = [] as string[];
+const regions = [] as string[];
+const types = [] as string[];
+
+export const emptyFilterOptions = { mainIngredients, regions, types };
 
 export const emptyFilters = {
   mainIngredient: '',
