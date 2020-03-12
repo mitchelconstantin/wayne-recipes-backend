@@ -13,8 +13,7 @@ import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { emptyFilterOptions, emptyFilters } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-  },
+  container: {},
   select: {
     width: '140px',
     margin: '10px'
@@ -80,7 +79,7 @@ export const AdvancedFilters = ({
           onChange={handleChangeMainIngredient}
         >
           <MenuItem value={''}>All</MenuItem>
-          {mainIngredients.map((mi: any) => (
+          {mainIngredients.map(mi => (
             <MenuItem key={mi} value={mi}>
               {mi}
             </MenuItem>
@@ -91,7 +90,7 @@ export const AdvancedFilters = ({
         <InputLabel>Region</InputLabel>
         <Select value={selectedFilters.region} onChange={handleChangeRegion}>
           <MenuItem value={''}>All</MenuItem>
-          {regions.map((region: any) => (
+          {regions.map(region => (
             <MenuItem key={region} value={region}>
               {region}
             </MenuItem>
@@ -102,7 +101,7 @@ export const AdvancedFilters = ({
         <InputLabel>Recipe Type</InputLabel>
         <Select value={selectedFilters.type} onChange={handleChangeType}>
           <MenuItem value={''}>All</MenuItem>
-          {types.map((type: any) => (
+          {types.map(type => (
             <MenuItem key={type} value={type}>
               {type}
             </MenuItem>

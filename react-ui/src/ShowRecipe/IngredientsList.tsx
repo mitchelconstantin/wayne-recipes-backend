@@ -23,7 +23,7 @@ export const IngredientsList = ({ ingredients }: props) => {
 
   const processedIngredients = ingredients
     .split('\n')
-    .map((line: any, i: number) => {
+    .map((line, i: number) => {
       return (
         <Typography key={i} className={classes.ingredientsLine}>
           {line}

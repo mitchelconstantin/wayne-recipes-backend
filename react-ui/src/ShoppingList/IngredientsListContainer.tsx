@@ -18,12 +18,6 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-interface IngredientsListProps { 
-  lineList: any;
-  setLineList: Function;
-  title: string;
-}
-
 const isChecked = (line: string) => line.startsWith('<checked>');
 
 const formatLine = (line: string) =>
@@ -57,21 +51,31 @@ const ShoppingListLine = ({ line, setLine }) => {
   );
 };
 
-export const IngredientsList = ({ lineList, setLineList, title }: IngredientsListProps) => {
+interface IngredientsListProps { 
+  ingredientsList: string[];
+  setIngredientsList: Function;
+  title: string;
+}
+
+export const IngredientsListContainer = ({ ingredientsList, setIngredientsList, title }: IngredientsListProps) => {
   const classes = useStyles();
   //@ts-ignore
   const createSetLine = i => newLine => {
-    const newList = [...lineList];
-    newList.splice(i, 1, newLine);
-    setLineList(newList);
+    const newIngredientsList = [...ingredientsList];
+    newIngredientsList.splice(i, 1, newLine);
+    setIngredientsList(newIngredientsList);
   };
 
   return (
     <Box className={classes.ListItemContainer}>
       <Typography variant="h6">{title}</Typography>
-      {lineList.map((line: string, i: any) => {
+      {ingredientsList.map((ingredientLine: string, i: number) => {
         return (
-          <ShoppingListLine key={i} line={line} setLine={createSetLine(i)} />
+          <ShoppingListLine
+            key={i}
+            line={ingredientLine}
+            setLine={createSetLine(i)}
+          />
         );
       })}
     </Box>

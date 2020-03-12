@@ -7,9 +7,8 @@ import { Loading } from '../Shared/Components/Loading';
 import { isLoggedIn } from '../Shared/AppBehaviors';
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
-import { IngredientsList } from './IngredientsList';
+import { IngredientsListContainer } from './IngredientsListContainer';
 import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
-
 const getTitle = (title: string, quantity: number) => {
   if (quantity < 2) return title;
   return `${title} x${quantity}`;
@@ -27,7 +26,7 @@ export const ShoppingList = () => {
   }, [load]);
   const [Container, Buttons] = [Box, Box];
 
-  const updateShoppingList = (newRecipe: any, i: any) => {
+  const updateShoppingList = (newRecipe: IShoppingListItem[], i: number) => {
     //@ts-ignore
     const newList = [...shoppingList];
     newList[i].ingredients = newRecipe.join('\n');
@@ -64,11 +63,11 @@ export const ShoppingList = () => {
           />
           <Divider />
           {shoppingList.map((recipe: any, i: number) => (
-            <IngredientsList
+            <IngredientsListContainer
               key={i}
               title={getTitle(recipe.title, recipe.quantity)}
-              lineList={recipe.ingredients.split('\n') || 'unknown'}
-              setLineList={(newList: any) => {
+              ingredientsList={recipe.ingredients.split('\n') || 'unknown'}
+              setIngredientsList={(newList: IShoppingListItem[]) => {
                 updateShoppingList(newList, i);
               }}
             />
