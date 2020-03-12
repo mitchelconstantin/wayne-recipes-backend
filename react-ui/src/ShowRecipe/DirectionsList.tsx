@@ -1,11 +1,12 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core/'; 
+import { Box, Typography } from '@material-ui/core/';
 
 const useStyles = makeStyles(theme => ({
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
+  directionsLine: {
+    marginTop: '10px',
+    fontWeight: 500,
+    fontSize: '1rem'
   }
 }));
 
@@ -16,21 +17,21 @@ const getLine = (index: number, line: any) => {
 };
 
 interface props {
-  directions?: string; 
+  directions?: string;
 }
 
 export const DirectionsList = ({ directions }: props) => {
   const classes = useStyles();
   if (!directions) return <div>no directions found</div>;
-  const processedDirections = directions.split('\n').map((line: any, i: number) => {
-    return (
-      <Box mt="10px" key={i}>
-        <Typography className={classes.secondaryHeading}>
+  const processedDirections = directions
+    .split('\n')
+    .map((line: any, i: number) => {
+      return (
+        <Typography key={i} className={classes.directionsLine}>
           {getLine(i, line)}
         </Typography>
-      </Box>
-    );
-  });
+      );
+    });
   return (
     <Box mt="20px" mb="20px">
       <Typography variant="h2">Directions</Typography>

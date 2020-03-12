@@ -1,6 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Divider } from '@material-ui/core/';
+import { Box } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 
 interface props {
