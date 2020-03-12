@@ -71,7 +71,7 @@ interface Props {
 
 export const RecipeCard = ({ recipe }: Props) => {
   const classes = useStyles();
-  
+
   const onError = (ev: any) => {
     const eventTarget = ev.target;
     eventTarget.src = noImage;
@@ -86,26 +86,26 @@ export const RecipeCard = ({ recipe }: Props) => {
 
   return (
     <Link className={classes.link} to={`/r/${recipe.id}`}>
-      <Paper> 
-        <LazyLoadComponent visibleByDefault={false} threshold={200}>
+      <LazyLoadComponent visibleByDefault={false}>
+        <Paper>
           <img
             onError={onError}
             src={imageToUse()}
             alt={'a tasty dish!'}
             className={classes.image}
           />
-        </LazyLoadComponent>
-        <Box className={classes.textBox}>
-          <OverflowTip
-            //@ts-ignore
-            title={recipe.title}
-            classes={classes.title}
-          />
-          <Typography noWrap className={classes.detail}>
-            {recipe.source || 'unknown'}
-          </Typography>
-        </Box>
-      </Paper>
+          <Box className={classes.textBox}>
+            <OverflowTip
+              //@ts-ignore
+              title={recipe.title}
+              classes={classes.title}
+            />
+            <Typography noWrap className={classes.detail}>
+              {recipe.source || 'unknown'}
+            </Typography>
+          </Box>
+        </Paper>
+      </LazyLoadComponent> 
     </Link>
   );
 };
