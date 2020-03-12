@@ -62,7 +62,7 @@ export const ShoppingList = () => {
             removeFromShoppingList={removeFromShoppingList}
           />
           <Divider />
-          {shoppingList.map((recipe: any, i: number) => (
+          {shoppingList.map((recipe, i) => (
             <IngredientsListContainer
               key={i}
               title={getTitle(recipe.title, recipe.quantity)}

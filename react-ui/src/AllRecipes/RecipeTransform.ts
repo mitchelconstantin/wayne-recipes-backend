@@ -1,5 +1,5 @@
 import { filter } from 'fuzzaldrin-plus';
-import { IRecipe } from '../Shared/Types';
+import { IRecipe, IFilters } from '../Shared/Types';
 
 export class RecipeTransform {
   static filterByAttribute = (
@@ -20,7 +20,7 @@ export class RecipeTransform {
 
   static filterRecipes = (
     recipes: IRecipe[],
-    selectedFilters: any,
+    selectedFilters: IFilters,
     searchTerm: string
   ) => {
     const { mainIngredient, region, type } = selectedFilters;

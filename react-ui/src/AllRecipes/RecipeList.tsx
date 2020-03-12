@@ -6,7 +6,7 @@ import { Loading } from '../Shared/Components/Loading';
 
 interface Props {
   recipes: IRecipe[];
-  loading: any;
+  loading: boolean;
 }
 
 export const RecipeList = ({ loading, recipes }: Props) => {

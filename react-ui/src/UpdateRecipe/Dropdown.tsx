@@ -4,7 +4,7 @@ import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 interface props {
   handleChange: any;
-  items: any;
+  items: string[];
   value: string;
   title: string;
 }

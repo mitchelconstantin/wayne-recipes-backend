@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const getLine = (index: number, line: any) => {
+const getLine = (index: number, line: string) => {
   if (!line) return line;
   const val = Math.floor(index / 2 + 1);
   return `${val}. ${line}`;
@@ -28,7 +28,7 @@ export const DirectionsList = ({ directions }: props) => {
   if (!directions) return <div>no directions found</div>;
   const processedDirections = directions
     .split('\n')
-    .map((line: any, i: number) => {
+    .map((line, i: number) => {
       return (
         <Typography key={i} className={classes.directionsLine}>
           {getLine(i, line)}
