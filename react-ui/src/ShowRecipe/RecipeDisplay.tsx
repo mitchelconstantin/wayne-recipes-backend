@@ -13,21 +13,6 @@ import { DirectionsList } from './DirectionsList';
 import { IngredientsList } from './IngredientsList';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%'
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    flexBasis: '33.33%',
-    flexShrink: 0
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary
-  },
-  details: {
-    flexDirection: 'column'
-  },
   container: {
     marginTop: '50px',
     width: '100%',
@@ -93,14 +78,9 @@ export const RecipeDisplay = () => {
         </Box>
         <Divider />
         <RecipeSpecifications recipe={recipe} />
-
         <Box mt="10px" display="flex" flexDirection="column">
-          <IngredientsList
-            content={recipe.ingredients || 'unknown'}
-          />
-          <DirectionsList
-            content={recipe.directions || 'unknown'}
-          />
+          <IngredientsList ingredients={recipe.ingredients} />
+          <DirectionsList directions={recipe.directions} />
         </Box>
       </RecipeDetails>
     </Container>

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography, Divider } from '@material-ui/core/';
+import { Box, Typography } from '@material-ui/core/'; 
 
 const useStyles = makeStyles(theme => ({
   secondaryHeading: {
@@ -15,14 +15,14 @@ const getLine = (index: number, line: any) => {
   return `${val}. ${line}`;
 };
 
-interface LongListProps {
-  content: any;
+interface props {
+  directions?: string; 
 }
 
-export const DirectionsList = ({ content }: LongListProps) => {
+export const DirectionsList = ({ directions }: props) => {
   const classes = useStyles();
-
-  const processedContent = content.split('\n').map((line: any, i: number) => {
+  if (!directions) return <div>no directions found</div>;
+  const processedDirections = directions.split('\n').map((line: any, i: number) => {
     return (
       <Box mt="10px" key={i}>
         <Typography className={classes.secondaryHeading}>
@@ -34,7 +34,7 @@ export const DirectionsList = ({ content }: LongListProps) => {
   return (
     <Box mt="20px" mb="20px">
       <Typography variant="h2">Directions</Typography>
-      {processedContent}
+      {processedDirections}
     </Box>
   );
 };

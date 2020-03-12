@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Typography } from '@material-ui/core/';
 
@@ -9,24 +9,27 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-interface LongListProps {
-  content: any;
+interface props {
+  ingredients?: string;
 }
 
-export const IngredientsList = ({ content }: LongListProps) => {
+export const IngredientsList = ({ ingredients }: props) => {
   const classes = useStyles();
+  if (!ingredients) return <div>no ingredients found</div>;
 
-  const processedContent = content.split('\n').map((line: any, i: number) => {
-    return (
-      <Box mt="10px" key={i}>
-        <Typography className={classes.secondaryHeading}>{line}</Typography>
-      </Box>
-    );
-  });
+  const processedIngredients = ingredients
+    .split('\n')
+    .map((line: any, i: number) => {
+      return (
+        <Box mt="10px" key={i}>
+          <Typography className={classes.secondaryHeading}>{line}</Typography>
+        </Box>
+      );
+    });
   return (
     <Box mt="20px" mb="20px">
       <Typography variant="h2">Ingredients</Typography>
-      {processedContent}
+      {processedIngredients}
     </Box>
   );
 };
