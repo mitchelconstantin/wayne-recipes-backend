@@ -6,7 +6,10 @@ const useStyles = makeStyles(theme => ({
   ingredientsLine: {
     marginTop: '10px',
     fontWeight: 500,
-    fontSize: '1rem'
+    fontSize: '1rem',
+    '@media print': {
+      fontSize: '1.2rem',
+    }
   }
 }));
 
