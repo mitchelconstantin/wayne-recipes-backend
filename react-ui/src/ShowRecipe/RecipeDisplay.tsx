@@ -13,6 +13,10 @@ import { DirectionsList } from './DirectionsList';
 import { IngredientsList } from './IngredientsList';
 
 const useStyles = makeStyles(theme => ({
+  recipeDetails: {
+    marginLeft: '30px',
+    marginRight: '30px'
+  },
   container: {
     marginTop: '50px',
     width: '100%',
@@ -22,7 +26,10 @@ const useStyles = makeStyles(theme => ({
       flexDirection: 'column',
       alignItems: 'center'
     },
-    [theme.breakpoints.up('md')]: { flexDirection: 'row', alignItems: 'top' }
+    [theme.breakpoints.up('md')]: { flexDirection: 'row', alignItems: 'top' },
+    '@media print': {
+      display: 'block'
+    }
   },
   image: {
     objectFit: 'cover',
@@ -67,8 +74,8 @@ export const RecipeDisplay = () => {
           alt={'a tasty dish'}
         />
       </Box>
-      <RecipeDetails ml="30px" mr="20px" display="flex" flexDirection="column">
-        <Box display="flex" flexDirection="row">
+      <RecipeDetails className={classes.recipeDetails}>
+        <Box display="flex">
           <h2>{recipe.title}</h2>
           <RecipeDisplayButtons recipe={recipe} />
         </Box>
@@ -78,10 +85,8 @@ export const RecipeDisplay = () => {
         </Box>
         <Divider />
         <RecipeSpecifications recipe={recipe} />
-        <Box mt="10px" display="flex" flexDirection="column">
-          <IngredientsList ingredients={recipe.ingredients} />
-          <DirectionsList directions={recipe.directions} />
-        </Box>
+        <IngredientsList ingredients={recipe.ingredients} />
+        <DirectionsList directions={recipe.directions} />
       </RecipeDetails>
     </Container>
   );
