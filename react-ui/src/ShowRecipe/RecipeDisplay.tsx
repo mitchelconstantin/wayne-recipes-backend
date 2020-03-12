@@ -2,18 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import noImage from '../Shared/noImage.png';
-import {
-  Box,
-  Typography,
-  Divider,
-} from '@material-ui/core/';
-import { isAdmin, isMobile } from '../Shared/AppBehaviors';
+import { Box, Typography, Divider } from '@material-ui/core/';
+import { isAdmin } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { useParams } from 'react-router-dom';
 import {
   PrintButton,
   AddToShoppingListButton,
-  EditRecipeButton,
+  EditRecipeButton
 } from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
 import { IRecipe, emptyRecipe } from '../Shared/Types';
@@ -33,21 +29,31 @@ const useStyles = makeStyles(theme => ({
   },
   details: {
     flexDirection: 'column'
+  },
+  container: {
+    marginTop: '50px',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'column',
+      alignItems: 'center'
+    },
+    [theme.breakpoints.up('md')]: { flexDirection: 'row', alignItems: 'top' }
+  },
+  image: {
+    [theme.breakpoints.down('sm')]: {
+      height: '80%',
+      width: '80%',
+      border: '1px'
+    },
+    [theme.breakpoints.up('md')]: {
+      height: '30%',
+      width: '30%',
+      border: '1px'
+    }
   }
 }));
-
-const getLayout = () =>
-  isMobile()
-    ? {
-        style: { height: '80%', width: '80%', border: '1px' },
-        flexDirection: 'column',
-        alignItems: 'center'
-      }
-    : {
-        style: { height: '30%', width: '30%', border: '1px' },
-        flexDirection: 'row',
-        alignItems: 'top'
-      };
 
 interface LongListProps {
   content: any;
@@ -88,7 +94,8 @@ export const RecipeDisplay = () => {
   const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
   const [loading, setLoading] = useState(true);
   const { recipeId } = useParams();
-  const [responsive] = useState(getLayout());
+  const classes = useStyles();
+
 
   useEffect(() => {
     RecipeAPI.getRecipe(recipeId).then(recipe => {
@@ -96,7 +103,7 @@ export const RecipeDisplay = () => {
       setLoading(false);
     });
   }, []);
-  
+
   const onError = (ev: { target: any }) => {
     const eventTarget = ev.target;
     eventTarget.src = noImage;
@@ -104,21 +111,14 @@ export const RecipeDisplay = () => {
 
   const [Container, RecipeDetails] = [Box, Box];
   const tags = [recipe.type, recipe.mainIngredient, recipe.region];
-  if (loading) return <Loading />
+  if (loading) return <Loading />;
   return (
-    <Container
-      mt="50px"
-      width="100%"
-      display="flex"
-      flexDirection={responsive.flexDirection}
-      justifyContent="center"
-      alignItems={responsive.alignItems}
-    >
+    <Container className={classes.container}>
       <img
         onError={onError}
+        className={classes.image}
         src={recipe.picture || noImage}
         alt={'a tasty dish'}
-        style={responsive.style}
       />
       <RecipeDetails ml="30px" mr="20px" display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row">
