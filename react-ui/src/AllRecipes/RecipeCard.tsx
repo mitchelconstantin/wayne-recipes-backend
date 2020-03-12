@@ -96,7 +96,6 @@ export const RecipeCard = ({ recipe }: Props) => {
           />
           <Box className={classes.textBox}>
             <OverflowTip
-              //@ts-ignore
               title={recipe.title}
               classes={classes.title}
             />

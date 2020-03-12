@@ -10,7 +10,7 @@ import {
   Button
 } from '@material-ui/core';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
-import { emptyFilterOptions, emptyFilters } from '../Shared/Types';
+import { emptyFilterOptions, emptyFilters, IFilters } from '../Shared/Types';
 
 const useStyles = makeStyles(theme => ({
   container: {},
@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 interface AdvancedFiltersProps {
-  selectedFilters: any;
+  selectedFilters: IFilters;
   setSelectedFilters: any;
   expanded: boolean;
 }
@@ -59,9 +59,7 @@ export const AdvancedFilters = ({
   const handleChangeType = (e: React.ChangeEvent<{ value: unknown }>) =>
     handleChange(e, 'type');
 
-  //@ts-ignore
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>, x: any) => {
-    //@ts-ignore
     setSelectedFilters((prev: any) => ({
       ...prev,
       [x]: e.target.value

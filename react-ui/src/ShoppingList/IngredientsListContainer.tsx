@@ -23,8 +23,12 @@ const isChecked = (line: string) => line.startsWith('<checked>');
 const formatLine = (line: string) =>
   isChecked(line) ? <del>{line.slice(9)}</del> : line;
 
-//@ts-ignore
-const ShoppingListLine = ({ line, setLine }) => {
+  interface ShoppingListLineProps {
+    line: string;
+    setLine: any;
+  };
+
+const ShoppingListLine = ({ line, setLine }: ShoppingListLineProps) => {
   const classes = useStyles();
 
   const handleCheck = () => {
@@ -59,8 +63,8 @@ interface IngredientsListProps {
 
 export const IngredientsListContainer = ({ ingredientsList, setIngredientsList, title }: IngredientsListProps) => {
   const classes = useStyles();
-  //@ts-ignore
-  const createSetLine = i => newLine => {
+
+  const createSetLine = (i: number) => (newLine: string) => {
     const newIngredientsList = [...ingredientsList];
     newIngredientsList.splice(i, 1, newLine);
     setIngredientsList(newIngredientsList);
