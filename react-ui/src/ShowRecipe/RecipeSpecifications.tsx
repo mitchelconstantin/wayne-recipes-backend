@@ -1,0 +1,21 @@
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Box, Typography, Divider } from '@material-ui/core/';
+import { IRecipe } from '../Shared/Types';
+
+interface props {
+  recipe: IRecipe;
+}
+
+export const RecipeSpecifications = ({recipe}: props) => {
+
+  return (
+    <Box mt="10px" display="flex" flexDirection="column">
+      <div>{`Yield: ${recipe.serves || 'unknown'}`}</div>
+      {/* <div>{`Time: ${recipe.time || 'unknown'}`}</div> */}
+      <div>{`NetCarbs: ${recipe.netCarbs || 'unknown'}`}</div>
+      <div>{`Main Ingredient: ${recipe.mainIngredient || 'unknown'}`}</div>
+      <div>{`Region: ${recipe.region || 'unknown'}`}</div>
+    </Box>
+  );
+}

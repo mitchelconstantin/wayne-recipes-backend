@@ -3,16 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import noImage from '../Shared/noImage.png';
 import { Box, Typography, Divider } from '@material-ui/core/';
-import { isAdmin } from '../Shared/AppBehaviors';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { useParams } from 'react-router-dom';
-import {
-  PrintButton,
-  AddToShoppingListButton,
-  EditRecipeButton
-} from '../Shared/Components/CustomButtons';
 import { Loading } from '../Shared/Components/Loading';
 import { IRecipe, emptyRecipe } from '../Shared/Types';
+import { RecipeDisplayButtons } from './RecipeDisplayButtons';
+import { RecipeSpecifications } from './RecipeSpecifications';
+import { DirectionsList } from './DirectionsList';
+import { IngredientsList } from './IngredientsList';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,60 +40,22 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up('md')]: { flexDirection: 'row', alignItems: 'top' }
   },
   image: {
+    objectFit: 'cover',
     [theme.breakpoints.down('sm')]: {
-      height: '80%',
-      width: '80%',
-      border: '1px'
+      maxWidth: '80vw'
     },
     [theme.breakpoints.up('md')]: {
-      height: '30%',
-      width: '30%',
-      border: '1px'
+      maxWidth: '30vw',
+      objectFit: 'cover'
     }
   }
 }));
-
-interface LongListProps {
-  content: any;
-  title: string;
-  numbered?: boolean;
-}
-
-export const LongList = ({
-  content,
-  title,
-  numbered = false
-}: LongListProps) => {
-  const classes = useStyles();
-
-  const getLine = (index: number, line: any) => {
-    if (!numbered || !line) return line;
-    const val = Math.floor(index / 2 + 1);
-    return `${val}. ${line}`;
-  };
-  const processedContent = content.split('\n').map((line: any, i: number) => {
-    return (
-      <Box mt="10px" key={i}>
-        <Typography className={classes.secondaryHeading}>
-          {getLine(i, line)}
-        </Typography>
-      </Box>
-    );
-  });
-  return (
-    <Box mt="20px" mb="20px">
-      <Typography variant="h2">{title}</Typography>
-      {processedContent}
-    </Box>
-  );
-};
 
 export const RecipeDisplay = () => {
   const [recipe, setRecipe] = useState<IRecipe>(emptyRecipe);
   const [loading, setLoading] = useState(true);
   const { recipeId } = useParams();
   const classes = useStyles();
-
 
   useEffect(() => {
     RecipeAPI.getRecipe(recipeId).then(recipe => {
@@ -114,41 +74,32 @@ export const RecipeDisplay = () => {
   if (loading) return <Loading />;
   return (
     <Container className={classes.container}>
-      <img
-        onError={onError}
-        className={classes.image}
-        src={recipe.picture || noImage}
-        alt={'a tasty dish'}
-      />
+      <Box displayPrint="none">
+        <img
+          onError={onError}
+          className={classes.image}
+          src={recipe.picture || noImage}
+          alt={'a tasty dish'}
+        />
+      </Box>
       <RecipeDetails ml="30px" mr="20px" display="flex" flexDirection="column">
         <Box display="flex" flexDirection="row">
           <h2>{recipe.title}</h2>
-          <AddToShoppingListButton recipe={recipe} />
-          <PrintButton label="Recipe" />
-          {isAdmin() && <EditRecipeButton id={recipe.id} />}
+          <RecipeDisplayButtons recipe={recipe} />
         </Box>
         <Box display="flex" mb="10px">
           <div>{`from: ${recipe.source || 'unknown'}`}</div>
           <Box ml="auto">{tags.map(tag => !!tag && `#${tag} `)}</Box>
         </Box>
         <Divider />
-        <Box mt="10px" display="flex" flexDirection="column">
-          <div>{`Yield: ${recipe.serves || 'unknown'}`}</div>
-          {/* <div>{`Time: ${recipe.time || 'unknown'}`}</div> */}
-          <div>{`NetCarbs: ${recipe.netCarbs || 'unknown'}`}</div>
-          <div>{`Main Ingredient: ${recipe.mainIngredient || 'unknown'}`}</div>
-          <div>{`Region: ${recipe.region || 'unknown'}`}</div>
-        </Box>
+        <RecipeSpecifications recipe={recipe} />
 
         <Box mt="10px" display="flex" flexDirection="column">
-          <LongList
-            title="Ingredients"
+          <IngredientsList
             content={recipe.ingredients || 'unknown'}
           />
-          <LongList
-            title="Directions"
+          <DirectionsList
             content={recipe.directions || 'unknown'}
-            numbered
           />
         </Box>
       </RecipeDetails>
