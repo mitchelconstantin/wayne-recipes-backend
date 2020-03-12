@@ -1,9 +1,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, AppBar, Typography } from '@material-ui/core/';
+import { Box, AppBar, Typography, Hidden } from '@material-ui/core/';
 import { HeaderButtons } from './HeaderButtons';
 import { Logo } from '../Shared/Components/Logo';
-import { isMobile } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -41,19 +40,20 @@ export const LargeAppBar = () => {
   const title = `WAYNE'S FAMILY RECIPES`;
   const description = 'Traditional Cajun food and so much more!';
 
-  if (isMobile()) return null; 
   return (
-    <AppBar className={classes.toolbar} position="sticky">
-      <Box className={classes.topRow}>
-        <Logo className={classes.image} />
-        <HeaderButtons />
-      </Box>
-      <Typography className={classes.title} variant="h2">
-        {title}
-      </Typography>
-      <Typography className={classes.subTitle} variant="h6">
-        {description}
-      </Typography>
-    </AppBar>
+    <Hidden smDown>
+      <AppBar className={classes.toolbar} position="sticky">
+        <Box className={classes.topRow}>
+          <Logo className={classes.image} />
+          <HeaderButtons />
+        </Box>
+        <Typography className={classes.title} variant="h2">
+          {title}
+        </Typography>
+        <Typography className={classes.subTitle} variant="h6">
+          {description}
+        </Typography>
+      </AppBar>
+    </Hidden>
   );
 };
