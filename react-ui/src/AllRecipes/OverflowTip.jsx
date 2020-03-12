@@ -11,7 +11,7 @@ export const OverflowTip = ({ title, classes }) => {
 
   const compareSize = () => {
     const compare =
-      textElementRef.current.scrollWidth > textElementRef.current.clientWidth;
+      textElementRef.current.scrollWidth > (textElementRef.current.clientWidth);
     setHover(compare);
   };
 

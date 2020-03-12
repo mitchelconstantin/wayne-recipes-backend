@@ -5,9 +5,11 @@ import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { OverflowTip } from './OverflowTip';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-  card: {
+  link: {
+    textDecoration: 'none',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -16,7 +18,6 @@ const useStyles = makeStyles(theme => ({
       width: '43%'
     },
     [theme.breakpoints.up('md')]: {
-      cursor: 'pointer',
       margin: '20px',
       width: '300px',
       minHeight: '370px'
@@ -56,7 +57,6 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     marginTop: 'auto',
     [theme.breakpoints.down('sm')]: {
-      width: '100%',
       padding: '8px'
     },
     [theme.breakpoints.up('md')]: {
@@ -71,7 +71,7 @@ interface Props {
 
 export const RecipeCard = ({ recipe }: Props) => {
   const classes = useStyles();
-  const selectRecipe = () => (window.location.href = `/r/${recipe.id}`);
+  
   const onError = (ev: any) => {
     const eventTarget = ev.target;
     eventTarget.src = noImage;
@@ -79,32 +79,33 @@ export const RecipeCard = ({ recipe }: Props) => {
 
   const imageToUse = () => {
     if (!recipe.picture) return noImage;
-
     const ar = recipe.picture.split('upload');
     const newUrl = `${ar[0]}upload/w_300,h_300,c_fill,g_auto${ar[1]}`;
     return newUrl;
   };
 
   return (
-    <Paper className={classes.card} onClick={selectRecipe}>
-      <LazyLoadComponent visibleByDefault={false} threshold={200}>
-        <img
-          onError={onError}
-          src={imageToUse()}
-          alt={'a tasty dish!'}
-          className={classes.image}
-        />
-      </LazyLoadComponent>
-      <Box className={classes.textBox}>
-        <OverflowTip
-          //@ts-ignore
-          title={recipe.title}
-          classes={classes.title}
-        />
-        <Typography noWrap className={classes.detail}>
-          {recipe.source || 'unknown'}
-        </Typography>
-      </Box>
-    </Paper>
+    <Link className={classes.link} to={`/r/${recipe.id}`}>
+      <Paper> 
+        <LazyLoadComponent visibleByDefault={false} threshold={200}>
+          <img
+            onError={onError}
+            src={imageToUse()}
+            alt={'a tasty dish!'}
+            className={classes.image}
+          />
+        </LazyLoadComponent>
+        <Box className={classes.textBox}>
+          <OverflowTip
+            //@ts-ignore
+            title={recipe.title}
+            classes={classes.title}
+          />
+          <Typography noWrap className={classes.detail}>
+            {recipe.source || 'unknown'}
+          </Typography>
+        </Box>
+      </Paper>
+    </Link>
   );
 };
