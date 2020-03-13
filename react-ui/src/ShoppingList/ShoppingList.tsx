@@ -8,7 +8,7 @@ import { isLoggedIn } from '../Shared/AppBehaviors';
 import { Redirect } from 'react-router-dom';
 import { ShoppingListItems } from './ShoppingListItems';
 import { IngredientsListContainer } from './IngredientsListContainer';
-import { ShoppingListBehaviors } from './ShoppinglistBehaviors';
+import { ShoppingListAPI } from '../Shared/APIs/ShoppingListAPI';
 const getTitle = (title: string, quantity: number) => {
   if (quantity < 2) return title;
   return `${title} x${quantity}`;
@@ -19,7 +19,7 @@ export const ShoppingList = () => {
   const [load, setLoad] = useState(0);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    ShoppingListBehaviors.load().then((list: IShoppingListItem[]) => {
+    ShoppingListAPI.get().then((list: IShoppingListItem[]) => {
       setShoppingList(list);
       setLoading(false);
     });
@@ -31,12 +31,12 @@ export const ShoppingList = () => {
     const newList = [...shoppingList];
     newList[i].ingredients = newRecipe.join('\n');
     setShoppingList(newList);
-    ShoppingListBehaviors.update(newList[i]);
+    ShoppingListAPI.update(newList[i]);
     setLoad(load + 1);
   };
 
   const removeFromShoppingList = async (recipeId: string, title: number) => {
-    await ShoppingListBehaviors.remove(recipeId);
+    await ShoppingListAPI.removeFromList(recipeId);
     setLoad(load + 1);
     SnackbarService.success(`Removed ${title} from Shopping List`);
   };

@@ -1,13 +1,16 @@
 import { IShoppingListItem } from '../Types';
+import { userEmail } from '../../Shared/AppBehaviors';
 
 export class ShoppingListAPI {
-  static get = async (email: string): Promise<IShoppingListItem[]> => {
+  static get = async (): Promise<IShoppingListItem[]> => {
+    const email = userEmail();
     const res = await fetch(`/api/shoppingList/${email}`);
     const { list } = await res.json();
     return list;
   };
 
-  static addToList = async (email?: string, recipeId?: string) => {
+  static addToList = async (recipeId?: string) => {
+    const email = userEmail();
     let res;
     try {
       res = await fetch(`/api/shoppingList/${email}`, {
@@ -27,7 +30,8 @@ export class ShoppingListAPI {
     return json;
   };
 
-  static removeFromList = async (email: string, recipeId: string) => {
+  static removeFromList = async (recipeId: string) => {
+    const email = userEmail();
     const res = await fetch(`/api/shoppingList/${email}`, {
       method: 'DELETE',
       headers: {
@@ -40,7 +44,8 @@ export class ShoppingListAPI {
     return json;
   };
 
-  static update = async (email: string, list: IShoppingListItem) => {
+  static update = async ( list: IShoppingListItem) => {
+    const email = userEmail();
     const res = await fetch(`/api/shoppingList/${email}`, {
       method: 'PATCH',
       headers: {

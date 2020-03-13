@@ -6,7 +6,6 @@ import Edit from '@material-ui/icons/Edit';
 import SnackbarService from '../SnackbarService';
 import { IRecipe } from '../Types';
 import { ShoppingListAPI } from '../APIs/ShoppingListAPI';
-import { userEmail } from '../AppBehaviors';
 
 interface PrintButtonProps {
   label: string;
@@ -26,7 +25,7 @@ interface ShoppingButtonProps {
 }
 export const AddToShoppingListButton = ({ recipe }: ShoppingButtonProps) => {
   const addToShoppingList = async () => {
-    const res = await ShoppingListAPI.addToList(userEmail(), recipe.id);
+    const res = await ShoppingListAPI.addToList(recipe.id);
     if (res.error) {
       SnackbarService.error(res.message);
       return;
