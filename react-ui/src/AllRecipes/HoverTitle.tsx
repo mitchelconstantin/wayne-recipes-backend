@@ -30,7 +30,7 @@ export const HoverTitle = ({ title, classes }: Props) => {
           disableFocusListener
           disableHoverListener
           disableTouchListener
-          title="Add"
+          title={title}
         >
           <Typography onClick={handleTooltipOpen} noWrap className={classes}>
             {title}
