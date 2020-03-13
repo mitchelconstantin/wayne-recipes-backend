@@ -1,16 +1,10 @@
-import { IRecipe, IShoppingListItem } from '../Shared/Types';
+import { IShoppingListItem } from '../Shared/Types';
 import { ShoppingListAPI } from '../Shared/APIs/ShoppingListAPI';
 import { userEmail } from '../Shared/AppBehaviors';
 
 export class ShoppingListBehaviors {
   static remove = async (recipeId: string) => {
     await ShoppingListAPI.removeFromList(userEmail(), recipeId);
-    return;
-  };
-
-  static add = async (recipe: IRecipe) => {
-    if (!recipe.id) return;
-    await ShoppingListAPI.addToList(userEmail(), recipe.id);
     return;
   };
 

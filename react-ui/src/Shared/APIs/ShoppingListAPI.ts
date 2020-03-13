@@ -7,16 +7,23 @@ export class ShoppingListAPI {
     return list;
   };
 
-  static addToList = async (email: string, recipeId: string) => {
-    const res = await fetch(`/api/shoppingList/${email}`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ recipeId })
-    });
+  static addToList = async (email?: string, recipeId?: string) => {
+    let res;
+    try {
+      res = await fetch(`/api/shoppingList/${email}`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ recipeId })
+      });
+      console.log('2');
+    } catch {
+      return { message: 'unknown error', error: true };
+    }
     const json = await res.json();
+    if (!res.ok) return { message: json.message, error: true };
     return json;
   };
 

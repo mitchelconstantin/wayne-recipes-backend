@@ -3,9 +3,10 @@ import { Tooltip, IconButton } from '@material-ui/core';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
 import Print from '@material-ui/icons/Print';
 import Edit from '@material-ui/icons/Edit';
-import { ShoppingListBehaviors } from '../../ShoppingList/ShoppinglistBehaviors';
 import SnackbarService from '../SnackbarService';
 import { IRecipe } from '../Types';
+import { ShoppingListAPI } from '../APIs/ShoppingListAPI';
+import { userEmail } from '../AppBehaviors';
 
 interface PrintButtonProps {
   label: string;
@@ -24,9 +25,14 @@ interface ShoppingButtonProps {
   recipe: IRecipe;
 }
 export const AddToShoppingListButton = ({ recipe }: ShoppingButtonProps) => {
-  const addToShoppingList = () => {
-    ShoppingListBehaviors.add(recipe);
+  const addToShoppingList = async () => {
+    const res = await ShoppingListAPI.addToList(userEmail(), recipe.id);
+    if (res.error) {
+      SnackbarService.error(res.message);
+      return;
+    }
     SnackbarService.success('added to list!');
+    return;
   };
   return (
     <Tooltip title="Add to Shopping List">
@@ -38,7 +44,7 @@ export const AddToShoppingListButton = ({ recipe }: ShoppingButtonProps) => {
 };
 
 interface EditButtonProps {
-  id?: string 
+  id?: string;
 }
 export const EditRecipeButton = ({ id }: EditButtonProps) => {
   return (

@@ -3,7 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 var cloudinary = require('cloudinary').v2;
 const { db } = require('../lib/database');
-const { configureRecipe, configureListItem, encode, decode } = require('../lib/hashIdService');
+const {
+  configureRecipe,
+  configureListItem,
+  encode,
+  decode
+} = require('../lib/hashIdService');
 
 const uploadToCloudinary = async (image, hashId) => {
   return new Promise((resolve, reject) => {
@@ -71,16 +76,21 @@ router.patch('/api/users', async (req, res) => {
 
 router.get('/api/shoppingList/:email', async (req, res) => {
   const preList = await db.any(
-    'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1 ORDER BY "title" ASC', 
+    'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1 ORDER BY "title" ASC',
     [req.params.email]
   );
-    const list = preList.map(configureListItem);
+  const list = preList.map(configureListItem);
   res.json({ list });
 });
 
+const send404 = (res, message) => res.status(400).send({ message });
+
 router.post('/api/shoppingList/:email', async (req, res) => {
   const recipeId = req.body.recipeId;
+  if (!recipeId) return send404(res,'no recipe found');
   const dbId = decode(recipeId);
+  if (req.params.email === 'false') return send404(res, 'no user found');
+  console.log('not there yet');
   const [
     { count }
   ] = await db.any(
@@ -136,7 +146,7 @@ router.delete('/api/shoppingList/:email', async (req, res) => {
 });
 
 router.patch('/api/shoppingList/:email', async (req, res) => {
-  const {list} = req.body;
+  const { list } = req.body;
   const values = [list.ingredients, list.user_email, list.id];
   await db.any(
     'UPDATE shoppinglist SET ingredients = $1 WHERE "user_email" = $2 AND "id" = $3',

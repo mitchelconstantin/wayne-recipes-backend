@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@material-ui/core/';
-import { isAdmin } from '../Shared/AppBehaviors';
+import { isAdmin, isLoggedIn } from '../Shared/AppBehaviors';
 import {
   PrintButton,
   AddToShoppingListButton,
@@ -15,6 +15,7 @@ interface props {
 export const RecipeDisplayButtons = ({ recipe }: props) => {
   return (
     <Box display="flex" displayPrint="none">
+      {/* {isLoggedIn() && <AddToShoppingListButton recipe={recipe} />} */}
       <AddToShoppingListButton recipe={recipe} />
       <PrintButton label="Recipe" />
       {isAdmin() && <EditRecipeButton id={recipe.id} />}
