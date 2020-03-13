@@ -4,12 +4,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Box, Paper, Typography } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
-import { OverflowTip } from './OverflowTip';
+import { HoverTitle } from './HoverTitle';
 import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   link: {
-    textDecoration: 'none',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -85,26 +84,23 @@ export const RecipeCard = ({ recipe }: Props) => {
   };
 
   return (
-    <Link className={classes.link} to={`/r/${recipe.id}`}>
-      <LazyLoadComponent visibleByDefault={false}>
-        <Paper>
+    <Paper className={classes.link}>
+      <LazyLoadComponent visibleByDefault={false} threshold={200}>
+        <Link to={`/r/${recipe.id}`}>
           <img
             onError={onError}
             src={imageToUse()}
             alt={'a tasty dish!'}
             className={classes.image}
           />
-          <Box className={classes.textBox}>
-            <OverflowTip
-              title={recipe.title}
-              classes={classes.title}
-            />
-            <Typography noWrap className={classes.detail}>
-              {recipe.source || 'unknown'}
-            </Typography>
-          </Box>
-        </Paper>
-      </LazyLoadComponent> 
-    </Link>
+        </Link>
+        <Box className={classes.textBox}>
+          <HoverTitle classes={classes.title} title={recipe.title}/>
+          <Typography noWrap className={classes.detail}>
+            {recipe.source || 'unknown'}
+          </Typography>
+        </Box>
+      </LazyLoadComponent>
+    </Paper>
   );
 };
