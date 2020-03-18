@@ -21,9 +21,10 @@ export class RecipeTransform {
   static filterRecipes = (
     recipes: IRecipe[],
     selectedFilters: IFilters,
-    searchTerm: string
+    // searchTerm: string
   ) => {
-    const { mainIngredient, region, type } = selectedFilters;
+    console.log('filtering selectedfilters', selectedFilters);
+    const { mainIngredient, region, type, debouncedSearchTerm } = selectedFilters;
     let filteredResults = recipes;
     if (mainIngredient) {
       filteredResults = RecipeTransform.filterByAttribute(
@@ -49,10 +50,10 @@ export class RecipeTransform {
       );
     }
 
-    if (searchTerm) {
+    if (debouncedSearchTerm) {
       filteredResults = RecipeTransform.filterBySearchTerm(
         filteredResults,
-        searchTerm
+        debouncedSearchTerm
       );
     }
     return filteredResults;

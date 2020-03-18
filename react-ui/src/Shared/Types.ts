@@ -25,12 +25,16 @@ export const emptyFilterOptions: IFilterOptions = {
 };
 
 export interface IFilters {
+  searchTerm: string;
+  debouncedSearchTerm: string;
   mainIngredient: string;
   region: string;
   type: string;
 }
 
 export const emptyFilters: IFilters = {
+  searchTerm: '',
+  debouncedSearchTerm: '',
   mainIngredient: '',
   region: '',
   type: ''

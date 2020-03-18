@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Paper, Input } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, emptyFilters } from '../Shared/Types';
@@ -10,6 +10,8 @@ import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
 import { RecipeTransform } from './RecipeTransform';
 import { ShowFiltersChip } from './ShowFiltersChip';
+import { useHistory } from 'react-router-dom';
+import { isEqual, debounce, throttle } from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
@@ -40,44 +42,86 @@ export const Home = () => {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<IRecipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const history = useHistory();
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
-  const [searchTerm, setSearchTerm] = useState('');
   const [filtersExpanded, setFiltersExpanded] = useState(false);
-  const [debouncedSearchTerm] = useDebounce<string>(searchTerm, 1000);
+
+  console.log('here is history', history.location.state);
   const classes = useStyles();
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(recipes => {
       setRecipes(recipes);
+      setFilteredRecipes(recipes);
       setLoading(false);
+      if (history.location.state) {
+        setSelectedFilters(history.location.state);
+        console.log('checking ');
+        if (
+          history.location.state.mainIngredient ||
+          history.location.state.region ||
+          history.location.state.type
+        ) {
+          console.log('making expandd true');
+          setFiltersExpanded(true);
+        }
+      }
     });
   }, []);
 
   useEffect(() => {
-    const filteredRecipes = RecipeTransform.filterRecipes(
+    const newFilteredRecipes = RecipeTransform.filterRecipes(
       recipes,
-      selectedFilters,
-      debouncedSearchTerm
+      selectedFilters
     );
-    setFilteredRecipes(filteredRecipes);
-  }, [debouncedSearchTerm, selectedFilters, recipes]);
+    if (!isEqual(filteredRecipes, newFilteredRecipes)) {
+      setFilteredRecipes(newFilteredRecipes);
+    }
+    if (!loading) {
+      console.log('pushing history', selectedFilters);
+      // history.push('/all', selectedFilters);
+    }
+  }, [
+    selectedFilters.debouncedSearchTerm,
+    selectedFilters.region,
+    selectedFilters.type,
+    selectedFilters.mainIngredient, 
+    recipes
+  ]);
 
-  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => { 
-    setSearchTerm(event.target.value);
+  const setSearchTerm = (debouncedSearchTerm: string) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      debouncedSearchTerm
+    }));
+  };
+
+  const setDebouncedSearchTerm = useCallback(
+    debounce((debouncedSearchTerm: string) => {
+      console.log('debouncing');
+      setSearchTerm(debouncedSearchTerm);
+    }, 500),
+    []
+  );
+
+  const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    //@ts-ignore
+    setSelectedFilters(prev => ({
+      ...prev,
+      searchTerm: value
+    }));
+    setDebouncedSearchTerm(value);
   };
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-    >
+    <Box display="flex" flexDirection="column" alignItems="center">
       <Paper className={classes.searchContainer}>
         <Box className={classes.searchBarLine}>
           <Input
             placeholder="search"
             disableUnderline
             className={classes.searchBox}
-            value={searchTerm}
+            value={selectedFilters.searchTerm}
             onChange={handleChangeInput}
             endAdornment={<SearchIcon style={{ color: 'grey' }} />}
           />
