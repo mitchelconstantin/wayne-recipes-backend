@@ -78,7 +78,7 @@ export const Home = () => {
     }
     if (!loading) {
       console.log('pushing history', selectedFilters);
-      // history.push('/all', selectedFilters);
+      history.push('/all', selectedFilters);
     }
   }, [
     selectedFilters.debouncedSearchTerm,
