@@ -78,7 +78,7 @@ export const Home = () => {
     selectedFilters.debouncedSearchTerm,
     selectedFilters.region,
     selectedFilters.type,
-    selectedFilters.mainIngredient, 
+    selectedFilters.mainIngredient,
     recipes
   ]);
 
@@ -129,8 +129,6 @@ export const Home = () => {
           setSelectedFilters={setSelectedFilters}
         />
       </Paper>
-      {/* 
-  // @ts-ignore */}
       <RecipeList loading={loading} recipes={filteredRecipes} />
     </Box>
   );
