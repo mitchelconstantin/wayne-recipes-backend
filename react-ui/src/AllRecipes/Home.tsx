@@ -44,7 +44,6 @@ export const Home = () => {
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
   const [filtersExpanded, setFiltersExpanded] = useState(false);
 
-  console.log('here is history', history.location.state);
   const classes = useStyles();
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(recipes => {
@@ -53,13 +52,11 @@ export const Home = () => {
       setLoading(false);
       if (history.location.state) {
         setSelectedFilters(history.location.state);
-        console.log('checking ');
         if (
           history.location.state.mainIngredient ||
           history.location.state.region ||
           history.location.state.type
         ) {
-          console.log('making expandd true');
           setFiltersExpanded(true);
         }
       }
@@ -75,7 +72,6 @@ export const Home = () => {
       setFilteredRecipes(newFilteredRecipes);
     }
     if (!loading) {
-      console.log('pushing history', selectedFilters);
       history.push('/all', selectedFilters);
     }
   }, [
@@ -95,7 +91,6 @@ export const Home = () => {
 
   const setDebouncedSearchTerm = useCallback(
     debounce((debouncedSearchTerm: string) => {
-      console.log('debouncing');
       setSearchTerm(debouncedSearchTerm);
     }, 500),
     []

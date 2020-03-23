@@ -21,9 +21,7 @@ export class RecipeTransform {
   static filterRecipes = (
     recipes: IRecipe[],
     selectedFilters: IFilters,
-    // searchTerm: string
   ) => {
-    console.log('filtering selectedfilters', selectedFilters);
     const { mainIngredient, region, type, debouncedSearchTerm } = selectedFilters;
     let filteredResults = recipes;
     if (mainIngredient) {

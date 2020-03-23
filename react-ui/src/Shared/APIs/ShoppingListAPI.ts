@@ -21,7 +21,6 @@ export class ShoppingListAPI {
         },
         body: JSON.stringify({ recipeId })
       });
-      console.log('2');
     } catch {
       return { message: 'unknown error', error: true };
     }
