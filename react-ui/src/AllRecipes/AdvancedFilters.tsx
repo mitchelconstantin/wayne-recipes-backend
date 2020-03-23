@@ -39,14 +39,16 @@ export const AdvancedFilters = ({
 
   useEffect(() => {
     if (expanded && !allFilters.mainIngredients.length) {
-      RecipeAPI.getFilters().then(({ mainIngredients, regions, types, sources }) => {
-        setAllFilters({
-          mainIngredients,
-          regions,
-          types,
-          sources
-        });
-      });
+      RecipeAPI.getFilters().then(
+        ({ mainIngredients, regions, types, sources }) => {
+          setAllFilters({
+            mainIngredients,
+            regions,
+            types,
+            sources
+          });
+        }
+      );
     }
     if (!expanded && allFilters.mainIngredients.length) {
       setSelectedFilters(emptyFilters);
@@ -59,14 +61,19 @@ export const AdvancedFilters = ({
     handleChange(e, 'region');
   const handleChangeType = (e: React.ChangeEvent<{ value: unknown }>) =>
     handleChange(e, 'type');
-      const handleChangeSource = (e: React.ChangeEvent<{ value: unknown }>) =>
-        handleChange(e, 'source');
+  const handleChangeSource = (e: React.ChangeEvent<{ value: unknown }>) =>
+    handleChange(e, 'source');
 
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>, x: any) => {
     setSelectedFilters((prev: any) => ({
       ...prev,
       [x]: e.target.value
     }));
+  };
+
+  const handleClear = () => {
+    const debouncedSearchTerm = selectedFilters.debouncedSearchTerm;
+    setSelectedFilters({ ...emptyFilters, debouncedSearchTerm });
   };
 
   const { mainIngredients, regions, types, sources } = allFilters;
@@ -120,11 +127,8 @@ export const AdvancedFilters = ({
           ))}
         </Select>
       </FormControl>
-      <Button
-        className={classes.select}
-        onClick={() => setSelectedFilters(emptyFilters)}
-      >
-        Clear All
+      <Button className={classes.select} onClick={handleClear}>
+        Clear Filters
       </Button>
     </Collapse>
   );
