@@ -42,8 +42,8 @@ export const Home = () => {
   const [loading, setLoading] = useState(true);
   const history = useHistory();
   const [selectedFilters, setSelectedFilters] = useState(emptyFilters);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filtersExpanded, setFiltersExpanded] = useState(false);
-
   const classes = useStyles();
   useEffect(() => {
     RecipeAPI.getAllRecipes().then(recipes => {
@@ -52,6 +52,7 @@ export const Home = () => {
       setLoading(false);
       if (history.location.state) {
         setSelectedFilters(history.location.state);
+        setSearchTerm(history.location.state.debouncedSearchTerm);
         if (
           history.location.state.mainIngredient ||
           history.location.state.region ||
@@ -68,42 +69,28 @@ export const Home = () => {
       recipes,
       selectedFilters
     );
+    console.log('nf', newFilteredRecipes);
     if (!isEqual(filteredRecipes, newFilteredRecipes)) {
       setFilteredRecipes(newFilteredRecipes);
     }
     if (!loading) {
       history.push('/all', selectedFilters);
     }
-  }, [
-    selectedFilters.debouncedSearchTerm,
-    selectedFilters.region,
-    selectedFilters.type,
-    selectedFilters.mainIngredient,
-    recipes
-  ]);
-
-  const setSearchTerm = (debouncedSearchTerm: string) => {
-    setSelectedFilters(prev => ({
-      ...prev,
-      debouncedSearchTerm
-    }));
-  };
+  }, [selectedFilters, recipes]);
 
   const setDebouncedSearchTerm = useCallback(
     debounce((debouncedSearchTerm: string) => {
-      setSearchTerm(debouncedSearchTerm);
+      setSelectedFilters(prev => ({
+        ...prev,
+        debouncedSearchTerm
+      }));
     }, 500),
     []
   );
 
   const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    //@ts-ignore
-    setSelectedFilters(prev => ({
-      ...prev,
-      searchTerm: value
-    }));
-    setDebouncedSearchTerm(value);
+    setSearchTerm(event.target.value);
+    setDebouncedSearchTerm(event.target.value);
   };
 
   return (
@@ -114,7 +101,7 @@ export const Home = () => {
             placeholder="search"
             disableUnderline
             className={classes.searchBox}
-            value={selectedFilters.searchTerm}
+            value={searchTerm}
             onChange={handleChangeInput}
             endAdornment={<SearchIcon style={{ color: 'grey' }} />}
           />

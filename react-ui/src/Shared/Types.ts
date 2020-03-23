@@ -25,7 +25,6 @@ export const emptyFilterOptions: IFilterOptions = {
 };
 
 export interface IFilters {
-  searchTerm: string;
   debouncedSearchTerm: string;
   mainIngredient: string;
   region: string;
@@ -33,7 +32,6 @@ export interface IFilters {
 }
 
 export const emptyFilters: IFilters = {
-  searchTerm: '',
   debouncedSearchTerm: '',
   mainIngredient: '',
   region: '',
