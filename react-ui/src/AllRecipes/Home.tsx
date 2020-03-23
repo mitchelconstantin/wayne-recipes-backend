@@ -56,7 +56,8 @@ export const Home = () => {
         if (
           history.location.state.mainIngredient ||
           history.location.state.region ||
-          history.location.state.type
+          history.location.state.type ||
+          history.location.state.source
         ) {
           setFiltersExpanded(true);
         }
