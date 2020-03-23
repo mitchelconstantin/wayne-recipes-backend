@@ -1,6 +1,11 @@
 import React from 'react';
-import { Box, IconButton, Tooltip, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Typography,
+  makeStyles
+} from '@material-ui/core';
 import { IShoppingListItem } from '../Shared/Types';
 import RemoveShoppingCart from '@material-ui/icons/RemoveShoppingCart';
 

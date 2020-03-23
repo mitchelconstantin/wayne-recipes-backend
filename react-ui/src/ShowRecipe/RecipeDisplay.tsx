@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import noImage from '../Shared/noImage.png';
-import { Box, Divider } from '@material-ui/core/';
+import { Box, Divider, makeStyles } from '@material-ui/core/';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import { useParams } from 'react-router-dom';
 import { Loading } from '../Shared/Components/Loading';

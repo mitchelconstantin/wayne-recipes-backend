@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Paper, Input } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Box, Paper, Input, makeStyles } from '@material-ui/core';
 import { IRecipe, emptyFilters } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';

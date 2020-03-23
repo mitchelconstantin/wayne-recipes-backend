@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Menu, Button } from '@material-ui/core/';
+import { Box, Menu, Button, makeStyles } from '@material-ui/core/';
 import { isLoggedIn, logOut, isAdmin, isOwner } from '../Shared/AppBehaviors';
 
 const useStyles = makeStyles(theme => ({

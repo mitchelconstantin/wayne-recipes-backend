@@ -1,7 +1,6 @@
 import React from 'react';
 import noImage from '../Shared/noImage.png';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Paper, Typography } from '@material-ui/core/';
+import { Box, Paper, Typography, makeStyles } from '@material-ui/core/';
 import { IRecipe } from '../Shared/Types';
 import { LazyLoadComponent } from 'react-lazy-load-image-component';
 import { HoverTitle } from './HoverTitle';

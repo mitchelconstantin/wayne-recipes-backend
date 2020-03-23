@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
@@ -7,7 +6,12 @@ import InfoIcon from '@material-ui/icons/Info';
 import { amber, green } from '@material-ui/core/colors';
 import WarningIcon from '@material-ui/icons/Warning';
 import ReactDOM from 'react-dom';
-import { SnackbarContent, Snackbar, IconButton } from '@material-ui/core';
+import {
+  SnackbarContent,
+  Snackbar,
+  IconButton,
+  makeStyles
+} from '@material-ui/core';
 
 type Variant = 'success' | 'warning' | 'error' | 'info';
 interface Props {
