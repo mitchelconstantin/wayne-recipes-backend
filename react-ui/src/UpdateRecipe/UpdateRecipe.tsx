@@ -80,13 +80,13 @@ export const UpdateRecipe = () => {
         value={recipe.type || ''}
         title={'Recipe Type'}
       />
-      <TextField
+      <Dropdown
+        handleChange={(e: any, value: any) => {
+          handleChange('source', value);
+        }}
+        items={filters.sources}
         value={recipe.source || ''}
-        onChange={e => handleChange('source', e.target.value)}
-        required
-        id="from"
-        label="From"
-        className={classes.formTextField}
+        title={'Source'}
       />
       <TextField
         value={recipe.serves || ''}
