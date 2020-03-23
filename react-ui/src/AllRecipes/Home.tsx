@@ -5,13 +5,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import { IRecipe, emptyFilters } from '../Shared/Types';
 import { RecipeAPI } from '../Shared/APIs/RecipeAPI';
 import SearchIcon from '@material-ui/icons/Search';
-import { useDebounce } from 'use-debounce';
 import { AdvancedFilters } from './AdvancedFilters';
 import { RecipeList } from './RecipeList';
 import { RecipeTransform } from './RecipeTransform';
 import { ShowFiltersChip } from './ShowFiltersChip';
 import { useHistory } from 'react-router-dom';
-import { isEqual, debounce, throttle } from 'lodash';
+import { isEqual, debounce } from 'lodash';
 
 const useStyles = makeStyles(theme => ({
   searchContainer: {
