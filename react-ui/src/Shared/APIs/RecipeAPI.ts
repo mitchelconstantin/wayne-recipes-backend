@@ -4,6 +4,7 @@ interface FiltersPayload {
   regions: string[];
   types: string[];
   mainIngredients: string[];
+  sources: string[];
 }
 
 export class RecipeAPI {

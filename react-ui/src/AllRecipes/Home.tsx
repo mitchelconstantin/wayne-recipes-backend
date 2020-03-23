@@ -69,7 +69,6 @@ export const Home = () => {
       recipes,
       selectedFilters
     );
-    console.log('nf', newFilteredRecipes);
     if (!isEqual(filteredRecipes, newFilteredRecipes)) {
       setFilteredRecipes(newFilteredRecipes);
     }

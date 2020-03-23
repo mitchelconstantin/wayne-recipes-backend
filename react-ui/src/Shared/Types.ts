@@ -16,12 +16,14 @@ export interface IFilterOptions {
   mainIngredients: string[];
   regions: string[];
   types: string[];
+  sources: string[];
 }
 
 export const emptyFilterOptions: IFilterOptions = {
   mainIngredients: [] as string[],
   regions: [] as string[],
-  types: [] as string[] 
+  types: [] as string[],
+  sources: [] as string[],
 };
 
 export interface IFilters {
@@ -29,13 +31,15 @@ export interface IFilters {
   mainIngredient: string;
   region: string;
   type: string;
+  source: string;
 }
 
 export const emptyFilters: IFilters = {
   debouncedSearchTerm: '',
   mainIngredient: '',
   region: '',
-  type: ''
+  type: '',
+  source: ''
 };
 
 export const emptyRecipe: IRecipe = {

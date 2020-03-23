@@ -39,11 +39,12 @@ export const AdvancedFilters = ({
 
   useEffect(() => {
     if (expanded && !allFilters.mainIngredients.length) {
-      RecipeAPI.getFilters().then(({ mainIngredients, regions, types }) => {
+      RecipeAPI.getFilters().then(({ mainIngredients, regions, types, sources }) => {
         setAllFilters({
           mainIngredients,
           regions,
-          types
+          types,
+          sources
         });
       });
     }
@@ -58,6 +59,8 @@ export const AdvancedFilters = ({
     handleChange(e, 'region');
   const handleChangeType = (e: React.ChangeEvent<{ value: unknown }>) =>
     handleChange(e, 'type');
+      const handleChangeSource = (e: React.ChangeEvent<{ value: unknown }>) =>
+        handleChange(e, 'source');
 
   const handleChange = (e: React.ChangeEvent<{ value: unknown }>, x: any) => {
     setSelectedFilters((prev: any) => ({
@@ -66,7 +69,7 @@ export const AdvancedFilters = ({
     }));
   };
 
-  const { mainIngredients, regions, types } = allFilters;
+  const { mainIngredients, regions, types, sources } = allFilters;
 
   return (
     <Collapse className={classes.container} in={expanded}>
@@ -102,6 +105,17 @@ export const AdvancedFilters = ({
           {types.map(type => (
             <MenuItem key={type} value={type}>
               {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl className={classes.select}>
+        <InputLabel>Source</InputLabel>
+        <Select value={selectedFilters.source} onChange={handleChangeSource}>
+          <MenuItem value={''}>All</MenuItem>
+          {sources.map(source => (
+            <MenuItem key={source} value={source}>
+              {source}
             </MenuItem>
           ))}
         </Select>

@@ -22,7 +22,7 @@ export class RecipeTransform {
     recipes: IRecipe[],
     selectedFilters: IFilters,
   ) => {
-    const { mainIngredient, region, type, debouncedSearchTerm } = selectedFilters;
+    const { mainIngredient, region, type, source, debouncedSearchTerm } = selectedFilters;
     let filteredResults = recipes;
     if (mainIngredient) {
       filteredResults = RecipeTransform.filterByAttribute(
@@ -47,6 +47,14 @@ export class RecipeTransform {
         type
       );
     }
+
+        if (source) {
+          filteredResults = RecipeTransform.filterByAttribute(
+            filteredResults,
+            'source',
+            source
+          );
+        }
 
     if (debouncedSearchTerm) {
       filteredResults = RecipeTransform.filterBySearchTerm(
