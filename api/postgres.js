@@ -7,15 +7,19 @@ const {
   configureRecipe,
   configureListItem,
   encode,
-  decode
+  decode,
 } = require('../lib/hashIdService');
 
 const uploadToCloudinary = async (image, hashId) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(image, { public_id: hashId }, (err, url) => {
-      if (err) return reject(err);
-      return resolve(url);
-    });
+    cloudinary.uploader.upload(
+      image,
+      { public_id: hashId, secure: true },
+      (err, url) => {
+        if (err) return reject(err);
+        return resolve(url);
+      }
+    );
   });
 };
 
@@ -24,14 +28,14 @@ router.post('/api/login', async (req, res) => {
   // try a single login
   const { email, password } = req.body.user;
   const [user] = await db.any('select * from "users" WHERE "email" = $1 ', [
-    email
+    email,
   ]);
   const newHash = bcrypt.hashSync(password, 10);
 
   if (!user || !bcrypt.compareSync(password, user.hash)) {
     //if no user or if password and hash do not match
     return res.status(400).send({
-      message: 'Incorrect login'
+      message: 'Incorrect login',
     });
   }
   res.json(user);
@@ -47,11 +51,11 @@ router.get('/api/users', async (req, res) => {
 router.post('/api/users', async (req, res) => {
   const { firstName, lastName, email, password } = req.body.user;
   const user = await db.any('select * from "users" WHERE "email" = $1 ', [
-    email
+    email,
   ]);
   if (user.length) {
     return res.status(400).send({
-      message: 'username already exists'
+      message: 'username already exists',
     });
   }
   const hash = bcrypt.hashSync(password, 10);
@@ -65,10 +69,10 @@ router.post('/api/users', async (req, res) => {
 // update user permissions
 router.patch('/api/users', async (req, res) => {
   const { users } = req.body;
-  users.forEach(async user => {
+  users.forEach(async (user) => {
     await db.any('update "users" SET "isAdmin" = $2 WHERE "email" = $1', [
       user.email,
-      user.isAdmin
+      user.isAdmin,
     ]);
   });
   res.json('success');
@@ -87,12 +91,12 @@ const send404 = (res, message) => res.status(400).send({ message });
 
 router.post('/api/shoppingList/:email', async (req, res) => {
   const recipeId = req.body.recipeId;
-  if (!recipeId) return send404(res,'no recipe found');
+  if (!recipeId) return send404(res, 'no recipe found');
   const dbId = decode(recipeId);
   if (req.params.email === 'false') return send404(res, 'no user found');
   console.log('not there yet');
   const [
-    { count }
+    { count },
   ] = await db.any(
     'select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
@@ -124,7 +128,7 @@ router.delete('/api/shoppingList/:email', async (req, res) => {
   const recipeId = req.body.recipeId;
   const dbId = decode(recipeId);
   const [
-    { quantity }
+    { quantity },
   ] = await db.any(
     'select quantity from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
@@ -175,14 +179,14 @@ router.get('/api/recipes/filters', async (req, res) => {
   const preTypes = await db.any(
     'select DISTINCT "type" from "Recipes" WHERE "type" IS NOT NULL ORDER BY "type" ASC'
   );
-   const preSources = await db.any(
-     'select DISTINCT "source" from "Recipes" WHERE "source" IS NOT NULL ORDER BY "source" ASC'
-   );
+  const preSources = await db.any(
+    'select DISTINCT "source" from "Recipes" WHERE "source" IS NOT NULL ORDER BY "source" ASC'
+  );
 
-  const mainIngredients = preMainIngredients.map(obj => obj.mainIngredient);
-  const regions = preRegions.map(obj => obj.region);
-  const types = preTypes.map(obj => obj.type);
-  const sources = preSources.map(obj => obj.source);
+  const mainIngredients = preMainIngredients.map((obj) => obj.mainIngredient);
+  const regions = preRegions.map((obj) => obj.region);
+  const types = preTypes.map((obj) => obj.type);
+  const sources = preSources.map((obj) => obj.source);
 
   res.json({ mainIngredients, regions, types, sources });
 });
@@ -219,7 +223,7 @@ router.patch('/api/recipes/:recipeId', async (req, res) => {
       recipe.mainIngredient,
       recipe.region,
       recipe.netCarbs,
-      recipe.type
+      recipe.type,
     ];
     await db.any(
       'update "Recipes" SET "title" = $2, "source" = $3, "serves" = $4, "ingredients" = $5, "directions" = $6, "picture" = $7, "mainIngredient" = $8, "region" = $9, "netCarbs" = $10, "type" = $11 WHERE "id" = $1',
@@ -237,7 +241,7 @@ router.patch('/api/recipes/:recipeId', async (req, res) => {
       recipe.region,
       recipe.netCarbs,
       recipe.picture,
-      recipe.type
+      recipe.type,
     ];
     const newRecipe = await db.one(
       'INSERT INTO "Recipes"("title", "source", "serves", "ingredients", "directions", "mainIngredient", "region", "netCarbs", "picture", "type") VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING id',
