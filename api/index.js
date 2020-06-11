@@ -1,6 +1,6 @@
-const express = require('express')
-const router = express.Router()
+const express = require("express");
+const router = express.Router();
 
-router.use(require('./postgres'))
+router.use(require("./postgres"));
 
-module.exports = router
+module.exports = router;

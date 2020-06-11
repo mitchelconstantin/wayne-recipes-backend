@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcrypt');
-var cloudinary = require('cloudinary').v2;
-const { db } = require('../lib/database');
+const bcrypt = require("bcrypt");
+var cloudinary = require("cloudinary").v2;
+const { db } = require("../lib/database");
 const {
   configureRecipe,
   configureListItem,
   encode,
   decode,
-} = require('../lib/hashIdService');
+} = require("../lib/hashIdService");
 
 const uploadToCloudinary = async (image, hashId) => {
   return new Promise((resolve, reject) => {
@@ -24,7 +24,7 @@ const uploadToCloudinary = async (image, hashId) => {
 };
 
 //login
-router.post('/api/login', async (req, res) => {
+router.post("/api/login", async (req, res) => {
   // try a single login
   const { email, password } = req.body.user;
   const [user] = await db.any('select * from "users" WHERE "email" = $1 ', [
@@ -35,27 +35,27 @@ router.post('/api/login', async (req, res) => {
   if (!user || !bcrypt.compareSync(password, user.hash)) {
     //if no user or if password and hash do not match
     return res.status(400).send({
-      message: 'Incorrect login',
+      message: "Incorrect login",
     });
   }
   res.json(user);
 });
 
-router.get('/api/users', async (req, res) => {
+router.get("/api/users", async (req, res) => {
   // get list of all users
   const data = await db.any('select * from "users"');
   res.json(data);
 });
 
 // create a new user
-router.post('/api/users', async (req, res) => {
+router.post("/api/users", async (req, res) => {
   const { firstName, lastName, email, password } = req.body.user;
   const user = await db.any('select * from "users" WHERE "email" = $1 ', [
     email,
   ]);
   if (user.length) {
     return res.status(400).send({
-      message: 'username already exists',
+      message: "username already exists",
     });
   }
   const hash = bcrypt.hashSync(password, 10);
@@ -63,11 +63,11 @@ router.post('/api/users', async (req, res) => {
     'INSERT INTO users("firstName", "lastName", "email", "hash") VALUES($1, $2, $3, $4) RETURNING email',
     [firstName, lastName, email, hash]
   );
-  res.json('success');
+  res.json("success");
 });
 
 // update user permissions
-router.patch('/api/users', async (req, res) => {
+router.patch("/api/users", async (req, res) => {
   const { users } = req.body;
   users.forEach(async (user) => {
     await db.any('update "users" SET "isAdmin" = $2 WHERE "email" = $1', [
@@ -75,10 +75,10 @@ router.patch('/api/users', async (req, res) => {
       user.isAdmin,
     ]);
   });
-  res.json('success');
+  res.json("success");
 });
 
-router.get('/api/shoppingList/:email', async (req, res) => {
+router.get("/api/shoppingList/:email", async (req, res) => {
   const preList = await db.any(
     'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1 ORDER BY "title" ASC',
     [req.params.email]
@@ -89,25 +89,25 @@ router.get('/api/shoppingList/:email', async (req, res) => {
 
 const send404 = (res, message) => res.status(400).send({ message });
 
-router.post('/api/shoppingList/:email', async (req, res) => {
+router.post("/api/shoppingList/:email", async (req, res) => {
   const recipeId = req.body.recipeId;
-  if (!recipeId) return send404(res, 'no recipe found');
+  if (!recipeId) return send404(res, "no recipe found");
   const dbId = decode(recipeId);
-  if (req.params.email === 'false') return send404(res, 'no user found');
-  console.log('not there yet');
+  if (req.params.email === "false") return send404(res, "no user found");
+  console.log("not there yet");
   const [
     { count },
   ] = await db.any(
     'select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
   );
-  console.log('count', count);
+  console.log("count", count);
   if (count > 0) {
     await db.any(
       'UPDATE shoppinglist SET quantity = quantity + 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
       [req.params.email, dbId]
     );
-    res.json('success');
+    res.json("success");
   } else {
     const [recipe] = await db.any(
       'select * from "Recipes" WHERE id = $1',
@@ -119,12 +119,12 @@ router.post('/api/shoppingList/:email', async (req, res) => {
       'INSERT INTO shoppinglist("recipe_id", "user_email", "quantity", "ingredients") VALUES($1, $2, $3, $4) RETURNING id',
       values
     );
-    console.log('added this recipe to shoppingList', dbId);
-    res.json('success');
+    console.log("added this recipe to shoppingList", dbId);
+    res.json("success");
   }
 });
 
-router.delete('/api/shoppingList/:email', async (req, res) => {
+router.delete("/api/shoppingList/:email", async (req, res) => {
   const recipeId = req.body.recipeId;
   const dbId = decode(recipeId);
   const [
@@ -133,23 +133,23 @@ router.delete('/api/shoppingList/:email', async (req, res) => {
     'select quantity from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
   );
-  console.log('count', quantity);
+  console.log("count", quantity);
   if (quantity > 1) {
     await db.any(
       'UPDATE shoppinglist SET quantity = quantity - 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
       [req.params.email, dbId]
     );
-    res.json('success');
+    res.json("success");
   } else {
     await db.any(
       'delete from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
       [req.params.email, dbId]
     );
-    res.json('success');
+    res.json("success");
   }
 });
 
-router.patch('/api/shoppingList/:email', async (req, res) => {
+router.patch("/api/shoppingList/:email", async (req, res) => {
   const { list } = req.body;
   const values = [list.ingredients, list.user_email, list.id];
   await db.any(
@@ -159,9 +159,9 @@ router.patch('/api/shoppingList/:email', async (req, res) => {
 });
 
 //recipes
-router.get('/api/recipes', async (req, res) => {
+router.get("/api/recipes", async (req, res) => {
   const preRecipes = await db.any(
-    'select * from "Recipes" ORDER BY "title" ASC'
+    'select id, title, picture, type, source from "Recipes" ORDER BY "title" ASC'
   );
 
   const recipes = preRecipes.map(configureRecipe);
@@ -169,7 +169,7 @@ router.get('/api/recipes', async (req, res) => {
   res.json({ recipes });
 });
 
-router.get('/api/recipes/filters', async (req, res) => {
+router.get("/api/recipes/filters", async (req, res) => {
   const preMainIngredients = await db.any(
     'select DISTINCT "mainIngredient" from "Recipes" WHERE "mainIngredient" IS NOT NULL ORDER BY "mainIngredient" ASC'
   );
@@ -191,23 +191,23 @@ router.get('/api/recipes/filters', async (req, res) => {
   res.json({ mainIngredients, regions, types, sources });
 });
 
-router.get('/api/recipes/:recipeId', async (req, res) => {
+router.get("/api/recipes/:recipeId", async (req, res) => {
   const dbId = decode(req.params.recipeId);
-  if (!dbId) res.status(404).send({ error: 'invalid recipeId' });
+  if (!dbId) res.status(404).send({ error: "invalid recipeId" });
 
   const [recipe] = await db.any('select * from "Recipes" WHERE id = $1', dbId);
-  if (!recipe) res.status(404).send({ error: 'no recipe found' });
+  if (!recipe) res.status(404).send({ error: "no recipe found" });
   res.json(configureRecipe(recipe));
 });
 
-router.delete('/api/recipes/:recipeId', async (req, res) => {
+router.delete("/api/recipes/:recipeId", async (req, res) => {
   const dbId = decode(req.params.recipeId);
 
   const [data] = await db.any('delete from "Recipes" WHERE id = $1', dbId);
   res.json(data);
 });
 
-router.patch('/api/recipes/:recipeId', async (req, res) => {
+router.patch("/api/recipes/:recipeId", async (req, res) => {
   const recipe = req.body.recipe;
   const dbId = decode(recipe.id);
 
@@ -251,7 +251,7 @@ router.patch('/api/recipes/:recipeId', async (req, res) => {
   }
 });
 
-router.post('/api/image', async (req, res) => {
+router.post("/api/image", async (req, res) => {
   const { url: link } = await uploadToCloudinary(
     req.body.image,
     req.body.recipeId
