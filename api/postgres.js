@@ -161,7 +161,7 @@ router.patch("/api/shoppingList/:email", async (req, res) => {
 //recipes
 router.get("/api/recipes", async (req, res) => {
   const preRecipes = await db.any(
-    'select id, title, picture, type, source from "Recipes" ORDER BY "title" ASC'
+    'select id, title, picture, type, source, "mainIngredient", region, type from "Recipes" ORDER BY "title" ASC'
   );
 
   const recipes = preRecipes.map(configureRecipe);
