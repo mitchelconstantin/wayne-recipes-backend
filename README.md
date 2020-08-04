@@ -1,5 +1,5 @@
 # Wayne's Recipes
-![Heroku](http://heroku-badge.herokuapp.com/?app=wayne-recipes-backend&root=api/recipes&style=flat)
+![Heroku](http://heroku-badge.herokuapp.com/?app=wayne-recipes-backend&root=api/recipes&style=flat&svg=1)
 
 Demo: [constantin.recipes](https://www.constantin.recipes/all)
 
