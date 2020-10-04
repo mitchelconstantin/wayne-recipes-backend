@@ -1,7 +1,7 @@
 # Wayne's Recipes
 ![Heroku](http://heroku-badge.herokuapp.com/?app=wayne-recipes-backend&root=api/recipes&style=flat&svg=1)
 
-Demo: [constantin.recipes](https://www.constantin.recipes/all)
+Demo: [constantinrecipes.com](https://www.constantinrecipes.com/all)
 
 ##### Recipe book web app to share Constantin family recipes.
 
