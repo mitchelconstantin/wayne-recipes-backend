@@ -12,7 +12,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "hashids": "^2.2.1",
+    "hashids": "^2.2.8",
     "morgan": "^1.10.0",
     "pg": "^8.2.1",
     "pg-monitor": "^1.4.0",
@@ -20,6 +20,6 @@
     "postgrator": "^2.10.3"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.6"
   }
 }

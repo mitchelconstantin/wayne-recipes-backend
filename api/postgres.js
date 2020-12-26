@@ -94,14 +94,12 @@ router.post("/api/shoppingList/:email", async (req, res) => {
   if (!recipeId) return send404(res, "no recipe found");
   const dbId = decode(recipeId);
   if (req.params.email === "false") return send404(res, "no user found");
-  console.log("not there yet");
   const [
     { count },
   ] = await db.any(
     'select COUNT(*) from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
   );
-  console.log("count", count);
   if (count > 0) {
     await db.any(
       'UPDATE shoppinglist SET quantity = quantity + 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
@@ -133,7 +131,6 @@ router.delete("/api/shoppingList/:email", async (req, res) => {
     'select quantity from shoppinglist WHERE "user_email" = $1 AND "recipe_id" = $2',
     [req.params.email, dbId]
   );
-  console.log("count", quantity);
   if (quantity > 1) {
     await db.any(
       'UPDATE shoppinglist SET quantity = quantity - 1 WHERE "user_email" = $1 AND "recipe_id" = $2',
@@ -197,7 +194,14 @@ router.get("/api/recipes/:recipeId", async (req, res) => {
 
   const [recipe] = await db.any('select * from "Recipes" WHERE id = $1', dbId);
   if (!recipe) res.status(404).send({ error: "no recipe found" });
-  res.json(configureRecipe(recipe));
+  const reviews = await db.any(
+    'select * from "reviews" WHERE recipe_id = $1',
+    dbId
+  );
+  const reviewScore =
+    reviews.reduce((total, next) => total + next.score, 0) / reviews.length;
+  const numberOfReviews = reviews.length;
+  res.json(configureRecipe({ ...recipe, reviewScore, numberOfReviews }));
 });
 
 router.delete("/api/recipes/:recipeId", async (req, res) => {
@@ -248,6 +252,87 @@ router.patch("/api/recipes/:recipeId", async (req, res) => {
       values
     );
     res.send(configureRecipe(newRecipe));
+  }
+});
+
+const convertReviews = (dbReviews) => {
+  return dbReviews.map((rev) => ({
+    reviewerName: rev.user_name,
+    score: rev.score,
+    comment: rev.comment,
+    date: rev.date,
+  }));
+};
+
+//get all reviews for one recipe
+router.get("/api/reviews/:recipeId", async (req, res) => {
+  const dbId = decode(req.params.recipeId);
+  if (!dbId) res.status(404).send({ error: "invalid recipeId" });
+
+  const reviews = await db.any(
+    'select * from "reviews" WHERE recipe_id = $1',
+    dbId
+  );
+  res.json(convertReviews(reviews));
+});
+
+const getUserShortName = async (userEmail) => {
+  const [
+    name,
+  ] = await db.any(
+    'select "firstName", "lastName" from users WHERE email = $1',
+    [userEmail]
+  );
+  const shortName = `${name.firstName} ${name.lastName[0]}`;
+  return shortName;
+};
+
+const getRecipeReviewForUser = async (recipeId, userEmail) => {
+  const [
+    review,
+  ] = await db.any(
+    "select * from reviews WHERE recipe_id = $1 AND user_email = $2",
+    [recipeId, userEmail]
+  );
+  return review;
+};
+
+//get a users review of a recipe, if they have one
+router.get("/api/reviews/:recipeId/:userEmail", async (req, res) => {
+  const dbId = decode(req.params.recipeId);
+  const rev = await getRecipeReviewForUser(dbId, req.params.userEmail);
+  res.json(rev || {});
+});
+
+//post review
+router.post("/api/reviews", async (req, res) => {
+  const dbId = decode(req.body.review.recipeId);
+  if (!dbId) res.status(404).send({ error: "invalid recipeId" });
+  const shortName = await getUserShortName(req.body.review.reviewerEmail);
+  const userReview = await getRecipeReviewForUser(
+    dbId,
+    req.body.review.reviewerEmail
+  );
+  if (userReview) {
+    const values = [dbId, req.body.review.score, req.body.review.comment];
+    await db.any(
+      'update reviews SET "score" = $2, "comment" = $3 WHERE "recipe_id" = $1',
+      values
+    );
+    res.json({});
+  } else {
+    const values = [
+      req.body.review.score,
+      req.body.review.reviewerEmail,
+      shortName,
+      dbId,
+      req.body.review.comment,
+    ];
+    const newRecipe = await db.one(
+      'INSERT INTO "reviews"("score", "user_email", "user_name", "recipe_id", "comment") VALUES($1, $2, $3, $4, $5) RETURNING id',
+      values
+    );
+    res.json({});
   }
 });
 
