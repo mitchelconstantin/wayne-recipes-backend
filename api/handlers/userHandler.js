@@ -24,7 +24,7 @@ class UserHandler {
     res.json("success");
   }
   static async updateUserPermission(req, res) {
-    const { users } = req.body;
+    const { users } = req.body.data;
     users.forEach(async (user) => {
       await db.any('update "users" SET "isAdmin" = $2 WHERE "email" = $1', [
         user.email,
