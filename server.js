@@ -4,6 +4,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const api = require("./api");
+const { HandlerGenerator } = require("./lib/authHandler");
+const middleware = require("./middleware");
 
 const app = express();
 
@@ -12,9 +14,6 @@ const bodyParser = require("body-parser");
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
-
-// app.use(bodyParser.urlencoded({ extended: false }))
-// app.use(bodyParser.json())
 
 /*
  * Log failed requests to stderr
@@ -53,6 +52,10 @@ if (process.env.DYNO) {
     }
   });
 }
+console.log("HandlerGenerator", HandlerGenerator);
+let handlers = new HandlerGenerator();
+app.post("/login", handlers.login);
+app.get("/", middleware.checkToken, handlers.index);
 
 /*
  * Hook up all apis defined in /api
@@ -101,6 +104,7 @@ postgrator.migrate("max", (err, migrations) => {
      * Database has been migrated, all is good to go!
      */
     const port = process.env.PORT || 4000;
+
     app.listen(port, () => {
       console.log(`Server listening at ${port}`);
     });
