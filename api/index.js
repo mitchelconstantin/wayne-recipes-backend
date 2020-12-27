@@ -7,11 +7,15 @@ const { ReviewHandler } = require("./handlers/reviewHandler");
 const { UserHandler } = require("./handlers/userHandler");
 const { ShoppingListHandler } = require("./handlers/shoppingListHandler");
 const { ImageHandler } = require("./handlers/imageHandler");
-console.log("recipehandler", RecipeHandler);
+const { LoginHandler } = require("../lib/authHandler");
+
+// let handlers = new HandlerGenerator();
+// app.post("/login", handlers.login);
 
 //user
-router.post("/api/login", UserHandler.login);
 router.get("/api/users", UserHandler.getAllUsers);
+// router.post("/api/login", UserHandler.login);
+router.post("/api/login", LoginHandler.login);
 router.post("/api/users", UserHandler.createUser);
 router.patch("/api/users", UserHandler.updateUserPermission);
 
@@ -21,22 +25,22 @@ router.post(
   "/api/shoppingList/:email",
   ShoppingListHandler.addToShoppingListByRecipeId
 );
-router.delete(
-  "/api/shoppingList/:email",
-  ShoppingListHandler.removeFromShoppingList
-);
 router.patch(
   "/api/shoppingList/:email",
   ShoppingListHandler.updateShoppingListCustomIngredients
 );
+router.delete(
+  "/api/shoppingList/:email",
+  ShoppingListHandler.removeFromShoppingList
+);
 
 //recipes
-router.get("/api/recipes", RecipeHandler.getAllRecipes);
 // router.get("/api/recipes", middleware.checkToken, RecipeHandlers.getAllRecipes);
-router.get("/api/recipes/filters", RecipeHandler.getAllRecipeFilters);
+router.get("/api/recipes", RecipeHandler.getAllRecipes);
 router.get("/api/recipes/:recipeId", RecipeHandler.getOneRecipe);
-router.delete("/api/recipes/:recipeId", RecipeHandler.deleteOneRecipe);
 router.patch("/api/recipes/:recipeId", RecipeHandler.updateOrAddRecipe);
+router.delete("/api/recipes/:recipeId", RecipeHandler.deleteOneRecipe);
+router.get("/api/recipes/filters", RecipeHandler.getAllRecipeFilters);
 
 //reviews
 router.get("/api/reviews/:recipeId", ReviewHandler.getAllReviewsForRecipe);
@@ -46,6 +50,7 @@ router.get(
 );
 router.post("/api/reviews", ReviewHandler.postRecipeReview);
 
+//images
 router.post("/api/image", ImageHandler.uploadImage);
 
 module.exports = router;
