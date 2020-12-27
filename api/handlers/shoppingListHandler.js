@@ -11,7 +11,7 @@ class ShoppingListHandler {
     const list = preList.map(configureListItem);
     res.json({ list });
   }
-  static async addToShoppingList(req, res) {
+  static async addToShoppingListByRecipeId(req, res) {
     const recipeId = req.body.recipeId;
     if (!recipeId) return send404(res, "no recipe found");
     const dbId = decode(recipeId);
@@ -66,7 +66,7 @@ class ShoppingListHandler {
       res.json("success");
     }
   }
-  static async updateShoppingList(req, res) {
+  static async updateShoppingListCustomIngredients(req, res) {
     const { list } = req.body;
     const values = [list.ingredients, list.user_email, list.id];
     await db.any(
