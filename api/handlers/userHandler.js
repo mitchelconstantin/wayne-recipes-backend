@@ -1,4 +1,5 @@
 const { db } = require("../../lib/database");
+const bcrypt = require("bcrypt");
 
 class UserHandler {
   static async getAllUsers(req, res) {
@@ -6,7 +7,7 @@ class UserHandler {
     res.json(data);
   }
   static async createUser(req, res) {
-    const { firstName, lastName, email, password } = req.body.user;
+    const { firstName, lastName, email, password } = req.body.data.user;
     const user = await db.any('select * from "users" WHERE "email" = $1 ', [
       email,
     ]);
