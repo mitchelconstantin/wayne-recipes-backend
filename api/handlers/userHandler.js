@@ -13,11 +13,11 @@ class UserHandler {
     ]);
     if (user.length) {
       return res.status(400).send({
-        message: "email already exists",
+        message: "that user already exists, please try logging in",
       });
     }
     const hash = bcrypt.hashSync(password, 10);
-    const newUser = await db.one(
+    await db.one(
       'INSERT INTO users("firstName", "lastName", "email", "hash") VALUES($1, $2, $3, $4) RETURNING email',
       [firstName, lastName, email, hash]
     );
@@ -33,21 +33,6 @@ class UserHandler {
     });
     res.json("success");
   }
-  // static async login(req, res) {
-  //   const { email, password } = req.body.user;
-  //   const [user] = await db.any('select * from "users" WHERE "email" = $1 ', [
-  //     email,
-  //   ]);
-  //   const newHash = bcrypt.hashSync(password, 10);
-
-  //   if (!user || !bcrypt.compareSync(password, user.hash)) {
-  //     //if no user or if password and hash do not match
-  //     return res.status(400).send({
-  //       message: "Incorrect login",
-  //     });
-  //   }
-  //   res.json(user);
-  // }
 }
 module.exports = {
   UserHandler: UserHandler,
