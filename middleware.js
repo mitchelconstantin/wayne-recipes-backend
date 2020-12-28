@@ -9,29 +9,6 @@ const getToken = (req) => {
   return token;
 };
 
-const checkToken = (req, res, next) => {
-  const token = getToken(req);
-  if (!token) {
-    return res.json({
-      success: false,
-      message: "Auth token is not supplied",
-    });
-  }
-
-  jwt.verify(token, config.secret, (err, decoded) => {
-    if (err) {
-      return res.json({
-        success: false,
-        message: "Token is not valid",
-      });
-    } else {
-      req.decoded = decoded;
-      console.log("token decoded, text", decoded);
-      next();
-    }
-  });
-};
-
 class CheckToken {
   static isLoggedIn(req, res, next) {
     const token = getToken(req);
