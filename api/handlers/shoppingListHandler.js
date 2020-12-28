@@ -35,11 +35,10 @@ class ShoppingListHandler {
       );
 
       const values = [dbId, req.params.email, 1, recipe.ingredients];
-      const newRecipe = await db.one(
+      await db.one(
         'INSERT INTO shoppinglist("recipe_id", "user_email", "quantity", "ingredients") VALUES($1, $2, $3, $4) RETURNING id',
         values
       );
-      console.log("added this recipe to shoppingList", dbId);
       res.json("success");
     }
   }

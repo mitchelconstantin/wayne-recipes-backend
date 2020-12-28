@@ -52,9 +52,6 @@ if (process.env.DYNO) {
     }
   });
 }
-// let handlers = new HandlerGenerator();
-// app.post("/login", handlers.login);
-// app.get("/", middleware.checkToken, handlers.index);
 
 /*
  * Hook up all apis defined in /api

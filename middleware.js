@@ -27,8 +27,6 @@ class CheckToken {
         });
       } else {
         req.decoded = decoded;
-        console.log("token decoded, text", decoded);
-        console.log("you are logged in! congrats");
         next();
       }
     });
@@ -51,14 +49,12 @@ class CheckToken {
         });
       } else {
         req.decoded = decoded;
-        console.log("token decoded, text", decoded);
         if (!decoded.isOwner) {
           return res.status(403).json({
             success: false,
             message: "You are not an owner of this site",
           });
         }
-        console.log("you are an owner! congrats!");
         next();
       }
     });
@@ -81,14 +77,12 @@ class CheckToken {
         });
       } else {
         req.decoded = decoded;
-        console.log("token decoded, text", decoded);
         if (!decoded.isAdmin) {
           return res.status(403).json({
             success: false,
             message: "You are not an admin of this site",
           });
         }
-        console.log("you are an ADMIN, congrats!");
         next();
       }
     });

@@ -12,7 +12,6 @@ class RecipeHandler {
   }
 
   static async getAllRecipeFilters(req, res) {
-    console.log("getting al recipe filters");
     const preMainIngredients = await db.any(
       'select DISTINCT "mainIngredient" from "Recipes" WHERE "mainIngredient" IS NOT NULL ORDER BY "mainIngredient" ASC'
     );
@@ -36,7 +35,6 @@ class RecipeHandler {
   static async getOneRecipe(req, res) {
     const dbId = decode(req.params.recipeId);
     if (!dbId) res.status(404).send({ error: "invalid recipeId" });
-    console.log("getting 1 recipe");
     const [recipe] = await db.any(
       'select * from "Recipes" WHERE id = $1',
       dbId
