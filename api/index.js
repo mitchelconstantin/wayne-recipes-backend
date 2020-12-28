@@ -37,10 +37,10 @@ router.delete(
 //recipes
 // router.get("/api/recipes", middleware.checkToken, RecipeHandlers.getAllRecipes);
 router.get("/api/recipes", RecipeHandler.getAllRecipes);
+router.get("/api/recipes/filters", RecipeHandler.getAllRecipeFilters);
 router.get("/api/recipes/:recipeId", RecipeHandler.getOneRecipe);
 router.patch("/api/recipes/:recipeId", RecipeHandler.updateOrAddRecipe);
 router.delete("/api/recipes/:recipeId", RecipeHandler.deleteOneRecipe);
-router.get("/api/recipes/filters", RecipeHandler.getAllRecipeFilters);
 
 //reviews
 router.get("/api/reviews/:recipeId", ReviewHandler.getAllReviewsForRecipe);

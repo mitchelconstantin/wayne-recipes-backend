@@ -16,8 +16,8 @@ const uploadToCloudinary = async (image, hashId) => {
 class ImageHandler {
   static async uploadImage(req, res) {
     const { url: link } = await uploadToCloudinary(
-      req.body.image,
-      req.body.recipeId
+      req.body.data.image,
+      req.body.data.recipeId
     );
     // const secondary = await uploadToImgur(req.body.image);
 

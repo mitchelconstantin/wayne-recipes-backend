@@ -49,15 +49,21 @@ class ReviewHandler {
   }
 
   static async postRecipeReview(req, res) {
-    const dbId = decode(req.body.review.recipeId);
+    const dbId = decode(req.body.data.review.recipeId);
     if (!dbId) res.status(404).send({ error: "invalid recipeId" });
-    const shortName = await getUserShortName(req.body.review.reviewerEmail);
+    const shortName = await getUserShortName(
+      req.body.data.review.reviewerEmail
+    );
     const userReview = await getRecipeReviewForUser(
       dbId,
-      req.body.review.reviewerEmail
+      req.body.data.review.reviewerEmail
     );
     if (userReview) {
-      const values = [dbId, req.body.review.score, req.body.review.comment];
+      const values = [
+        dbId,
+        req.body.data.review.score,
+        req.body.data.review.comment,
+      ];
       await db.any(
         'update reviews SET "score" = $2, "comment" = $3 WHERE "recipe_id" = $1',
         values
@@ -65,13 +71,13 @@ class ReviewHandler {
       res.json({});
     } else {
       const values = [
-        req.body.review.score,
-        req.body.review.reviewerEmail,
+        req.body.data.review.score,
+        req.body.data.review.reviewerEmail,
         shortName,
         dbId,
-        req.body.review.comment,
+        req.body.data.review.comment,
       ];
-      const newRecipe = await db.one(
+      const newReview = await db.one(
         'INSERT INTO "reviews"("score", "user_email", "user_name", "recipe_id", "comment") VALUES($1, $2, $3, $4, $5) RETURNING id',
         values
       );

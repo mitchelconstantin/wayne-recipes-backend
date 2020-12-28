@@ -12,7 +12,7 @@ class ShoppingListHandler {
     res.json({ list });
   }
   static async addToShoppingListByRecipeId(req, res) {
-    const recipeId = req.body.recipeId;
+    const recipeId = req.body.data.recipeId;
     if (!recipeId) return send404(res, "no recipe found");
     const dbId = decode(recipeId);
     if (req.params.email === "false") return send404(res, "no user found");
@@ -67,7 +67,7 @@ class ShoppingListHandler {
     }
   }
   static async updateShoppingListCustomIngredients(req, res) {
-    const { list } = req.body;
+    const { list } = req.body.data;
     const values = [list.ingredients, list.user_email, list.id];
     await db.any(
       'UPDATE shoppinglist SET ingredients = $1 WHERE "user_email" = $2 AND "id" = $3',
