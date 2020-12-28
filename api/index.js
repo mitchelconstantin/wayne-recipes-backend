@@ -20,17 +20,24 @@ router.post("/api/users", UserHandler.createUser);
 router.patch("/api/users", UserHandler.updateUserPermission);
 
 //shopping list
-router.get("/api/shoppingList/:email", ShoppingListHandler.getUserShoppingList);
+router.get(
+  "/api/shoppingList/:email",
+  middleware.checkToken,
+  ShoppingListHandler.getUserShoppingList
+);
 router.post(
   "/api/shoppingList/:email",
+  middleware.checkToken,
   ShoppingListHandler.addToShoppingListByRecipeId
 );
 router.patch(
   "/api/shoppingList/:email",
+  middleware.checkToken,
   ShoppingListHandler.updateShoppingListCustomIngredients
 );
 router.delete(
   "/api/shoppingList/:email",
+  middleware.checkToken,
   ShoppingListHandler.removeFromShoppingList
 );
 

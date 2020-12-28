@@ -1,4 +1,3 @@
 module.exports = {
-  //todo change this to an environment variable
-  secret: "worldisfullofdevelopers",
+  secret: process.env.USER_AUTH_SECRET,
 };

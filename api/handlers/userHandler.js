@@ -13,7 +13,7 @@ class UserHandler {
     ]);
     if (user.length) {
       return res.status(400).send({
-        message: "username already exists",
+        message: "email already exists",
       });
     }
     const hash = bcrypt.hashSync(password, 10);
