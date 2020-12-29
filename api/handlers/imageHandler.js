@@ -1,10 +1,11 @@
 var cloudinary = require("cloudinary").v2;
 
 const uploadToCloudinary = async (image, hashId) => {
+  const public_id = process.env.IS_LOCAL ? `${hashId}loc` : `${hashId}prod`;
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
       image,
-      { public_id: hashId, secure: true },
+      { public_id: public_id, secure: true },
       (err, url) => {
         if (err) return reject(err);
         return resolve(url);
