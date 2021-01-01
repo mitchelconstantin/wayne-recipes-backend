@@ -4,7 +4,7 @@ const { configureRecipe, decode } = require("../../lib/hashIdService");
 class RecipeHandler {
   static async getAllRecipes(req, res) {
     const preRecipes = await db.any(
-      'select id, title, picture, type, source, "mainIngredient", region, type from "Recipes" ORDER BY "title" ASC'
+      'select "Recipes".id, title, picture, type, source, "mainIngredient", region, type, avg(reviews.score) as rating FROM "Recipes" LEFT JOIN reviews ON "Recipes".id = reviews.recipe_id GROUP BY "Recipes".id ORDER BY "title" ASC'
     );
 
     const recipes = preRecipes.map(configureRecipe);
@@ -44,10 +44,10 @@ class RecipeHandler {
       'select * from "reviews" WHERE recipe_id = $1',
       dbId
     );
-    const reviewScore =
+    const rating =
       reviews.reduce((total, next) => total + next.score, 0) / reviews.length;
     const numberOfReviews = reviews.length;
-    res.json(configureRecipe({ ...recipe, reviewScore, numberOfReviews }));
+    res.json(configureRecipe({ ...recipe, rating, numberOfReviews }));
   }
   static async deleteOneRecipe(req, res) {
     const dbId = decode(req.params.recipeId);
