@@ -29,7 +29,7 @@ class ShoppingListHandler {
       );
       res.json("success");
     } else {
-      const [recipe] = await db.any(
+      const recipe = await db.one(
         'select * from "Recipes" WHERE id = $1',
         dbId
       );

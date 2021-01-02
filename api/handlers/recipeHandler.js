@@ -12,18 +12,24 @@ class RecipeHandler {
   }
 
   static async getAllRecipeFilters(req, res) {
-    const preMainIngredients = await db.any(
+    const dbMainIngredients = db.any(
       'select DISTINCT "mainIngredient" from "Recipes" WHERE "mainIngredient" IS NOT NULL ORDER BY "mainIngredient" ASC'
     );
-    const preRegions = await db.any(
+    const dbRegions = db.any(
       'select DISTINCT "region" from "Recipes" WHERE "region" IS NOT NULL ORDER BY "region" ASC'
     );
-    const preTypes = await db.any(
+    const dbTypes = db.any(
       'select DISTINCT "type" from "Recipes" WHERE "type" IS NOT NULL ORDER BY "type" ASC'
     );
-    const preSources = await db.any(
+    const dbSources = db.any(
       'select DISTINCT "source" from "Recipes" WHERE "source" IS NOT NULL ORDER BY "source" ASC'
     );
+    const [
+      preMainIngredients,
+      preRegions,
+      preTypes,
+      preSources,
+    ] = await Promise.all([dbMainIngredients, dbRegions, dbTypes, dbSources]);
 
     const mainIngredients = preMainIngredients.map((obj) => obj.mainIngredient);
     const regions = preRegions.map((obj) => obj.region);
@@ -35,15 +41,15 @@ class RecipeHandler {
   static async getOneRecipe(req, res) {
     const dbId = decode(req.params.recipeId);
     if (!dbId) res.status(404).send({ error: "invalid recipeId" });
-    const [recipe] = await db.any(
-      'select * from "Recipes" WHERE id = $1',
-      dbId
-    );
-    if (!recipe) res.status(404).send({ error: "no recipe found" });
-    const reviews = await db.any(
+
+    const dbRecipe = db.one('select * from "Recipes" WHERE id = $1', dbId);
+    const dbReviews = db.any(
       'select * from "reviews" WHERE recipe_id = $1',
       dbId
     );
+    const [recipe, reviews] = await Promise.all([dbRecipe, dbReviews]);
+
+    if (!recipe) res.status(404).send({ error: "no recipe found" });
     const rating =
       reviews.reduce((total, next) => total + next.score, 0) / reviews.length;
     const numberOfReviews = reviews.length;

@@ -51,13 +51,18 @@ class ReviewHandler {
   static async postRecipeReview(req, res) {
     const dbId = decode(req.body.data.review.recipeId);
     if (!dbId) res.status(404).send({ error: "invalid recipeId" });
-    const shortName = await getUserShortName(
+    const dbShortName = await getUserShortName(
       req.body.data.review.reviewerEmail
     );
-    const userReview = await getRecipeReviewForUser(
+    const dbUserReview = await getRecipeReviewForUser(
       dbId,
       req.body.data.review.reviewerEmail
     );
+    const [shortName, userReview] = await Promise.all([
+      dbShortName,
+      dbUserReview,
+    ]);
+
     if (userReview) {
       const values = [
         dbId,
