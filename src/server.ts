@@ -73,7 +73,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(buildDir, "index.html"));
   });
 }
-
 /*
  * Migrate database before listening for requests
  */
@@ -81,7 +80,9 @@ const postgrator = require("postgrator");
 const { connectionString } = require("./lib/database");
 
 postgrator.setConfig({
-  migrationDirectory: __dirname + "/postgrator",
+  migrationDirectory: "./postgrator",
+  // migrationDirectory: __dirname + "/postgrator",
+  // migrationDirectory: __dirname + "./postgrator",
   driver: "pg",
   connectionString,
 });

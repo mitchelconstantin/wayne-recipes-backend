@@ -1,6 +1,6 @@
 let jwt = require("jsonwebtoken");
 let config = require("../config");
-const { db } = require("../lib/database");
+const { db } = require("./database");
 const bcrypt = require("bcrypt");
 
 class LoginHandler {
