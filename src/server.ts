@@ -1,15 +1,11 @@
 require("dotenv").config();
-
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import bodyParser from "body-parser";
 const api = require("./api");
-const { HandlerGenerator } = require("./lib/authHandler");
-const middleware = require("./middleware");
 
 const app = express();
-
-const bodyParser = require("body-parser");
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
