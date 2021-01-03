@@ -1,10 +1,14 @@
-var cloudinary = require("cloudinary").v2;
+import { UploadApiResponse, v2 } from "cloudinary";
+import { config } from "../../config";
 
-const uploadToCloudinary = async (image, hashId) => {
-  const env = process.env.IS_LOCAL ? "loc" : "prod";
+const uploadToCloudinary = async (
+  image,
+  hashId
+): Promise<UploadApiResponse> => {
+  const env = config.isLocal ? "loc" : "prod";
   const ms = new Date().getTime();
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload(
+    v2.uploader.upload(
       image,
       { public_id: `${hashId}_${env}_${ms}`, secure: true },
       (err, url) => {
@@ -15,17 +19,13 @@ const uploadToCloudinary = async (image, hashId) => {
   });
 };
 
-class ImageHandler {
+export class ImageHandler {
   static async uploadImage(req, res) {
     const { secure_url } = await uploadToCloudinary(
       req.body.data.image,
       req.body.data.recipeId
     );
-    // const secondary = await uploadToImgur(req.body.image);
 
     res.send({ link: secure_url });
   }
 }
-module.exports = {
-  ImageHandler: ImageHandler,
-};

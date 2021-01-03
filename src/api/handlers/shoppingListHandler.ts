@@ -1,8 +1,9 @@
-const { db } = require("../../lib/database");
-const { configureListItem, decode } = require("../../lib/hashIdService");
+import { configureListItem, decode } from "../../lib/hashIdService";
+import { db } from "../../lib/database";
+
 const send404 = (res, message) => res.status(400).send({ message });
 
-class ShoppingListHandler {
+export class ShoppingListHandler {
   static async getUserShoppingList(req, res) {
     const preList = await db.any(
       'select s.id, s.quantity, s.user_email, s.recipe_id, s.ingredients, r.title, r.picture FROM shoppinglist as s LEFT JOIN "Recipes" as r ON r.id = s.recipe_id WHERE "user_email" = $1 ORDER BY "title" ASC',
@@ -74,6 +75,3 @@ class ShoppingListHandler {
     );
   }
 }
-module.exports = {
-  ShoppingListHandler: ShoppingListHandler,
-};

@@ -1,5 +1,5 @@
-let jwt = require("jsonwebtoken");
-const config = require("./config.js");
+import jwt from "jsonwebtoken";
+import { config } from "./config";
 
 const getToken = (req) => {
   let token = req.headers["x-access-token"] || req.headers["authorization"]; // Express headers are auto converted to lowercase
@@ -9,7 +9,7 @@ const getToken = (req) => {
   return token;
 };
 
-class CheckToken {
+export class Middleware {
   static isLoggedIn(req, res, next) {
     const token = getToken(req);
     if (!token) {
@@ -88,7 +88,3 @@ class CheckToken {
     });
   }
 }
-
-module.exports = {
-  CheckToken: CheckToken,
-};

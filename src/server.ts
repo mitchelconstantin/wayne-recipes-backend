@@ -1,15 +1,13 @@
-require("dotenv").config();
-
-const express = require("express");
-const morgan = require("morgan");
-const cors = require("cors");
-const api = require("./api");
-const { HandlerGenerator } = require("./lib/authHandler");
-const middleware = require("./middleware");
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { connectionString } from "./lib/database";
+import { router } from "./api";
 
 const app = express();
-
-const bodyParser = require("body-parser");
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -56,32 +54,15 @@ if (process.env.DYNO) {
 /*
  * Hook up all apis defined in /api
  */
-app.use(api);
-
-/*
- * In production mode we will also serve the react-ui
- */
-if (process.env.NODE_ENV === "production") {
-  console.log(`Production mode detected: Serving react-ui`);
-  const path = require("path");
-
-  const buildDir = path.join(__dirname, "../react-ui/build");
-
-  app.use(express.static(buildDir));
-
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(buildDir, "index.html"));
-  });
-}
+app.use(router);
 
 /*
  * Migrate database before listening for requests
  */
 const postgrator = require("postgrator");
-const { connectionString } = require("./lib/database");
 
 postgrator.setConfig({
-  migrationDirectory: __dirname + "/postgrator",
+  migrationDirectory: "./postgrator",
   driver: "pg",
   connectionString,
 });

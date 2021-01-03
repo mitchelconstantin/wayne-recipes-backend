@@ -1,47 +1,43 @@
-const express = require("express");
-const router = express.Router();
+import { AuthHandler } from "./handlers/authHandler";
+import { UserHandler } from "../api/handlers/userHandler";
+import { ImageHandler } from "./handlers/imageHandler";
+import { RecipeHandler } from "./handlers/recipeHandler";
+import { ReviewHandler } from "./handlers/reviewHandler";
+import { ShoppingListHandler } from "./handlers/shoppingListHandler";
+import { Middleware } from "../middleware";
+import express from "express";
 
-const middleware = require("../middleware");
-const { RecipeHandler } = require("./handlers/recipeHandler");
-const { ReviewHandler } = require("./handlers/reviewHandler");
-const { UserHandler } = require("./handlers/userHandler");
-const { ShoppingListHandler } = require("./handlers/shoppingListHandler");
-const { ImageHandler } = require("./handlers/imageHandler");
-const { LoginHandler } = require("../lib/authHandler");
+export const router = express.Router();
 
 //user
-router.get(
-  "/api/users",
-  middleware.CheckToken.isOwner,
-  UserHandler.getAllUsers
-);
-router.post("/api/login", LoginHandler.login);
+router.get("/api/users", Middleware.isOwner, UserHandler.getAllUsers);
+router.post("/api/login", AuthHandler.login);
 router.post("/api/users", UserHandler.createUser);
 router.patch(
   "/api/users",
-  middleware.CheckToken.isOwner,
+  Middleware.isOwner,
   UserHandler.updateUserPermission
 );
 
 //shopping list
 router.get(
   "/api/shoppingList/:email",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ShoppingListHandler.getUserShoppingList
 );
 router.post(
   "/api/shoppingList/:email",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ShoppingListHandler.addToShoppingListByRecipeId
 );
 router.patch(
   "/api/shoppingList/:email",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ShoppingListHandler.updateShoppingListCustomIngredients
 );
 router.delete(
   "/api/shoppingList/:email",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ShoppingListHandler.removeFromShoppingList
 );
 
@@ -51,12 +47,12 @@ router.get("/api/recipes/filters", RecipeHandler.getAllRecipeFilters);
 router.get("/api/recipes/:recipeId", RecipeHandler.getOneRecipe);
 router.patch(
   "/api/recipes/:recipeId",
-  middleware.CheckToken.isAdmin,
+  Middleware.isAdmin,
   RecipeHandler.updateOrAddRecipe
 );
 router.delete(
   "/api/recipes/:recipeId",
-  middleware.CheckToken.isAdmin,
+  Middleware.isAdmin,
   RecipeHandler.deleteOneRecipe
 );
 
@@ -64,20 +60,16 @@ router.delete(
 router.get("/api/reviews/:recipeId", ReviewHandler.getAllReviewsForRecipe);
 router.get(
   "/api/reviews/:recipeId/:userEmail",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ReviewHandler.getUserRecipeReview
 );
 router.post(
   "/api/reviews",
-  middleware.CheckToken.isLoggedIn,
+  Middleware.isLoggedIn,
   ReviewHandler.postRecipeReview
 );
 
 //images
-router.post(
-  "/api/image",
-  middleware.CheckToken.isAdmin,
-  ImageHandler.uploadImage
-);
+router.post("/api/image", Middleware.isAdmin, ImageHandler.uploadImage);
 
-module.exports = router;
+// module.exports = router;
