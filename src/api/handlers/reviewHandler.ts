@@ -1,5 +1,6 @@
-const { db } = require("../../lib/database");
-const { decode } = require("../../lib/hashIdService");
+import { db } from "../../lib/database";
+import { decode } from "../../lib/hashIdService";
+
 const convertReviews = (dbReviews) => {
   return dbReviews.map((rev) => ({
     reviewerName: rev.user_name,
@@ -30,7 +31,7 @@ const getRecipeReviewForUser = async (recipeId, userEmail) => {
   return review;
 };
 
-class ReviewHandler {
+export class ReviewHandler {
   static async getAllReviewsForRecipe(req, res) {
     const dbId = decode(req.params.recipeId);
     if (!dbId) res.status(404).send({ error: "invalid recipeId" });
@@ -90,6 +91,3 @@ class ReviewHandler {
     }
   }
 }
-module.exports = {
-  ReviewHandler: ReviewHandler,
-};

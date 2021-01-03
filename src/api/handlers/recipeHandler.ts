@@ -1,7 +1,7 @@
-const { db } = require("../../lib/database");
-const { configureRecipe, decode } = require("../../lib/hashIdService");
+import { db } from "../../lib/database";
+import { configureRecipe, decode } from "../../lib/hashIdService";
 
-class RecipeHandler {
+export class RecipeHandler {
   static async getAllRecipes(req, res) {
     const preRecipes = await db.any(
       'select "Recipes".id, title, picture, type, source, "mainIngredient", region, type, avg(reviews.score) as rating FROM "Recipes" LEFT JOIN reviews ON "Recipes".id = reviews.recipe_id GROUP BY "Recipes".id ORDER BY "title" ASC'
@@ -104,6 +104,3 @@ class RecipeHandler {
     }
   }
 }
-module.exports = {
-  RecipeHandler: RecipeHandler,
-};

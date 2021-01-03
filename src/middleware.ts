@@ -1,4 +1,4 @@
-let jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 import { config } from "./config";
 
 const getToken = (req) => {
@@ -9,7 +9,7 @@ const getToken = (req) => {
   return token;
 };
 
-class CheckToken {
+export class Middleware {
   static isLoggedIn(req, res, next) {
     const token = getToken(req);
     if (!token) {
@@ -88,7 +88,3 @@ class CheckToken {
     });
   }
 }
-
-module.exports = {
-  CheckToken: CheckToken,
-};

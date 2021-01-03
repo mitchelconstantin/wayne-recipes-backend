@@ -1,9 +1,9 @@
-let jwt = require("jsonwebtoken");
-let config = require("../config");
-const { db } = require("./database");
-const bcrypt = require("bcrypt");
+import jwt from "jsonwebtoken";
+import { config } from "../../config";
+import { db } from "../../lib/database";
+import bcrypt from "bcrypt";
 
-class LoginHandler {
+export class AuthHandler {
   static async login(req, res) {
     const { email, password } = req.body.data.user;
     const [user] = await db.any('select * from "users" WHERE "email" = $1 ', [
@@ -44,7 +44,3 @@ class LoginHandler {
     });
   }
 }
-
-module.exports = {
-  LoginHandler: LoginHandler,
-};

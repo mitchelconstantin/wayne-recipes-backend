@@ -1,7 +1,7 @@
-const { db } = require("../../lib/database");
-const bcrypt = require("bcrypt");
+import { db } from "../../lib/database";
+import bcrypt from "bcrypt";
 
-class UserHandler {
+export class UserHandler {
   static async getAllUsers(req, res) {
     const data = await db.any('select * from "users"');
     res.json(data);
@@ -34,6 +34,3 @@ class UserHandler {
     res.json("success");
   }
 }
-module.exports = {
-  UserHandler: UserHandler,
-};
