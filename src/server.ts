@@ -59,31 +59,24 @@ app.use(router);
 /*
  * Migrate database before listening for requests
  */
-const postgrator = require("postgrator");
+const Postgrator = require("postgrator");
 
-postgrator.setConfig({
+const postgrator = new Postgrator({
   migrationDirectory: "./postgrator",
   driver: "pg",
   connectionString,
 });
 
-postgrator.migrate("max", (err, migrations) => {
-  if (err) {
-    console.error("Database migration failed!");
-    console.error(err);
-    process.exit(1);
-  }
+postgrator
+  .migrate()
+  .then((appliedMigrations) => {
+    console.log("Database migrated successfully, applied migrations:");
+    console.log(appliedMigrations);
 
-  postgrator.endConnection(() => {
-    console.log("Database migrated successfully.");
-
-    /*
-     * Database has been migrated, all is good to go!
-     */
     const port = process.env.PORT || 4000;
 
     app.listen(port, () => {
       console.log(`Server listening at ${port}`);
     });
-  });
-});
+  })
+  .catch((error) => console.log(error));
