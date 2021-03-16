@@ -65,6 +65,7 @@ const postgrator = new Postgrator({
   migrationDirectory: "./postgrator",
   driver: "pg",
   connectionString,
+  ssl: { rejectUnauthorized: false },
 });
 
 postgrator

@@ -1,4 +1,5 @@
 const addSSL = (url: string) => {
+  if (!url) return "";
   if (url.endsWith("?ssl=true")) return url;
   return `${url}?ssl=true`;
 };
